@@ -28,7 +28,6 @@ private:
 	std::ifstream plik;
 public:
 	Tasks();
-	Tasks(const vis & v);
 	~Tasks();
 
 	const void Check() const;
