@@ -2,15 +2,12 @@
 #define MEMORY_H_
 
 #include <iostream>
-#include <cstdlib>
 #include <vector>
-#include <iomanip>
 #include <string>
 #include <fstream>
-#include <sstream>
-#include <cctype>
 #include <limits>
 #include <algorithm>
+#include <sstream>
 
 using std::cin;
 using std::cout;
