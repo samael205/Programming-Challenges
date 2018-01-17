@@ -23,7 +23,6 @@ using std::ios;
 typedef std::vector<std::pair<std::string, std::string>> vis;
 typedef std::vector<std::string> datas;
 
-
 class Tasks{
 private:
 	std::string linia;
