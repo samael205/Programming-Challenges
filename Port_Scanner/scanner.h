@@ -65,10 +65,4 @@ private slots:
     void ChangeFilter() { filter = !filter;}
 };
 
-
-
-
-
-
-
 #endif // SCAN_H
