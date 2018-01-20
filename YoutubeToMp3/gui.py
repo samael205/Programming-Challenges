@@ -183,7 +183,4 @@ if __name__ == '__main__':
     download = Downloader()
     download.show()
     sys.exit(app.exec_())
-
-
-
-
+    
