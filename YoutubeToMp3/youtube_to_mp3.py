@@ -17,10 +17,3 @@ def download(link):
         video_title = info_dict.get("title", None)
         with open("history.txt", 'a') as file:
             file.write(video_title + "   " + link + "\n")
-
-
-
-
-
-
-
