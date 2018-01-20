@@ -23,3 +23,14 @@ def active_tabs():
             if "www.youtube.com" in strUrl:
                 tabs.append(strUrl)
     return tabs
+
+
+
+
+
+
+
+
+
+
+
