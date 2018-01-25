@@ -93,9 +93,5 @@ public:
 	friend void summary(const Queue & queue);
 	
 protected:
-	void save(){
-		std::stringstream sstream;
-		sstream<<number_of_customers<<" customers\tsum: "<<time_format(allwaittime)<<"\tavg: "<<average<<"s\tslow: "<<longest_time<<"\tquick: "<<shortest_time;
-		results.push_back(sstream.str());
-	}
+	void save();		
 };
