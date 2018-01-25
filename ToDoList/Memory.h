@@ -79,7 +79,7 @@ void Tasks::Check_Progress(){
 	if(taskNumber > 0 && taskNumber <= tasks.size()){
 		Clear();
 		cout<<tasks[taskNumber-1].second<<" is done?\n";
-		cout<<"(D/N): "<<std::flush;
+		cout<<"(Y/N): "<<std::flush;
 		cin>>done;
 		while(cin.get() != '\n' && !(cin)){
 			continue;
