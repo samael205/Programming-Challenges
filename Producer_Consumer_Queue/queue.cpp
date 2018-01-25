@@ -43,8 +43,15 @@ void Queue::dequeue(Customer & leaver){
 	current--;
 	if(isempty())
 		head = nullptr;
-}	
+}
 
+void Queue::save(){
+	std::stringstream sstream;
+	sstream<<number_of_customers<<" customers\tsum: "<<time_format(allwaittime)<<"\tavg: "<<
+		average<<"s\tslow: "<<longest_time<<"\tquick: "<<shortest_time;
+	results.push_back(sstream.str());
+
+}
 void simulate(Queue & queue){
 	Customer * temp;
 	queue.shortest_time = queue.head->person;
