@@ -89,6 +89,7 @@ void Scanner::HostDown(){
     noHost->exec();
     delete noHost;
 }
+
 void Scanner::HostEmpty(){
     QMessageBox * noHost = new QMessageBox;
     noHost->setWindowTitle("host name error");
