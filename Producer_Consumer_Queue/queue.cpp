@@ -1,5 +1,37 @@
 #include "queue.h"
 
+Customer::Customer(){
+	name = '\0';
+	wait_time = 0;
+}
+
+Customer::Customer(const string & addname, const int addtime){
+	name = addname;
+	wait_time = addtime;
+}
+
+Customer & Customer::operator=(const Customer & absorb){
+	this->wait_time = absorb.first();
+	this->name = absorb.second();
+}
+
+bool Customer::operator<(const Customer & customer){
+	if(customer.first() < this->wait_time)
+			return true;
+	return false;
+}
+
+bool Customer::operator>(const Customer & customer){
+		if(customer.first() > this->wait_time)
+			return true;
+	return false;
+}
+
+std::ostream & operator<<(std::ostream & os, const Customer & customer){
+	os<<customer.name<<" "<<time_format(customer.wait_time);
+	return os;
+}
+
 vs Queue::results = vs(0);
 
 Queue::Queue() : maximum(n), longest_time(), shortest_time() {
@@ -43,39 +75,13 @@ void Queue::dequeue(Customer & leaver){
 	current--;
 	if(isempty())
 		head = nullptr;
-}
+}	
 
 void Queue::save(){
 	std::stringstream sstream;
-	sstream<<number_of_customers<<" customers\tsum: "<<time_format(allwaittime)<<"\tavg: "<<
-		average<<"s\tslow: "<<longest_time<<"\tquick: "<<shortest_time;
+	sstream<<number_of_customers<<" customers\tsum: "<<time_format(allwaittime)
+		<<"\tavg: "<<average<<"s\tslow: "<<longest_time<<"\tquick: "<<shortest_time;
 	results.push_back(sstream.str());
-
-}
-void simulate(Queue & queue){
-	Customer * temp;
-	queue.shortest_time = queue.head->person;
-	queue.longest_time = queue.head->person;
-	while(!queue.isempty()){
-		double time = 0;
-		if(time <= 0){
-			temp = new Customer;
-			queue.dequeue(*temp);
-			if(*temp < queue.longest_time)
-				queue.longest_time = *temp;
-			if(*temp > queue.shortest_time)
-				queue.shortest_time = *temp;
-			time = temp->first();
-			queue.allwaittime+= time;
-			delete temp;
-		}
-		if(time > 0)
-			time--;
-	}
-	queue.average = queue.allwaittime/queue.number_of_customers;
-	guard.lock();
-	queue.save();
-	guard.unlock();
 }
 
 void summary(const Queue & queue){
@@ -88,11 +94,12 @@ void summary(const Queue & queue){
 
 string time_format(ll time){
 	int min = time/60;
-		int seconds = time%60;
-		if(seconds == 0 && min != 0)
-			return std::to_string(min) + "m ";
-		else if(seconds != 0 && min == 0)
-			return std::to_string(seconds) + "s ";
-		else 
-			return std::to_string(min) + "m " + std::to_string(seconds) + "s ";
+	int seconds = time%60;
+	if(seconds == 0 && min != 0)
+		return std::to_string(min) + "m ";
+	else if(seconds != 0 && min == 0)
+		return std::to_string(seconds) + "s ";
+	else 
+		return std::to_string(min) + "m " + std::to_string(seconds) + "s ";
 }
+

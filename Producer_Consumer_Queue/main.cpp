@@ -1,15 +1,29 @@
 #include "queue.h"
-
 #include <fstream>
 
 const int random(int n) { return rand()%n+10; }
 
+std::mutex guard;
+
 string setname();
 
+void simulate(Queue&);
+
 typedef std::vector<Queue> vq;
+
 vq queues_to_simulate(int,int);
 vq queues_to_simulate(int);
 vq queues_to_simulate();
+
+void queue_threads(vq & queue);
+
+int main(void){
+	std::srand(std::time(0));
+	vq test = queues_to_simulate(10);
+	queue_threads(test);
+	cout<< "\033[2J\033[1;1H";
+	summary(test.back());
+}
 
 void queue_threads(vq & queue){
 	std::vector<std::future<void>> threads;
@@ -19,12 +33,30 @@ void queue_threads(vq & queue){
 		it->get();
 }
 
-int main(void){
-	std::srand(std::time(0));
-	vq test = queues_to_simulate(10);
-	queue_threads(test);
-	cout<< "\033[2J\033[1;1H";
-	summary(test.back());
+void simulate(Queue & queue){
+	Customer * temp;
+	queue.shortest_time = queue.head->person;
+	queue.longest_time = queue.head->person;
+	while(!queue.isempty()){
+		double time = 0;
+		if(time <= 0){
+			temp = new Customer;
+			queue.dequeue(*temp);
+			if(*temp < queue.longest_time)
+				queue.longest_time = *temp;
+			if(*temp > queue.shortest_time)
+				queue.shortest_time = *temp;
+			time = temp->first();
+			queue.allwaittime+= time;
+			delete temp;
+		}
+		if(time > 0)
+			time--;
+	}
+	queue.average = queue.allwaittime/queue.number_of_customers;
+	guard.lock();
+	queue.save();
+	guard.unlock();
 }
 
 string setname(){
@@ -51,6 +83,7 @@ vq queues_to_simulate(int n, int n_customers){
 	}
 	return queues;
 }
+
 vq queues_to_simulate(int n){
 	vq queues;
 	queues.reserve(n);
@@ -63,6 +96,7 @@ vq queues_to_simulate(int n){
 	}
 	return queues;
 }
+
 vq queues_to_simulate(){
 	vq queues;
 	int n = rand()%40+1;

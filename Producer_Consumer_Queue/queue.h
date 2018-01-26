@@ -11,8 +11,6 @@
 using std::cout;
 using std::string;
 
-std::mutex guard;
-
 typedef long long ll;
 typedef std::vector<string> vs;
 
@@ -27,36 +25,18 @@ private:
 	int wait_time;
 	string name;
 public:
-	Customer(){
-		name = '\0';
-		wait_time = 0;
-	}
-	Customer(const string & addname, const int addtime){
-		name = addname;
-		wait_time = addtime;
-	}
-
+	Customer();
+	Customer(const string & addname, const int addtime);
+	
 	const int & first() const { return wait_time; }
 	const string & second() const { return name; }
 
-	Customer & operator=(const Customer & absorb){
-		this->wait_time = absorb.first();
-		this->name = absorb.second();
-	}
-	bool operator>(const Customer & larger){
-		if(larger.first() > this->wait_time)
-			return true;
-		return false;
-	}
-	bool operator<(const Customer & smaller){
-		if(smaller.first() < this->wait_time)
-			return true;
-		return false;
-	}
-	friend std::ostream & operator<<(std::ostream & os, const Customer & customer){
-		os<<customer.name<<" "<<time_format(customer.wait_time);
-		return os;
-	}
+	Customer & operator=(const Customer & absorb);
+		
+	bool operator>(const Customer & larger);
+	bool operator<(const Customer & smaller);
+			
+	friend std::ostream & operator<<(std::ostream & os, const Customer & customer);			
 };
 
 class Queue{
@@ -93,5 +73,6 @@ public:
 	friend void summary(const Queue & queue);
 	
 protected:
-	void save();		
+	void save();	
 };
+
