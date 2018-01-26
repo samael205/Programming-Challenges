@@ -1,5 +1,0 @@
-;Buy car
-;Clear room
-DONE;Go to cinema
-;Play with dog
-DONE;Repair bike
