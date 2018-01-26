@@ -16,15 +16,11 @@
 TaskWidget::TaskWidget(QWidget * parent)
     : QTabWidget(parent){
     taskList = new TaskModel(this);
-
     setFixedWidth(600);
-
     Setup();
-
 }
 
 void TaskWidget::Setup(){
-
     proxy = new QSortFilterProxyModel(this);
     proxy->setSourceModel(taskList);
 
@@ -42,7 +38,6 @@ void TaskWidget::Setup(){
 }
 
 void TaskWidget::addTask(QString taskDescription, bool status){
-
     if(!taskList->containCheckBox(taskDescription)){
         taskList->insertRows(0, 1, QModelIndex());
         QModelIndex index = taskList->index(0, 0, QModelIndex());
@@ -56,7 +51,6 @@ void TaskWidget::addTask(QString taskDescription, bool status){
 }
 
 void TaskWidget::showAddTaskDialog(){
-
     addTaskDialog addNewTask;
 
     if(addNewTask.exec()){
@@ -66,7 +60,6 @@ void TaskWidget::showAddTaskDialog(){
 }
 
 void TaskWidget::editTask(){
-
     QTableView * view = static_cast<QTableView*>(currentWidget());
     QSortFilterProxyModel * proxy = static_cast<QSortFilterProxyModel*>(view->model());
     QItemSelectionModel * selectModel = view->selectionModel();
@@ -96,7 +89,6 @@ void TaskWidget::editTask(){
 }
 
 void TaskWidget::removeTask(){
-
         QTableView * view = static_cast<QTableView*>(currentWidget());
         QSortFilterProxyModel * proxy = static_cast<QSortFilterProxyModel*>(view->model());
         QItemSelectionModel * selectModel = view->selectionModel();
@@ -126,7 +118,6 @@ int Status(std::string check){
 }
 
 void TaskWidget::saveToFile(QString & fileName){
-
     std::ofstream file;
     file.open(fileName.toStdString());
 
@@ -143,7 +134,6 @@ void TaskWidget::saveToFile(QString & fileName){
 }
 
 void TaskWidget::readFromFile(QString & fileName){
-
     std::ifstream file;
     file.open(fileName.toStdString());
     if(!file.is_open())
@@ -162,7 +152,6 @@ void TaskWidget::readFromFile(QString & fileName){
         task.push_back(std::pair<std::string, std::string>(getInfo.front(), getInfo.back()));
         getInfo.clear();
     }
-
     file.close();
 
     for(auto & each : task)
