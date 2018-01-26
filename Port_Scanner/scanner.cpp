@@ -1,5 +1,4 @@
 #include "scanner.h"
-#include "error.h"
 
 #include <QTextStream>
 #include <QIcon>
