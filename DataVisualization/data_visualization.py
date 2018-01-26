@@ -19,7 +19,7 @@ ind = np.random.randint(0, len(workers_data.values()), 25)
 heights = np.random.randint(3, 12, len(workers_data.values()))
 
 plt.title("Average earn occupations")
-plt.xlabel("Occupy")
+plt.xlabel("Occupation")
 plt.ylabel("Earn")
 
 bar = plt.bar(workers_data.keys(), workers_data.values(), width=1, color='b')
