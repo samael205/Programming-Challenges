@@ -152,6 +152,7 @@ void TaskWidget::readFromFile(QString & fileName){
         task.push_back(std::pair<std::string, std::string>(getInfo.front(), getInfo.back()));
         getInfo.clear();
     }
+    
     file.close();
 
     for(auto & each : task)
