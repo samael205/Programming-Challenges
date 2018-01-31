@@ -1,4 +1,5 @@
 #include "scanner.h"
+#include "error.h"
 
 #include <QTextStream>
 #include <QIcon>
@@ -89,7 +90,6 @@ void Scanner::HostDown(){
     noHost->exec();
     delete noHost;
 }
-
 void Scanner::HostEmpty(){
     QMessageBox * noHost = new QMessageBox;
     noHost->setWindowTitle("host name error");
