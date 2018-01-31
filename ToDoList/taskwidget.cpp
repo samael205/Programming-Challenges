@@ -12,78 +12,94 @@
 #include <fstream>
 #include <vector>
 #include <sstream>
+#include <boost/algorithm/string.hpp>
 
 TaskWidget::TaskWidget(QWidget * parent)
     : QTabWidget(parent){
     taskList = new TaskModel(this);
-    setFixedWidth(600);
+
     Setup();
 }
 
 void TaskWidget::Setup(){
+
     proxy = new QSortFilterProxyModel(this);
     proxy->setSourceModel(taskList);
 
     QTableView * viewModel = new QTableView;
     viewModel->setModel(proxy);
     viewModel->setSortingEnabled(true);
-    viewModel->setFixedWidth(width());
-    viewModel->setColumnWidth(0, width()-20);
+    viewModel->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    connect(viewModel->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectChanged()));
 
     QString iconPath(QDir::currentPath() + "/icons/progress.png");
     QIcon tabIcon(iconPath);
 
     addTab(viewModel, tabIcon, "Productivity");
-
 }
 
-void TaskWidget::addTask(QString taskDescription, bool status){
+void TaskWidget::addTask(QString taskDescription, QString note, bool status){
+
     if(!taskList->containCheckBox(taskDescription)){
+        if(note.isEmpty())
+            note = "NONE";
         taskList->insertRows(0, 1, QModelIndex());
         QModelIndex index = taskList->index(0, 0, QModelIndex());
         taskList->setData(index, taskDescription, Qt::DisplayRole);
+        taskList->setData(index, note, Qt::EditRole);
         taskList->setData(index, status, Qt::CheckStateRole);
     }
     else
-        QMessageBox::information(this, tr("Duplicate Name"),
+        QMessageBox::information(this, "Duplicate Name",
                                  tr("The name %1 already exists.").arg(taskDescription));
-
 }
 
 void TaskWidget::showAddTaskDialog(){
+
     addTaskDialog addNewTask;
 
     if(addNewTask.exec()){
         QString task = addNewTask.taskName->text();
-        addTask(task);
+        QString note = addNewTask.noteName->toPlainText();
+        addTask(task, note);
     }
 }
 
 void TaskWidget::editTask(){
+
     QTableView * view = static_cast<QTableView*>(currentWidget());
     QSortFilterProxyModel * proxy = static_cast<QSortFilterProxyModel*>(view->model());
     QItemSelectionModel * selectModel = view->selectionModel();
 
     QModelIndexList indexes = selectModel->selectedRows();
     QString description;
+    QString note;
     int row;
 
     foreach(QModelIndex index, indexes){
         row = proxy->mapToSource(index).row();
         QModelIndex nameIndex = taskList->index(row, 0, QModelIndex());
         QVariant taskName = taskList->data(nameIndex, Qt::DisplayRole);
+        QVariant noteName = taskList->data(nameIndex, Qt::EditRole);
         description = taskName.toString();
+        note = noteName.toString();
+        if(note == "NONE")
+            note.clear();
 
         addTaskDialog aDialog;
         aDialog.setWindowTitle("Edit Task");
 
-       aDialog.taskName->setReadOnly(false);
+        aDialog.taskName->setReadOnly(false);
         aDialog.taskName->setText(description);
+        aDialog.noteName->setText(note);
 
         if(aDialog.exec()){
             QString newTask = aDialog.taskName->text();
+            QString newNote = aDialog.noteName->toPlainText();
             QModelIndex index = taskList->index(row, 0, QModelIndex());
              taskList->setData(index, newTask, Qt::DisplayRole);
+             taskList->setData(index, newNote, Qt::EditRole);
         }
     }
 }
@@ -99,6 +115,22 @@ void TaskWidget::removeTask(){
             int row = proxy->mapToSource(index).row();
             taskList->removeRows(row, 1, QModelIndex());
         }
+}
+
+const QString TaskWidget::taskDescription() const{
+    QTableView * view = static_cast<QTableView*>(currentWidget());
+    QSortFilterProxyModel * proxy = static_cast<QSortFilterProxyModel*>(view->model());
+    QItemSelectionModel * select = view->selectionModel();
+
+    QModelIndex index = select->currentIndex();
+    int row = proxy->mapToSource(index).row();
+    QModelIndex noteIndex = taskList->index(row, 0, QModelIndex());
+
+    return taskList->showNote(noteIndex, Qt::DisplayRole);
+}
+
+void TaskWidget::selectChanged(){
+    emit selected();
 }
 
 void TaskWidget::clearAll(){
@@ -118,18 +150,20 @@ int Status(std::string check){
 }
 
 void TaskWidget::saveToFile(QString & fileName){
+
     std::ofstream file;
     file.open(fileName.toStdString());
 
     if(!file.is_open()){
-        QMessageBox::information(this, tr("Could not open file."), tr("Can't write content to file!"));
+        QMessageBox::information(this, "Could not open file.", "Can't write content to file!");
         return;
     }
 
-    for(const auto task : taskList->getTasks())
-        file<<taskStatus(task->checkState())<<";"
-           <<task->text().toStdString()<<"\n";
-
+    for(auto task : taskList->getTasks()){
+        task.description.replace("\n", "~");
+        file<<taskStatus(task.progress->checkState())<<";"
+           <<task.progress->text().toStdString()<<";"<<task.description.toStdString()<<"\n";
+    }
     file.close();
 }
 
@@ -148,13 +182,15 @@ void TaskWidget::readFromFile(QString & fileName){
         std::stringstream sstream(temp);
         while(std::getline(sstream, bufor, ';'))
             getInfo.push_back(bufor);
+
+        QString formatNotes = QString::fromStdString(getInfo[2]);
+        formatNotes.replace("~", "\n");
+
+        addTask(QString::fromStdString(getInfo[1]), formatNotes, Status(getInfo[0]));
+
         sstream.str("");
-        task.push_back(std::pair<std::string, std::string>(getInfo.front(), getInfo.back()));
         getInfo.clear();
     }
-    
-    file.close();
-
-    for(auto & each : task)
-        addTask(QString::fromStdString(each.second), Status(each.first));
+    file.close();    
 }
+

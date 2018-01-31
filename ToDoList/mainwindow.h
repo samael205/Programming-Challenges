@@ -15,7 +15,9 @@ public:
 private slots:
      void save();
      void read();
+     void showTaskNote();
 private:
+    QTextEdit * notes;
     TaskWidget * ToDoList;
 
     void SetupMenu();

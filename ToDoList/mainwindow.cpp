@@ -6,10 +6,34 @@ QString MainWindow::path = QDir::currentPath() + "/myToDo";
 
 MainWindow::MainWindow(){
     ToDoList = new TaskWidget(this);
-    setCentralWidget(ToDoList);
-    SetupMenu();
 
+    QVBoxLayout * mainLayout = new QVBoxLayout;
+    notes = new QTextEdit;
+    notes->setReadOnly(true);
+    notes->setFixedHeight(100);
+
+    mainLayout->addWidget(ToDoList);
+
+    QLabel *notesLabel = new QLabel("Task notes");
+    mainLayout->addWidget(notesLabel);
+    mainLayout->addWidget(notes);
+
+    setCentralWidget(new QWidget);
+
+    centralWidget()->setLayout(mainLayout);
+
+    SetupMenu();
     Restore();
+
+    connect(ToDoList, SIGNAL(selected()), this, SLOT(showTaskNote()));
+
+    QRect desktop = QApplication::desktop()->screenGeometry();
+    int x = desktop.width();
+    int y = desktop.height();
+
+    QPropertyAnimation * animation = new QPropertyAnimation(this, "geometry");
+    animation->setEndValue(QRect(x/2-300, y/2-300, 600, 500));
+    animation->start();
 }
 
 MainWindow::~MainWindow(){
@@ -61,5 +85,13 @@ void MainWindow::read(){
     QString file = QFileDialog::getOpenFileName(this);
     if(!file.isEmpty())
         ToDoList->readFromFile(file);
+}
+
+void MainWindow::showTaskNote(){
+    QString desc = ToDoList->taskDescription();
+    if(desc != "NONE")
+        notes->setText(ToDoList->taskDescription());
+    else
+        notes->setText("");
 }
 

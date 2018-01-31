@@ -5,6 +5,8 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QtWidgets>
+#include <QObject>
 
 class addTaskDialog : public QDialog
 {
@@ -12,10 +14,12 @@ class addTaskDialog : public QDialog
 public:
     addTaskDialog(QWidget * parenet = 0);
     QLineEdit * taskName;
+    QTextEdit * noteName;
 private:
     QPushButton * okButton;
     QPushButton * cancelButton;
     QLabel * taskLabel;
+    QLabel * noteLabel;
 
 };
 

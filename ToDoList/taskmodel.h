@@ -4,10 +4,17 @@
 #include <QAbstractTableModel>
 #include <QCheckBox>
 #include <QVariant>
+#include <QtWidgets>
+#include <QObject>
 
 #define REP(i, n) for(int i=0; i<n; i++)
 #define VAR(i, x) __typeof(x) i = x
 #define FOREACH(i, x) for(VAR(i, x.begin()); i != x.end(); i++)
+
+struct Task{
+    QCheckBox * progress;
+    QString description;
+};
 
 class TaskModel : public QAbstractTableModel
 {
@@ -23,15 +30,16 @@ public:
 
     bool insertRows(int row, int count, const QModelIndex &parent) override;
     bool removeRows(int row, int count, const QModelIndex &parent) override;
-    bool setData(const QModelIndex &index, const QVariant &value, int role) override;
+    bool setData(const QModelIndex &index, const QVariant &, int role) override;
+
+    QString showNote(QModelIndex&,int);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool containCheckBox(QString);
-
-    QList<QCheckBox*> getTasks() const;
+    QList<Task> getTasks() const;
 private:
-    QList<QCheckBox*> tasks;   
+    QList<Task> tasks;
 };
 
 #endif // TASKMODEL_H
