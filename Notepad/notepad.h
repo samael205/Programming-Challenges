@@ -2,8 +2,9 @@
 #define NOTEPAD_H
 
 #include <QMainWindow>
-#include <QAction>
-#include <QMenu>
+#include <QtWidgets>
+
+#include "hightlight.h"
 
 namespace Ui {
 class Notepad;
@@ -17,34 +18,47 @@ public:
     explicit Notepad(QWidget *parent = 0);
     ~Notepad();
 public slots:
-    void on_ActionNew_Trigerred();
-    void on_Action_Trigerred();
-    void on_ActionSave_Trigerred();
-    void on_ActionSave_as_Trigerred();
-    void on_ActionFont_Trigerred();
+    void onNew();
+    void onOpen();
+    void onSave();
+    void onSaveAs();
+    void setFont();
 
-    void countWords();
+    void countAll();
 
-    void window();
-protected:
-    unsigned int calculate(QString&);
-    unsigned int countChars(const std::string&);
+    void searchOn();
+    void find(const QString&);
+    void searchoff();
+
+    void addNewWidget();
+
+    void searchAndReplaceOn();
+    void replaceAll();
 private:
-    Ui::Notepad *ui;
+    Hightlight * hightlighter;
+
     QString currentFile;
+    Ui::Notepad *ui;
+
+    QString countColumnAndLine();
+    QString countWordsAndChars();
 
     void setupMenus();
     QMenu * fileMenu;
-    QAction * saveFile;
-    QAction * saveAsFile;
-    QAction * openFile;
     QAction * newFile;
+    QAction * open;
+    QAction * save;
+    QAction * saveAs;
 
-    QMenu * fontMenu;
-    QAction * setFont;
+    QMenu * edit;
+    QAction * search;
+    QAction * replace;
 
-    QMenu *view;
-    QAction * newWindow;
+    QMenu *fontMenu;
+    QAction * fontSelect;
+
+    QMenu * viewMenu;
+    QAction * newView;
 };
 
 #endif // NOTEPAD_H

@@ -1,141 +1,205 @@
 #include "notepad.h"
 #include "ui_notepad.h"
-#include <QFileDialog>
 #include <QMessageBox>
-#include <QTextStream>
-#include <QFontDialog>
-#include <QMenuBar>
-#include <QGridLayout>
 #include <string>
-#include <sstream>
 #include <algorithm>
 #include <cctype>
+#include <sstream>
 
 Notepad::Notepad(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::Notepad)
-{
+    ui(new Ui::Notepad){
+
     ui->setupUi(this);
 
-    connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(countWords()));
+    searchoff();
+
+    connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(countAll()));
+    connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(searchoff()));
+    connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(find(QString)));
+    connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(replaceAll()));
+
+    QString replaceIconPath = QDir::currentPath() + "/icons/exit.png";
+    QString searchIconPath = QDir::currentPath() + "/icons/replace.png";
+
+    QIcon replaceIcon(replaceIconPath);
+    QIcon searchIcon(searchIconPath);
+
+    ui->pushButton->setIcon(replaceIcon);
+    ui->pushButton_2->setIcon(searchIcon);
 
     setupMenus();
 }
 
-Notepad::~Notepad()
-{
+Notepad::~Notepad(){
     delete ui;
 }
 
 void Notepad::setupMenus(){
-    fileMenu = menuBar()->addMenu("&File");
+    fileMenu = menuBar()->addMenu("File");
 
-    newFile = new QAction(tr("&New"), this);
+    newFile = new QAction("New", this);
     fileMenu->addAction(newFile);
-    connect(newFile, SIGNAL(triggered(bool)), this, SLOT(on_ActionNew_Trigerred()));
+    connect(newFile, SIGNAL(triggered(bool)), this, SLOT(onNew()));
 
-    openFile = new QAction(("&Open"), this);
-    fileMenu->addAction(openFile);
-    connect(openFile, SIGNAL(triggered(bool)), this, SLOT(on_Action_Trigerred()));
+    open = new QAction("Open", this);
+    fileMenu->addAction(open);
+    connect(open, SIGNAL(triggered(bool)), this, SLOT(onOpen()));
 
-    saveFile = new QAction(tr("&Save"), this);
-    fileMenu->addAction(saveFile);
-    connect(saveFile, SIGNAL(triggered(bool)), this, SLOT(on_ActionSave_Trigerred()));
+    save = new QAction("Save", this);
+    fileMenu->addAction(save);
+    connect(save, SIGNAL(triggered(bool)), this, SLOT(onSave()));
 
-    saveAsFile = new QAction(tr("&Save as"), this);
-    fileMenu->addAction(saveAsFile);
-    connect(saveAsFile, SIGNAL(triggered(bool)), this, SLOT(on_ActionSave_as_Trigerred()));
+    saveAs = new QAction("Save As", this);
+    fileMenu->addAction(saveAs);
+    connect(saveAs, SIGNAL(triggered(bool)), this, SLOT(onSaveAs()));
+
+    edit = menuBar()->addMenu("Edit");
+
+    search = new QAction("Find", this);
+    edit->addAction(search);
+    connect(search, SIGNAL(triggered(bool)), this, SLOT(searchOn()));
+
+    replace = new QAction("Replace", this);
+    edit->addAction(replace);
+    connect(replace, SIGNAL(triggered(bool)), this, SLOT(searchAndReplaceOn()));
 
     fontMenu = menuBar()->addMenu("Font");
 
-    setFont = new QAction(tr("&Set Font"), this);
-    fontMenu->addAction(setFont);
-    connect(setFont, SIGNAL(triggered(bool)), this, SLOT(on_ActionFont_Trigerred()));
+    fontSelect = new QAction("Set new font", this);
+    fontMenu->addAction(fontSelect);
+    connect(fontSelect, SIGNAL(triggered(bool)), this, SLOT(setFont()));
 
-    view = menuBar()->addMenu(tr("&View"));
-    newWindow = new QAction(tr("&New"), this);
-    view->addAction(newWindow);
-    connect(newWindow, SIGNAL(triggered(bool)), this, SLOT(window()));
+    viewMenu = menuBar()->addMenu("View");
+    newView = new QAction("New", this);
+    viewMenu->addAction(newView);
+    connect(newView, SIGNAL(triggered(bool)), this, SLOT(addNewWidget()));
 }
 
-void Notepad::window(){
-    Notepad * quickWindow;
-    quickWindow = new Notepad;
-    quickWindow->show();
+void Notepad::addNewWidget(){
+    Notepad * addNotepad;
+    addNotepad = new Notepad;
+    addNotepad->show();
 }
 
-void Notepad::on_ActionNew_Trigerred(){
-    ui->textEdit->setText("");
+void Notepad::onNew(){
     currentFile = "";
+    ui->textEdit->setText("");
 }
 
-void Notepad::on_Action_Trigerred(){
+void Notepad::onOpen(){
     QString fileName = QFileDialog::getOpenFileName(this, "Open File");
     QFile file(fileName);
     currentFile = fileName;
     if(!file.open(QIODevice::ReadOnly | QFile::Text)){
-        QMessageBox::warning(this, tr("Error!"), tr("File not opened"));
+        QMessageBox::information(this, "File open error", tr("Could not open %1 file").arg(fileName));
         return;
     }
-    QTextStream getContent(&file);
-    QString text = getContent.readAll();
+    QTextStream getFromFile(&file);
+    QString text = getFromFile.readAll();
     ui->textEdit->setText(text);
     file.close();
 }
 
-void Notepad::on_ActionSave_Trigerred(){
+void Notepad::onSave(){
+
     QFile file(currentFile);
     if(!file.open(QIODevice::WriteOnly | QFile::Text)){
-        QMessageBox::warning(this, tr("..."), tr("File not opened"));
+        QMessageBox::information(this, "Write Error!", tr("No file opened!"));
         return;
     }
-    QTextStream saveTo(&file);
+    QTextStream getFromNotepad(&file);
     QString text = ui->textEdit->toPlainText();
-    saveTo << text;
+    getFromNotepad << text;
     file.flush();
     file.close();
 }
 
-void Notepad::on_ActionSave_as_Trigerred(){
-    QString fileName = QFileDialog::getSaveFileName(this, tr("Save as"));
-    QFile file(fileName);
-    currentFile = fileName;
+void Notepad::onSaveAs(){
+    QString filePath = QFileDialog::getSaveFileName(this, "Save file");
+    QFile file(filePath);
+    currentFile = filePath;
     if(!file.open(QIODevice::WriteOnly | QFile::Text)){
-        QMessageBox::warning(this, tr("..."), "File not opened");
+        QMessageBox::information(this, "Write error", tr("File not opened!"));
         return;
     }
-    QTextStream writeContent(&file);
+    QTextStream getFromNotepad(&file);
     QString text = ui->textEdit->toPlainText();
-    writeContent << text;
+    getFromNotepad << text;
     file.flush();
     file.close();
 }
 
-void Notepad::on_ActionFont_Trigerred(){
-    bool select;
-    QFont font = QFontDialog::getFont(&select, this);
-    if(select)
-       ui->textEdit->setFont(font);
+void Notepad::setFont(){
+    bool fontSelected;
+    QFont font = QFontDialog::getFont(&fontSelected, this);
+    if(fontSelected)
+        ui->textEdit->setFont(font);
 }
 
-unsigned int Notepad::calculate(QString & sentence){
-    std::stringstream sstream(sentence.toStdString());
-    return std::distance(std::istream_iterator<std::string>(sstream), std::istream_iterator<std::string>());
+void Notepad::countAll(){
+    QString format = countColumnAndLine() + countWordsAndChars();
+    ui->counter->setText(format);
 }
 
-unsigned int Notepad::countChars(const std::string & word){
-    int count = 0;
-    for(auto it = word.begin(); it != word.end(); it++)
-        if(std::isalpha(*it) || std::ispunct(*it))
-            count++;
-    return count;
+QString Notepad::countColumnAndLine(){
+    QTextCursor cursor = ui->textEdit->textCursor();
+    int column = cursor.blockNumber()+1;
+    int line = cursor.columnNumber()+1;
+    QString format = "Column: " + QString::number(column) + ", Line: " + QString::number(line);
+    return format;
 }
 
-void Notepad::countWords(){
+QString Notepad::countWordsAndChars(){
+    std::string text = ui->textEdit->toPlainText().toStdString();
+    std::stringstream sstream(text);
+    int words =  std::distance(std::istream_iterator<std::string>(sstream), std::istream_iterator<std::string>());
+
+    int chars = 0;
+    for(auto it = text.begin(); it != text.end(); it++)
+        if(!std::isspace(*it))
+            chars++;
+    return "\tWords: " + QString::number(words) + ", Chars: " + QString::number(chars);
+}
+
+void Notepad::searchoff(){
+    ui->searcher->hide();
+    ui->counter->show();
+
+    ui->lineEdit->clear();
+    ui->lineEdit_2->clear();
+}
+
+void Notepad::searchOn(){
+    ui->searcher->show();
+    ui->lineEdit_2->hide();
+    ui->pushButton_2->hide();
+    ui->label_2->hide();
+
+    ui->counter->hide();
+    ui->lineEdit->setFocus();
+}
+
+void Notepad::find(const QString & find){
+   hightlighter = new Hightlight(ui->textEdit->document(), find);
+}
+
+void Notepad::searchAndReplaceOn(){
+    ui->counter->hide();
+
+    ui->searcher->show();
+    ui->lineEdit_2->show();
+    ui->pushButton_2->show();
+    ui->label_2->show();
+}
+
+void Notepad::replaceAll(){
     QString text = ui->textEdit->toPlainText();
-    auto count = calculate(text);
-    auto chars = countChars(text.toStdString());
-    ui->label->setText("Words: " + QString::number(count) + " Chars: " + QString::number(chars));
+
+    QString toReplace = ui->lineEdit->text();
+    QString replaceWith = ui->lineEdit_2->text();
+
+    text.replace(toReplace, replaceWith);
+
+    ui->textEdit->setText(text);
 }
-
-
