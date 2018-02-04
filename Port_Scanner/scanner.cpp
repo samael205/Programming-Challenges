@@ -13,8 +13,8 @@
 #include <QTableView>
 #include <QtWidgets>
 
-Scanner::Scanner(QWidget * p) : QWidget(p)
-{
+Scanner::Scanner(QWidget * p)
+    : QWidget(p){
     QIcon icon(QCoreApplication::applicationDirPath() + "/scan.png");
     QGridLayout * background;
     background = new QGridLayout;
@@ -64,15 +64,6 @@ Scanner::Scanner(QWidget * p) : QWidget(p)
 
     background->addWidget(showResults, 3, 0);
 
-    QPropertyAnimation * animation = new QPropertyAnimation(this, "geometry");
-    QRect start(500, 200, 0, 0);
-    setGeometry(start);
-    QRect begin = geometry();
-    QRect end(begin.x(), begin.y(), 650, 500);
-    animation->setStartValue(begin);
-    animation->setEndValue(end);
-    animation->start();
-
     QProgressBar * progressbar = new QProgressBar(this);
     progressbar->resize(300, 80);
     progressbar->setWindowTitle("Scanning");
@@ -84,6 +75,7 @@ Scanner::Scanner(QWidget * p) : QWidget(p)
     connect(this, SIGNAL(setMax(int)), progressbar, SLOT(setMaximum(int)));
     connect(this, SIGNAL(stop()), progressbar, SLOT(reset()));
     connect(enter, SIGNAL(clicked(bool)), this, SLOT(Scan()));
+
 }
 
 Scanner::~Scanner(){
@@ -124,22 +116,24 @@ bool Scanner::isHostUp(const QString &host){
         return false;
 }
 
-std::string Scanner::portInfo(int port){
-    std::fstream file;
-    file.open(QCoreApplication::applicationDirPath().toStdString() + "/ports.txt");
-   if(!file.is_open())
-        exit(EXIT_FAILURE);
-    file.seekg(port);
-    std::string line;
-    while(std::getline(file, line))
-        if(line.substr(0, line.find_first_of("\t")) == std::to_string(port)){
-            line =  line.substr(line.find_first_of("\t"), line.length());
+QString Scanner::portInfo(int port){
+    QFile file(QCoreApplication::applicationDirPath() + "/ports.txt");
+    file.open(QIODevice::ReadOnly);
+    file.seek((qint64)port);
+    QStringList splitContent;
+    QTextStream readContent(&file);
+    QString line;
+    while(!readContent.atEnd()){
+        line = readContent.readLine();
+        splitContent = line.split(";");
+        if( port == splitContent[0].toInt() && splitContent.size() > 1){
+            line = splitContent[1];
             break;
         }
-        else if(std::atoi(line.substr(0, line.find_first_of("\t")).c_str()) > port){
-            line = "";
+        else if(port < splitContent[0].toInt())
             break;
-        }
+        splitContent.clear();
+    }
     file.close();
     return line;
 }
@@ -149,33 +143,25 @@ void Scanner::RemovePreviousScanInfo(){
     scanResults->removeRows(0, rows, QModelIndex());
 }
 
-void Scanner::ResizeColumnWidthToDescriptionSize(){
-    QPropertyAnimation * animation;
-    animation = new QPropertyAnimation(this, "size");
-    QSize size(1000, 600);
-    animation->setEndValue(size);
-    animation->start();
-}
-
 void Scanner::Scan(){
        RemovePreviousScanInfo();
-       std::string host = data[0].text().toStdString();
+       QString host = data[0].text();
 
-    if(isHostUp(QString::fromStdString(host)) && host.length() != 0){
-        std::string ports = data[1].text().toStdString();
+    if(isHostUp(host) && host.length() != 0){
+        QString ports = data[1].text();
         QString msg;
         QTextStream show{&msg};
 
         int i = 0;
-        auto Ports_To_Check = PortList(ports);
+        auto Ports_To_Check = PortList(ports.toStdString());
         emit start();
         emit setMax(Ports_To_Check.size());
 
      for(auto & port : Ports_To_Check){
-        if(isOpen(host, port))
+        if(isOpen(host.toStdString(), port))
             show <<"OPEN";
         else
-            show  <<"CLOSE ";
+            show  <<"CLOSE";
 
          scanResults->insertRows(0, 1, QModelIndex());
          QModelIndex index = scanResults->index(0, 0, QModelIndex());
@@ -183,19 +169,49 @@ void Scanner::Scan(){
          index = scanResults->index(0, 1, QModelIndex());
          scanResults->setData(index, msg, Qt::EditRole);
          index = scanResults->index(0, 2, QModelIndex());
-         scanResults->setData(index, QString::fromStdString(portInfo(port)), Qt::EditRole);
+         scanResults->setData(index, portInfo(port), Qt::EditRole);
 
          msg.clear();
 
          emit SignalProgress(++i);
         }
-        ResizeColumnWidthToDescriptionSize();
         emit stop();
     }
     else if(host.length() == 0)
         HostEmpty();
     else
         HostDown();
+}
+
+void Scanner::saveResultsToCSV(){
+    QString filePath = QFileDialog::getSaveFileName(0, "Save File", QDir::currentPath(),
+                                                    "(*.csv)");
+    QString result;
+    QTextStream getContent { &result };
+
+    for(int i = scanResults->rowCount(QModelIndex()); i >= 0; i--){
+        QVariant currentData;
+
+        QModelIndex index = scanResults->index(i, 0, QModelIndex());
+        currentData = scanResults->data(index, Qt::DisplayRole);
+        getContent<<currentData.toString()<<",";
+        index = scanResults->index(i, 1, QModelIndex());
+        currentData = scanResults->data(index, Qt::DisplayRole);
+        getContent<<currentData.toString()<<",";
+        index = scanResults->index(i, 2, QModelIndex());
+        currentData = scanResults->data(index, Qt::DisplayRole);
+        getContent<<currentData.toString()<<"\n";
+    }
+
+    QFile file(filePath);
+    file.open(QIODevice::WriteOnly);
+    QTextStream saveToFile(&file);
+    result.trimmed();
+    QRegularExpression exp("\"*");
+    result.remove(exp);
+    saveToFile << result.toUtf8();
+    file.flush();
+    file.close();
 }
 
 vis Scanner::Split(const std::string &s, char delimiter){
@@ -253,4 +269,6 @@ vi Scanner::PortList(const std::string & ports){
     }
     return Port_List;
 }
+
+
 

@@ -44,7 +44,7 @@ private:
     QSortFilterProxyModel * proxy;
     ScanInfoModel * scanResults;
 protected:
-    std::string portInfo(int);
+    QString portInfo(int);
     vi PortList(const std::string &);
     vis Split(const std::string & s, char delimiter = ' ');
     int StringToInt(const std::string & s);
@@ -59,8 +59,9 @@ protected:
     template <class T>
     void Swap(T & a, T & b);
 
-    void ResizeColumnWidthToDescriptionSize();
     void RemovePreviousScanInfo();
+public slots:
+    void saveResultsToCSV();
 signals:
     void SignalProgress(int);
     void setMax(int);

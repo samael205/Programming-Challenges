@@ -10,6 +10,7 @@ ScanInfoModel::ScanInfoModel(const QString & info, QObject *parent)
 
 }
 
+
 int ScanInfoModel::columnCount(const QModelIndex &parent) const{
     Q_UNUSED(parent);
     return 3;
@@ -51,6 +52,7 @@ QVariant ScanInfoModel::data(const QModelIndex &index, int role) const{
         switch(index.column()){
             case 0:
             case 1:
+            case 2:
                 return Qt::AlignCenter;
             default:
                 return Qt::AlignLeft;

@@ -1,12 +1,12 @@
 #include <QApplication>
+#include "mainwindow.h"
 
-#include "scanner.h"
 
 int main(int argc, char ** argv){
     QApplication app(argc, argv);
 
-    Scanner scanPorts;
-    scanPorts.show();
+    MainWindow scanner;
+    scanner.show();
 
     app.exec();
 }
