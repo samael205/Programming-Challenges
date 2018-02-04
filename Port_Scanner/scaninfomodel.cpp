@@ -10,7 +10,6 @@ ScanInfoModel::ScanInfoModel(const QString & info, QObject *parent)
 
 }
 
-
 int ScanInfoModel::columnCount(const QModelIndex &parent) const{
     Q_UNUSED(parent);
     return 3;
