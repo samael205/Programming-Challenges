@@ -9,5 +9,5 @@ Gallery::Gallery(QWidget * parent)
     icons->addItem(new Thumbnail_item("haha.png"));
     icons->addItem(new Thumbnail_item("hihi.png"));
 
-   QListView * showIcons;
+    QListView * showIcons;
 }
