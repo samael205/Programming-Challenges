@@ -3,7 +3,6 @@
 
 #include <QtWidgets>
 #include <QMainWindow>
-#include "thumbnail_item.h"
 
 #define REP(i, n) for(int i=0; i<n; i++)
 
