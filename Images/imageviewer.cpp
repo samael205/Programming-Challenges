@@ -233,8 +233,7 @@ void ImageViewer::openFiles(){
     imagesPaths = getImages.getOpenFileNames();
 
     if(imagesPaths.size() > 1){
-        bool setChecked = ThumbnailShow->isChecked() ? 1 : 1;
-        ThumbnailShow->setChecked(setChecked);
+        ThumbnailShow->setChecked(true);
         ChangeThumbnailVisible();
     }
 
