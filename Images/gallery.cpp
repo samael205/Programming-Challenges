@@ -10,6 +10,4 @@ Gallery::Gallery(QWidget * parent)
     icons->addItem(new Thumbnail_item("hihi.png"));
 
    QListView * showIcons;
-  // showIcons = new QListView;
-  // showIcons->setModel(icons);
 }
