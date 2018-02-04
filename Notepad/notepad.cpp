@@ -29,6 +29,11 @@ Notepad::Notepad(QWidget *parent) :
     ui->pushButton_2->setIcon(searchIcon);
 
     setupMenus();
+
+    QRect screenSize = QApplication::desktop()->screenGeometry();
+    int x = screenSize.width();
+    int y = screenSize.height();
+    resize(x, y);
 }
 
 Notepad::~Notepad(){
@@ -40,28 +45,41 @@ void Notepad::setupMenus(){
 
     newFile = new QAction("New", this);
     fileMenu->addAction(newFile);
+    newFile->setShortcut(QKeySequence::New);
     connect(newFile, SIGNAL(triggered(bool)), this, SLOT(onNew()));
 
     open = new QAction("Open", this);
     fileMenu->addAction(open);
+    open->setShortcut(QKeySequence::Open);
     connect(open, SIGNAL(triggered(bool)), this, SLOT(onOpen()));
 
     save = new QAction("Save", this);
     fileMenu->addAction(save);
+    save->setShortcut(QKeySequence::Save);
     connect(save, SIGNAL(triggered(bool)), this, SLOT(onSave()));
 
     saveAs = new QAction("Save As", this);
     fileMenu->addAction(saveAs);
+    saveAs->setShortcut(QKeySequence::SaveAs);
     connect(saveAs, SIGNAL(triggered(bool)), this, SLOT(onSaveAs()));
+
+    fileMenu->addSeparator();
+
+    exit = new QAction("Exit", this);
+    fileMenu->addAction(exit);
+    exit->setShortcut(QKeySequence::Quit);
+    connect(exit, SIGNAL(triggered(bool)), this, SLOT(quit()));
 
     edit = menuBar()->addMenu("Edit");
 
     search = new QAction("Find", this);
     edit->addAction(search);
+    search->setShortcut(QKeySequence::Find);
     connect(search, SIGNAL(triggered(bool)), this, SLOT(searchOn()));
 
     replace = new QAction("Replace", this);
     edit->addAction(replace);
+    replace->setShortcut(QKeySequence::Replace);
     connect(replace, SIGNAL(triggered(bool)), this, SLOT(searchAndReplaceOn()));
 
     fontMenu = menuBar()->addMenu("Font");
@@ -71,7 +89,7 @@ void Notepad::setupMenus(){
     connect(fontSelect, SIGNAL(triggered(bool)), this, SLOT(setFont()));
 
     viewMenu = menuBar()->addMenu("View");
-    newView = new QAction("New", this);
+    newView = new QAction("New Window", this);
     viewMenu->addAction(newView);
     connect(newView, SIGNAL(triggered(bool)), this, SLOT(addNewWidget()));
 }
@@ -99,13 +117,15 @@ void Notepad::onOpen(){
     QString text = getFromFile.readAll();
     ui->textEdit->setText(text);
     file.close();
+
+    statusBar()->showMessage(tr("Opened file %1").arg(QDir::toNativeSeparators(fileName)));
 }
 
 void Notepad::onSave(){
 
     QFile file(currentFile);
     if(!file.open(QIODevice::WriteOnly | QFile::Text)){
-        QMessageBox::information(this, "Write Error!", tr("No file opened!"));
+        statusBar()->showMessage("No file opened!");
         return;
     }
     QTextStream getFromNotepad(&file);
@@ -113,6 +133,8 @@ void Notepad::onSave(){
     getFromNotepad << text;
     file.flush();
     file.close();
+
+    statusBar()->showMessage("Saved");
 }
 
 void Notepad::onSaveAs(){
@@ -128,13 +150,18 @@ void Notepad::onSaveAs(){
     getFromNotepad << text;
     file.flush();
     file.close();
+
+    statusBar()->showMessage(tr("Saved as %1").arg(filePath.split("/").back()));
 }
 
 void Notepad::setFont(){
     bool fontSelected;
     QFont font = QFontDialog::getFont(&fontSelected, this);
-    if(fontSelected)
+    if(fontSelected){
         ui->textEdit->setFont(font);
+        statusBar()->showMessage(tr("New font %1")
+                .arg(font.family()));
+    }
 }
 
 void Notepad::countAll(){
@@ -182,6 +209,22 @@ void Notepad::searchOn(){
 
 void Notepad::find(const QString & find){
    hightlighter = new Hightlight(ui->textEdit->document(), find);
+
+   QString cursorPositionOnWord = ui->textEdit->toPlainText();
+   QTextCursor setCursorPosition = ui->textEdit->textCursor();
+   int wordPosition = cursorPositionOnWord.indexOf(find); 
+
+   std::string wordExistInNotepad = ui->textEdit->toPlainText().toStdString();
+   std::string searchedWord = ui->lineEdit->text().toStdString();
+
+   if(wordExistInNotepad.find(searchedWord) != std::string::npos){
+       ui->lineEdit->setStyleSheet("background-color: green;");
+       setCursorPosition.setPosition(wordPosition);
+       setCursorPosition.setPosition(wordPosition + find.length(), QTextCursor::KeepAnchor);
+       ui->textEdit->setTextCursor(setCursorPosition);
+   }
+   else
+       ui->lineEdit->setStyleSheet("background-color: red;");
 }
 
 void Notepad::searchAndReplaceOn(){
@@ -191,6 +234,8 @@ void Notepad::searchAndReplaceOn(){
     ui->lineEdit_2->show();
     ui->pushButton_2->show();
     ui->label_2->show();
+
+    ui->lineEdit->setFocus();
 }
 
 void Notepad::replaceAll(){
@@ -202,4 +247,8 @@ void Notepad::replaceAll(){
     text.replace(toReplace, replaceWith);
 
     ui->textEdit->setText(text);
+}
+
+void Notepad::quit(){
+    QGuiApplication::exit();
 }

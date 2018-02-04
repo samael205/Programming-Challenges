@@ -34,6 +34,8 @@ public slots:
 
     void searchAndReplaceOn();
     void replaceAll();
+
+    void quit();
 private:
     Hightlight * hightlighter;
 
@@ -49,6 +51,7 @@ private:
     QAction * open;
     QAction * save;
     QAction * saveAs;
+    QAction * exit;
 
     QMenu * edit;
     QAction * search;
