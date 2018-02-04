@@ -11,8 +11,10 @@ LIBS += -lsfml-system -lsfml-network -lsfml-graphics -lsfml-window
 
 SOURCES += \
     scanner.cpp \
-    main.cpp
+    main.cpp \
+    scaninfomodel.cpp
 
 HEADERS += \
-    scanner.h
+    scanner.h \
+    scaninfomodel.h
 

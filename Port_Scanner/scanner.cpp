@@ -10,23 +10,22 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 
+#include <QTableView>
+#include <QtWidgets>
+
 Scanner::Scanner(QWidget * p) : QWidget(p)
 {
     QIcon icon(QCoreApplication::applicationDirPath() + "/scan.png");
     QGridLayout * background;
     background = new QGridLayout;
 
-    open = new QCheckBox;
     data = new QLineEdit[2];
-    output = new QTextEdit;
     enter = new QPushButton;
-    description = new QLabel[2];
-    description[0].setText("Scan");
-    description[1].setText("Open");
+    description = new QLabel;
+    description->setText("Scan");
     enter->setIcon(icon);
     enter->setStyleSheet("background-color: #68ADC4;");
     enter->setWindowTitle("Scan ports!");
-    filter = 1;
 
     QRegExpValidator *v = new QRegExpValidator;
     QRegExp rx("((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})");
@@ -45,10 +44,25 @@ Scanner::Scanner(QWidget * p) : QWidget(p)
     background->addWidget(description, 0, 1);
     background->addWidget(enter, 0, 2);
     background->addWidget(data+1, 1, 0);
-    background->addWidget(description+1, 1, 1);
-    background->addWidget(open, 1, 2);
-    background->addWidget(output, 3, 0);
-    setLayout(background);
+
+    scanResults = new ScanInfoModel;
+
+    proxy = new QSortFilterProxyModel(this);
+    proxy->setSourceModel(scanResults);
+    proxy->setFilterKeyColumn(0);
+
+    QTableView * showResults;
+    showResults = new QTableView;
+    showResults->setModel(proxy);
+    showResults->setSelectionBehavior(QAbstractItemView::SelectRows);
+    showResults->setSelectionMode(QAbstractItemView::SingleSelection);
+    showResults->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    showResults->setSortingEnabled(true);
+    showResults->resizeColumnsToContents();
+    showResults->horizontalHeader()->setStretchLastSection(true);
+    showResults->setColumnWidth(1, 200);
+
+    background->addWidget(showResults, 3, 0);
 
     QPropertyAnimation * animation = new QPropertyAnimation(this, "geometry");
     QRect start(500, 200, 0, 0);
@@ -58,28 +72,24 @@ Scanner::Scanner(QWidget * p) : QWidget(p)
     animation->setStartValue(begin);
     animation->setEndValue(end);
     animation->start();
-    QDialog * progress = new QDialog;
 
-    progress->resize(300, 80);
-    progress->setToolTip("Wait until ports is scanning");
-    progress->setWindowTitle("Scanning");
-    QProgressBar * progressbar = new QProgressBar(progress);
+    QProgressBar * progressbar = new QProgressBar(this);
     progressbar->resize(300, 80);
     progressbar->setWindowTitle("Scanning");
 
+    background->addWidget(progressbar, 4, 0);
+    setLayout(background);
+
     connect(this, SIGNAL(SignalProgress(int)), progressbar, SLOT(setValue(int)));
     connect(this, SIGNAL(setMax(int)), progressbar, SLOT(setMaximum(int)));
-    connect(this, SIGNAL(stop()), progress, SLOT(hide()));
-    connect(this, SIGNAL(start()), progress, SLOT(open()));
+    connect(this, SIGNAL(stop()), progressbar, SLOT(reset()));
     connect(enter, SIGNAL(clicked(bool)), this, SLOT(Scan()));
-    connect(open, SIGNAL(clicked(bool)), this, SLOT(ChangeFilter()));
 }
 
 Scanner::~Scanner(){
     delete [] data;
-    delete [] description;
-    delete output;
-    delete enter;\
+    delete  description;
+    delete enter;
 }
 
 void Scanner::HostDown(){
@@ -114,7 +124,7 @@ bool Scanner::isHostUp(const QString &host){
         return false;
 }
 
-std::string Scanner::port_info(int port){
+std::string Scanner::portInfo(int port){
     std::fstream file;
     file.open(QCoreApplication::applicationDirPath().toStdString() + "/ports.txt");
    if(!file.is_open())
@@ -134,39 +144,53 @@ std::string Scanner::port_info(int port){
     return line;
 }
 
+void Scanner::RemovePreviousScanInfo(){
+    int rows = scanResults->rowCount(QModelIndex());
+    scanResults->removeRows(0, rows, QModelIndex());
+}
+
+void Scanner::ResizeColumnWidthToDescriptionSize(){
+    QPropertyAnimation * animation;
+    animation = new QPropertyAnimation(this, "size");
+    QSize size(1000, 600);
+    animation->setEndValue(size);
+    animation->start();
+}
+
 void Scanner::Scan(){
-      std::string host = data[0].text().toStdString();
-      output->clear();
+       RemovePreviousScanInfo();
+       std::string host = data[0].text().toStdString();
+
     if(isHostUp(QString::fromStdString(host)) && host.length() != 0){
         std::string ports = data[1].text().toStdString();
         QString msg;
         QTextStream show{&msg};
+
         int i = 0;
-       auto Ports_To_Check = PortList(ports);
-       emit setMax(Ports_To_Check.size());
-       emit start();
+        auto Ports_To_Check = PortList(ports);
+        emit start();
+        emit setMax(Ports_To_Check.size());
+
      for(auto & port : Ports_To_Check){
-         switch(filter){
-         case 0:
-             if(isOpen(host, port)){
-                 show <<QString::number(port) <<"\tOPEN ";
-                 show<<QString::fromStdString(port_info(port))<<"\n";
-             }
-              break;
-         case 1:
-                if(isOpen(host, port))
-                 show << QString::number(port) <<"\tOPEN ";
-                else
-                  show << QString::number(port) <<"\tCLOSE ";
-               show<<QString::fromStdString(port_info(port))<<"\n";
-               break;
-         }
+        if(isOpen(host, port))
+            show <<"OPEN";
+        else
+            show  <<"CLOSE ";
+
+         scanResults->insertRows(0, 1, QModelIndex());
+         QModelIndex index = scanResults->index(0, 0, QModelIndex());
+         scanResults->setData(index, port, Qt::EditRole);
+         index = scanResults->index(0, 1, QModelIndex());
+         scanResults->setData(index, msg, Qt::EditRole);
+         index = scanResults->index(0, 2, QModelIndex());
+         scanResults->setData(index, QString::fromStdString(portInfo(port)), Qt::EditRole);
+
+         msg.clear();
+
          emit SignalProgress(++i);
-     }
-      emit stop();
-      emit setMax(0);
-      emit SignalProgress(0);
-     output->insertPlainText(msg);
+        }
+        ResizeColumnWidthToDescriptionSize();
+        emit stop();
     }
     else if(host.length() == 0)
         HostEmpty();
@@ -183,7 +207,7 @@ vis Scanner::Split(const std::string &s, char delimiter){
     return tokens;
 }
 
-int Scanner::String_To_Int(const std::string &s){
+int Scanner::StringToInt(const std::string &s){
     std::stringstream sstream(s);
     int IntFromString;
     sstream >> IntFromString;
@@ -215,11 +239,11 @@ vi Scanner::PortList(const std::string & ports){
     for(const std::string & token : Split(ports, ',')){
         vis list_range = Split(token, '-');
         switch(list_range.size()){
-            case 0:Port_List.push_back(String_To_Int(token));break;
-            case 1:Port_List.push_back(String_To_Int(list_range[0])); break;
+            case 0:Port_List.push_back(StringToInt(token));break;
+            case 1:Port_List.push_back(StringToInt(list_range[0])); break;
         case 2:{
-              int min = String_To_Int(list_range[0]);
-              int max = String_To_Int(list_range[1]);
+              int min = StringToInt(list_range[0]);
+              int max = StringToInt(list_range[1]);
               for(int port : range(min, max))
                   Port_List.push_back(port);
             }break;
@@ -229,3 +253,4 @@ vi Scanner::PortList(const std::string & ports){
     }
     return Port_List;
 }
+

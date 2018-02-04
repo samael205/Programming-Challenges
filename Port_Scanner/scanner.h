@@ -19,6 +19,9 @@
 #include <fstream>
 #include <sstream>
 #include <SFML/Network.hpp>
+#include <QSortFilterProxyModel>
+
+#include "scaninfomodel.h"
 
 typedef std::vector<std::string> vis;
 typedef std::vector<int> vi;
@@ -34,16 +37,17 @@ public:
     }
 private:
     QLineEdit * data;
-    QTextEdit * output;
     QPushButton * enter;
     QCheckBox * open;
     QLabel * description;
-    bool filter;
+
+    QSortFilterProxyModel * proxy;
+    ScanInfoModel * scanResults;
 protected:
-    std::string port_info(int);
+    std::string portInfo(int);
     vi PortList(const std::string &);
     vis Split(const std::string & s, char delimiter = ' ');
-    int String_To_Int(const std::string & s);
+    int StringToInt(const std::string & s);
     bool isHostUp(const QString & host);
 
     void HostDown();
@@ -55,6 +59,8 @@ protected:
     template <class T>
     void Swap(T & a, T & b);
 
+    void ResizeColumnWidthToDescriptionSize();
+    void RemovePreviousScanInfo();
 signals:
     void SignalProgress(int);
     void setMax(int);
@@ -62,13 +68,6 @@ signals:
     void stop();
 private slots:
     void Scan();
-    void ChangeFilter() { filter = !filter;}
 };
-
-
-
-
-
-
 
 #endif // SCAN_H
