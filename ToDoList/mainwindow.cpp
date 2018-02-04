@@ -50,15 +50,18 @@ void MainWindow::SetupMenu(){
 
     fileMenu = menuBar()->addMenu(tr("&File"));
     saveToFile = new QAction("Save", this);
+    saveToFile->setShortcut(QKeySequence::Save);
     fileMenu->addAction(saveToFile);
     connect(saveToFile, SIGNAL(triggered(bool)), this, SLOT(save()));
 
     readFromFile = new QAction("Load", this);
+    readFromFile->setShortcut(QKeySequence::Open);
     fileMenu->addAction(readFromFile);
     connect(readFromFile, SIGNAL(triggered(bool)), this, SLOT(read()));
 
     taskMenu = menuBar()->addMenu(tr("&Task"));
     addTask = new QAction("New", this);
+    addTask->setShortcut(QKeySequence::New);
     taskMenu->addAction(addTask);
     connect(addTask, SIGNAL(triggered(bool)), ToDoList, SLOT(showAddTaskDialog()));
 
@@ -67,6 +70,7 @@ void MainWindow::SetupMenu(){
     connect(editTask, SIGNAL(triggered(bool)), ToDoList, SLOT(editTask()));
 
     removeTask = new QAction("Remove", this);
+    removeTask->setShortcut(QKeySequence::Delete);
     taskMenu->addAction(removeTask);
     connect(removeTask, SIGNAL(triggered(bool)), ToDoList, SLOT(removeTask()));
 
@@ -77,14 +81,18 @@ void MainWindow::SetupMenu(){
 
 void MainWindow::save(){
     QString file = QFileDialog::getSaveFileName(this);
-    if(!file.isEmpty())
+    if(!file.isEmpty()){
         ToDoList->saveToFile(file);
+        statusBar()->showMessage("Saved");
+    }
 }
 
 void MainWindow::read(){
     QString file = QFileDialog::getOpenFileName(this);
-    if(!file.isEmpty())
+    if(!file.isEmpty()){
         ToDoList->readFromFile(file);
+        statusBar()->showMessage(tr("Opened %1").arg(file));
+    }
 }
 
 void MainWindow::showTaskNote(){
