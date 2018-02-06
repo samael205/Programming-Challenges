@@ -13,6 +13,7 @@ public:
     MainWindow();
 public slots:
     void ResizeWindowToSeeResultsContent();
+    void quit();
 private:
     Scanner * portScanner;
 
@@ -20,6 +21,7 @@ private:
 
     QMenu * fileMenu;
     QAction * saveToCSV;
+    QAction * exit;
 
 };
 

@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 
+
 #include <QTableView>
 #include <QtWidgets>
 
@@ -22,8 +23,9 @@ Scanner::Scanner(QWidget * p)
     data = new QLineEdit[2];
     enter = new QPushButton;
     description = new QLabel;
-    description->setText("Scan");
+    description->setText("");
     enter->setIcon(icon);
+    enter->setText("Scan");
     enter->setStyleSheet("background-color: #68ADC4;");
     enter->setWindowTitle("Scan ports!");
 
@@ -41,8 +43,8 @@ Scanner::Scanner(QWidget * p)
     data[1].setPlaceholderText("Ports");
     data[1].setValidator(vx);
     background->addWidget(data, 0, 0);
-    background->addWidget(description, 0, 1);
-    background->addWidget(enter, 0, 2);
+    background->addWidget(description, 0, 1, 0, Qt::AlignVertical_Mask);
+    background->addWidget(enter, 0, 2, 2, Qt::AlignRight);
     background->addWidget(data+1, 1, 0);
 
     scanResults = new ScanInfoModel;
@@ -62,13 +64,13 @@ Scanner::Scanner(QWidget * p)
     showResults->horizontalHeader()->setStretchLastSection(true);
     showResults->setColumnWidth(1, 200);
 
-    background->addWidget(showResults, 3, 0);
+    background->addWidget(showResults, 3, 0, 1, Qt::AlignHorizontal_Mask);
 
     QProgressBar * progressbar = new QProgressBar(this);
     progressbar->resize(300, 80);
     progressbar->setWindowTitle("Scanning");
 
-    background->addWidget(progressbar, 4, 0);
+    background->addWidget(progressbar, 4, 0, 1, Qt::AlignHorizontal_Mask);
     setLayout(background);
 
     connect(this, SIGNAL(SignalProgress(int)), progressbar, SLOT(setValue(int)));

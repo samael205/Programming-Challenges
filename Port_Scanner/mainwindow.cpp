@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 
 #include <QPropertyAnimation>
+#include <QGuiApplication>
 
 MainWindow::MainWindow(){
     portScanner = new Scanner;
@@ -21,9 +22,21 @@ MainWindow::MainWindow(){
 void MainWindow::setupMenus(){
     fileMenu = menuBar()->addMenu("File");
 
-    saveToCSV = new QAction("Export to CSV", this);
+    saveToCSV = new QAction("Save", this);
+    saveToCSV->setShortcut(QKeySequence::Save);
     fileMenu->addAction(saveToCSV);
     connect(saveToCSV, SIGNAL(triggered(bool)), portScanner, SLOT(saveResultsToCSV()));
+
+    fileMenu->addSeparator();
+
+    exit = new QAction("Exit", this);
+    exit->setShortcut(QKeySequence::Quit);
+    fileMenu->addAction(exit);
+    connect(exit, SIGNAL(triggered(bool)), this, SLOT(quit()));
+}
+
+void MainWindow::quit(){
+    QGuiApplication::exit();
 }
 
 void MainWindow::ResizeWindowToSeeResultsContent(){
