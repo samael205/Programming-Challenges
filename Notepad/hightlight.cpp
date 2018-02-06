@@ -9,7 +9,9 @@ Hightlight::Hightlight(QTextDocument * parent, const QString exp)
 void Hightlight::highlightBlock(const QString & text){
     QTextCharFormat format;
     format.setFontWeight(QFont::Bold);
-    format.setForeground(Qt::yellow);
+
+    QBrush backgroundColorSyntax(QColor(91, 61, 31));
+    format.setBackground(backgroundColorSyntax);
 
     QRegularExpressionMatchIterator findThis = expression->globalMatch(text);
 

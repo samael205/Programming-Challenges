@@ -14,10 +14,11 @@ Notepad::Notepad(QWidget *parent) :
 
     searchoff();
 
-    connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(countAll()));
+    connect(ui->textEdit, SIGNAL(textChanged()), this, SLOT(countText()));
     connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(searchoff()));
     connect(ui->lineEdit, SIGNAL(textChanged(QString)), this, SLOT(find(QString)));
     connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(replaceAll()));
+    connect(ui->textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkColumnAndLine()));
 
     QString replaceIconPath = QDir::currentPath() + "/icons/exit.png";
     QString searchIconPath = QDir::currentPath() + "/icons/replace.png";
@@ -47,6 +48,8 @@ void Notepad::setupMenus(){
     fileMenu->addAction(newFile);
     newFile->setShortcut(QKeySequence::New);
     connect(newFile, SIGNAL(triggered(bool)), this, SLOT(onNew()));
+
+    fileMenu->addSeparator();
 
     open = new QAction("Open", this);
     fileMenu->addAction(open);
@@ -154,6 +157,7 @@ void Notepad::onSaveAs(){
     statusBar()->showMessage(tr("Saved as %1").arg(filePath.split("/").back()));
 }
 
+
 void Notepad::setFont(){
     bool fontSelected;
     QFont font = QFontDialog::getFont(&fontSelected, this);
@@ -164,9 +168,8 @@ void Notepad::setFont(){
     }
 }
 
-void Notepad::countAll(){
-    QString format = countColumnAndLine() + countWordsAndChars();
-    ui->counter->setText(format);
+void Notepad::countText(){
+    ui->wordCounter->setText(countWordsAndChars());
 }
 
 QString Notepad::countColumnAndLine(){
@@ -175,6 +178,10 @@ QString Notepad::countColumnAndLine(){
     int line = cursor.columnNumber()+1;
     QString format = "Column: " + QString::number(column) + ", Line: " + QString::number(line);
     return format;
+}
+
+void Notepad::checkColumnAndLine(){
+    ui->positionCounter->setText(countColumnAndLine());
 }
 
 QString Notepad::countWordsAndChars(){
@@ -191,7 +198,8 @@ QString Notepad::countWordsAndChars(){
 
 void Notepad::searchoff(){
     ui->searcher->hide();
-    ui->counter->show();
+    ui->wordCounter->show();
+    ui->positionCounter->show();
 
     ui->lineEdit->clear();
     ui->lineEdit_2->clear();
@@ -203,7 +211,8 @@ void Notepad::searchOn(){
     ui->pushButton_2->hide();
     ui->label_2->hide();
 
-    ui->counter->hide();
+    ui->wordCounter->hide();
+    ui->positionCounter->hide();
     ui->lineEdit->setFocus();
 }
 
@@ -213,10 +222,10 @@ void Notepad::find(const QString & find){
    QString cursorPositionOnWord = ui->textEdit->toPlainText();
    QTextCursor setCursorPosition = ui->textEdit->textCursor();
    int wordPosition = cursorPositionOnWord.indexOf(find); 
-
    std::string wordExistInNotepad = ui->textEdit->toPlainText().toStdString();
    std::string searchedWord = ui->lineEdit->text().toStdString();
 
+    QList<QTextEdit::ExtraSelection> selectAllFound;
    if(wordExistInNotepad.find(searchedWord) != std::string::npos){
        ui->lineEdit->setStyleSheet("background-color: green;");
        setCursorPosition.setPosition(wordPosition);
@@ -225,10 +234,18 @@ void Notepad::find(const QString & find){
    }
    else
        ui->lineEdit->setStyleSheet("background-color: red;");
+
+   if(find.length() > 0 && find != " "){
+       QString countSearchedWord = ui->textEdit->toPlainText();
+       ui->label_3->setText(tr("Count: %1").arg(countSearchedWord.count(find)));
+   }
+   else
+       ui->label_3->setText("Count: 0");
 }
 
 void Notepad::searchAndReplaceOn(){
-    ui->counter->hide();
+    ui->wordCounter->hide();
+    ui->positionCounter->hide();
 
     ui->searcher->show();
     ui->lineEdit_2->show();

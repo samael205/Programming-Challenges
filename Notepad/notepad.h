@@ -6,6 +6,8 @@
 
 #include "hightlight.h"
 
+#define REP(i, n) for(int i=0; i<n; i++)
+
 namespace Ui {
 class Notepad;
 }
@@ -24,7 +26,8 @@ public slots:
     void onSaveAs();
     void setFont();
 
-    void countAll();
+    void countText();
+    void checkColumnAndLine();
 
     void searchOn();
     void find(const QString&);
