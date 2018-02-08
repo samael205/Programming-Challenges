@@ -4,6 +4,7 @@
 #include <boost/filesystem.hpp>
 #include <vector>
 #include <string>
+#include <cstdio>
 
 namespace fs = ::boost::filesystem;
 
@@ -17,9 +18,7 @@ public:
 	~FileSearcher();
 
 	Vstring filesPath() { return filePaths; }
-
 	void search(const fs::path &dirRoot);
 };
-
 
 #endif

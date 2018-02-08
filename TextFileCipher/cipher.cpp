@@ -1,59 +1,22 @@
 #include "cipher.h"
 
-Cipher::Cipher(){
-	cipherMethod = vigenere;
+static Cipher::CipherMethods EncryptMethod(const std::string setMethod){
+	if(setMethod == "rot13")
+		return Cipher::CipherMethods::rot13;
+	else if(setMethod == "caesar")
+		return Cipher::CipherMethods::caesar;
+	else if(setMethod == "vigenere")
+		return Cipher::CipherMethods::vigenere;
+	else
+		return Cipher::CipherMethods::caesar;
+}
+
+Cipher::Cipher(const Vstring & filePaths, const std::string method){
+	filesToEncrypt = filePaths;
+	cipherMethod = EncryptMethod(method);
 }
 
 Cipher::~Cipher() { }
-
-const void Cipher::showMenu() const{
-	cout<<"Cipher v0.1\n";
-	cout<<"V.\tvigenere\n";
-	cout<<"R.\trot13\n";
-	cout<<"C.\tcaesar\n";
-	cout<<"-: "<<std::flush;
-}
-
-void Cipher::setCipherMethod(){
-	cout << "\033[2J\033[1;1H";
-	char setMethod;
-	showMenu();
-	cin>>setMethod;
-	switch(std::tolower(setMethod)){
-		case 'v':
-			cipherMethod = vigenere;
-		break;
-		case 'r':
-			cipherMethod = rot13;
-		break;
-		case 'c':
-			cipherMethod = caesar;
-		break;
-		default:
-			while(cin.get() != '\n')
-				continue;
-		break;
-	}
-}
-
-void Cipher::encryptFile(std::string & filePath){
-	std::string content;
-	std::ifstream file;
-	file.open(filePath);
-	content = fileContent(file); 
-	file.close();
-	std::ofstream saveFile;
-	saveFile.open(filePath);
-	saveFile << encrypt(content);
-	saveFile.close();
-	cout << "\033[2J\033[1;1H";
-	cout<<"Done!\n";
-}
-
-void Cipher::encryptFiles(Vstring filesPath){
-	FOREACH(filePath, filesPath)
-		encryptFile(*filePath);		
-}
 
 std::string Cipher::encrypt(std::string & contentToEncrypt){
 	std::string encrypted;
@@ -70,13 +33,36 @@ std::string Cipher::encrypt(std::string & contentToEncrypt){
 	}
 }
 
+void Cipher::encryptFile(const std::string & fileToEncrypt){
+	cout<<"\t"<<fileToEncrypt<<" ";
+	std::string content;
+	std::ifstream file;
+	file.open(fileToEncrypt);
+
+	content = fileContent(file); 
+
+	file.close();
+
+	std::ofstream saveFile;
+	saveFile.open(fileToEncrypt);
+	saveFile << encrypt(content);
+	saveFile.close();
+
+	cout<<"\033[1;34mDone\033[0m\n";
+}
+
+void Cipher::StartEncrypt(){
+	cout<<"Encrypt: \n";
+	FOREACH(file, filesToEncrypt)
+		encryptFile(*file);		
+}
+
 std::string Cipher::fileContent(std::ifstream & fileToRead){
 	std::string bufor, allContent = "";
 	while(std::getline(fileToRead, bufor))
 		allContent += bufor + "\n";
 	return allContent;
 }
-
 
 std::string Cipher::caesarCipher(std::string & contentToEncrypt){
 	static std::string letters = "abcdefghijklmnopqrstuvwxyz";

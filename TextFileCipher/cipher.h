@@ -5,7 +5,6 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <iomanip>
 #include <cctype>
 
 #define REP(i, n) for(int i=0; i<n; i++)
@@ -20,26 +19,22 @@ typedef std::vector<std::string> Vstring;
 
 class Cipher{
 private:
+	Vstring filesToEncrypt;
+public:
 	enum CipherMethods{ vigenere, rot13, caesar };
 	CipherMethods cipherMethod;
-public:
-	Cipher();
+
+	Cipher(const Vstring&, const std::string);
 	~Cipher();
 
-	void setCipherMethod();
-	void encryptFile(std::string&);
-	void encryptFiles(Vstring);
-
+	void encryptFile(const std::string&);
+	void StartEncrypt();
 protected:
 	std::string fileContent(std::ifstream&);
-	
 	std::string encrypt(std::string&);
 	std::string vigenereCipher(std::string&);
 	std::string makeVigenereKey(std::string);
 	std::string caesarCipher(std::string&);
 	std::string rot13Cipher(std::string&);
-	const void showMenu() const;
 };
-
-
 #endif 
