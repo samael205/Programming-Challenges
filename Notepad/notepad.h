@@ -4,6 +4,11 @@
 #include <QMainWindow>
 #include <QtWidgets>
 
+#ifndef QT_NO_PRINTER
+#include <QtPrintSupport/QPrinter>
+#include <QtPrintSupport/QPrintDialog>
+#endif
+
 #include "hightlight.h"
 
 #define REP(i, n) for(int i=0; i<n; i++)
@@ -38,6 +43,8 @@ public slots:
     void searchAndReplaceOn();
     void replaceAll();
 
+    void print();
+
     void quit();
 private:
     Hightlight * hightlighter;
@@ -48,12 +55,17 @@ private:
     QString countColumnAndLine();
     QString countWordsAndChars();
 
+#ifndef QT_MO_PRINTER
+    QPrinter printer;
+#endif
+
     void setupMenus();
     QMenu * fileMenu;
     QAction * newFile;
     QAction * open;
     QAction * save;
     QAction * saveAs;
+    QAction * printAct;
     QAction * exit;
 
     QMenu * edit;

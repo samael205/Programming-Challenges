@@ -112,11 +112,14 @@
          </property>
          <property name="font">
           <font>
-           <family>Noto Sans CJK JP Medium</family>
-           <pointsize>9</pointsize>
-           <weight>75</weight>
-           <italic>true</italic>
-           <bold>true</bold>
+           <family>Noto Sans Hanunoo</family>
+           <pointsize>8</pointsize>
+           <weight>50</weight>
+           <italic>false</italic>
+           <bold>false</bold>
+           <underline>false</underline>
+           <strikeout>false</strikeout>
+           <kerning>false</kerning>
           </font>
          </property>
          <property name="layoutDirection">

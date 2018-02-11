@@ -31,10 +31,13 @@ Notepad::Notepad(QWidget *parent) :
 
     setupMenus();
 
+    QPropertyAnimation * animation;
+    animation = new QPropertyAnimation(this, "geometry");
     QRect screenSize = QApplication::desktop()->screenGeometry();
     int x = screenSize.width();
     int y = screenSize.height();
-    resize(x, y);
+    animation->setEndValue(QRect(x/3, y/3, 700, 500));
+    animation->start();
 }
 
 Notepad::~Notepad(){
@@ -65,6 +68,13 @@ void Notepad::setupMenus(){
     fileMenu->addAction(saveAs);
     saveAs->setShortcut(QKeySequence::SaveAs);
     connect(saveAs, SIGNAL(triggered(bool)), this, SLOT(onSaveAs()));
+
+    fileMenu->addSeparator();
+
+    printAct = new QAction("Print", this);
+    fileMenu->addAction(printAct);
+    printAct->setShortcut(QKeySequence::Print);
+    connect(printAct, SIGNAL(triggered(bool)), this, SLOT(print()));
 
     fileMenu->addSeparator();
 
@@ -166,6 +176,12 @@ void Notepad::setFont(){
         statusBar()->showMessage(tr("New font %1")
                 .arg(font.family()));
     }
+}
+
+void Notepad::print(){
+     QPrintDialog dialog(&printer, this);
+     if(dialog.exec())
+         ui->textEdit->print(&printer);
 }
 
 void Notepad::countText(){
