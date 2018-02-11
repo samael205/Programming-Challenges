@@ -35,6 +35,8 @@ private:
     QLabel * imageShow;
     QImage image;
     void setImage(const QImage&);
+    void setAnimatedImage(QMovie*);
+
     void scaleImage(double);
     void adjustScrollBar(QScrollBar*, double);
 
@@ -53,6 +55,9 @@ private:
     QAction * close;
     QAction * clearImage;
     QAction * exit;
+
+    QMenu * recentMenu;
+    QAction * openRecent;
 
     QMenu * editMenu;
     QAction * copyThis;

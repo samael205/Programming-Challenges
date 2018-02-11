@@ -2,15 +2,18 @@
 
 ImageViewer::ImageViewer()
 {
-    imageShow = new QLabel;
-    imageShow->setBackgroundRole(QPalette::Base);
+    imageShow = new QLabel(tr("No Images selected"));
+    imageShow->setStyleSheet("font-weight: 800;");
+    imageShow->setBackgroundRole(QPalette::Dark);
     imageShow->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    imageShow->setAlignment(Qt::AlignCenter);
     imageShow->setScaledContents(true);
 
     scroll = new QScrollArea;
     scroll->setBackgroundRole(QPalette::Dark);
     scroll->setWidget(imageShow);
-    scroll->setVisible(false);
+    scroll->setAlignment(Qt::AlignCenter);
+    scroll->setVisible(true);
 
     scale = 1;
 
@@ -45,6 +48,7 @@ ImageViewer::ImageViewer()
 
     animation->setEndValue(QRect(x/2-300, y/2-300, 1000, 700));
     animation->start();
+
 }
 
 ImageViewer::~ImageViewer(){
@@ -64,14 +68,17 @@ void ImageViewer::setActions(){
 
     open = new QAction("Open", this);
     fileMenu->addAction(open);
+    open->setShortcut(QKeySequence::Open);
     connect(open, SIGNAL(triggered(bool)), this, SLOT(openFile()));
 
     openMultiple = new QAction("Open Files", this);
     fileMenu->addAction(openMultiple);
+    openMultiple->setShortcut(tr("SHIFT+CTRL+O"));
     connect(openMultiple, SIGNAL(triggered(bool)), this, SLOT(openFiles()));
 
     save = new QAction("Save", this);
     fileMenu->addAction(save);
+    save->setShortcut(QKeySequence::Save);
     connect(save, SIGNAL(triggered(bool)), this, SLOT(saveAs()));
 
     close = new QAction("Close", this);
@@ -147,6 +154,14 @@ void ImageViewer::setImage(const QImage & getImg){
     updateActions();
 }
 
+void ImageViewer::setAnimatedImage(QMovie * getAnimated){
+    imageShow->setMovie(getAnimated);
+
+    scroll->setVisible(true);
+    fitToWindow->setEnabled(true);
+    updateActions();
+}
+
 void ImageViewer::changeImageByIconSelect(){
     auto currentIcons = iconsShow->selectedItems();
     if(!currentIcons.empty()){
@@ -165,15 +180,23 @@ bool ImageViewer::iconExist(const QString & imgToCheck){
 }
 
 bool ImageViewer::loadImage(const QString & fileName){
-    QImageReader reader(fileName);
-    const QImage img = reader.read();
-    if(img.isNull()){
-        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
-                                 tr("Can't load : %1").arg(QDir::toNativeSeparators(fileName),
-                                                           reader.errorString()));
-        return false;
+      QImageReader reader(fileName);
+      const QImage img = reader.read();
+      if(img.isNull()){
+          QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+                                    tr("Can't load : %1").arg(QDir::toNativeSeparators(fileName),
+                                                              reader.errorString()));
+           return false;
     }
-    setImage(img);
+
+    if(QFileInfo(fileName).suffix() != "gif")
+        setImage(img);
+    else{
+        QMovie * animated;
+        animated = new QMovie(fileName);
+        animated->start();
+        setAnimatedImage(animated);
+    }
 
     if(!iconExist(fileName)){
         QListWidgetItem * setIcon;
@@ -233,7 +256,8 @@ void ImageViewer::openFiles(){
     imagesPaths = getImages.getOpenFileNames();
 
     if(imagesPaths.size() > 1){
-        ThumbnailShow->setChecked(true);
+        bool setChecked = ThumbnailShow->isChecked() ? 1 : 1;
+        ThumbnailShow->setChecked(setChecked);
         ChangeThumbnailVisible();
     }
 
