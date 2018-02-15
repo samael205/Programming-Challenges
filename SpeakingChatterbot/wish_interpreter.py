@@ -39,5 +39,5 @@ def play_prefer_music(preferred):
 
 def word_meaning(word):
     dictionary = PyDictionary()
-	word_mean = return dictionary.meaning(word)
-	return word_mean
+    word_mean = return dictionary.meaning(word)
+    return word_mean
