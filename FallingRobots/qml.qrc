@@ -1,10 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>icons/ball.png</file>
         <file>icons/robot.png</file>
-        <file>icons/robotarm.png</file>
         <file>icons/space.png</file>
-        <file>icons/space.gif</file>
     </qresource>
 </RCC>
