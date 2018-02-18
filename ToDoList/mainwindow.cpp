@@ -59,6 +59,13 @@ void MainWindow::SetupMenu(){
     fileMenu->addAction(readFromFile);
     connect(readFromFile, SIGNAL(triggered(bool)), this, SLOT(read()));
 
+    fileMenu->addSeparator();
+
+    exit = new QAction(tr("Exit"), this);
+    exit->setShortcut(QKeySequence::Quit);
+    fileMenu->addAction(exit);
+    connect(exit, SIGNAL(triggered(bool)), this, SLOT(exitProgram()));
+
     taskMenu = menuBar()->addMenu(tr("&Task"));
     addTask = new QAction("New", this);
     addTask->setShortcut(QKeySequence::New);
@@ -76,6 +83,7 @@ void MainWindow::SetupMenu(){
 
     clearAll = new QAction("Remove All", this);
     taskMenu->addAction(clearAll);
+    clearAll->setShortcut(tr("CTRL+DEL"));
     connect(clearAll, SIGNAL(triggered(bool)), ToDoList, SLOT(clearAll()));
 }
 
@@ -101,5 +109,9 @@ void MainWindow::showTaskNote(){
         notes->setText(ToDoList->taskDescription());
     else
         notes->setText("");
+}
+
+void MainWindow::exitProgram(){
+    QGuiApplication::exit();
 }
 

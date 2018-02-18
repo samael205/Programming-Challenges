@@ -16,6 +16,7 @@ private slots:
      void save();
      void read();
      void showTaskNote();
+     void exitProgram();
 private:
     QTextEdit * notes;
     TaskWidget * ToDoList;
@@ -32,6 +33,8 @@ private:
     QAction * saveToFile;
     QAction * readFromFile;
     QAction * addTask;
+
+    QAction * exit;
 protected:
     void Restore();
 };

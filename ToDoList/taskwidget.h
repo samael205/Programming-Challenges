@@ -13,8 +13,8 @@ class TaskWidget : public QTabWidget
 public:
     TaskWidget(QWidget * parent = 0);
     const QString taskDescription() const;
-    void saveToFile(QString &);
-    void readFromFile(QString&);
+    void saveToFile(const QString &);
+    void readFromFile(const QString&);
 public slots:
     void showAddTaskDialog();
     void addTask(QString, QString, bool=false);
@@ -25,8 +25,6 @@ public slots:
 signals:
     bool selected();
 private:
-    std::string taskStatus(Qt::CheckState);
-
     void Setup();
 
     TaskModel * taskList;

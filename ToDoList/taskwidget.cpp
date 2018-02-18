@@ -37,6 +37,7 @@ void TaskWidget::Setup(){
     QIcon tabIcon(iconPath);
 
     addTab(viewModel, tabIcon, "Productivity");
+
 }
 
 void TaskWidget::addTask(QString taskDescription, QString note, bool status){
@@ -137,60 +138,53 @@ void TaskWidget::clearAll(){
    taskList->removeRows(0, taskList->getTasks().size(), QModelIndex());
 }
 
-std::string TaskWidget::taskStatus(Qt::CheckState status){
-    if(status == Qt::Checked)
-        return "DONE";
-    return "UNDONE";
-}
-
-int Status(std::string check){
-    if(check == "DONE")
-        return 1;
-    return 0;
-}
-
-void TaskWidget::saveToFile(QString & fileName){
-
-    std::ofstream file;
-    file.open(fileName.toStdString());
-
-    if(!file.is_open()){
-        QMessageBox::information(this, "Could not open file.", "Can't write content to file!");
+void TaskWidget::saveToFile(const QString & fileName){
+    QFile file(fileName);
+    if(!file.open(QIODevice::WriteOnly)){
+        QMessageBox::information(this, "File Error", tr("Failed to open file %1")
+                                 .arg(fileName));
         return;
     }
 
-    for(auto task : taskList->getTasks()){
-        task.description.replace("\n", "~");
-        file<<taskStatus(task.progress->checkState())<<";"
-           <<task.progress->text().toStdString()<<";"<<task.description.toStdString()<<"\n";
+    int n, m;
+    n = taskList->rowCount(QModelIndex());
+    m = taskList->columnCount(QModelIndex());
+    QDataStream data(&file);
+    data << n << m;
+    QModelIndex index;
+
+    REP(i, n)
+            REP(j, m){
+                index = taskList->index(i, j, QModelIndex());
+                data << taskList->data(index, Qt::CheckStateRole);
+                data << taskList->data(index, Qt::DisplayRole);
+                data << taskList->data(index, Qt::EditRole);
     }
+
     file.close();
+
 }
 
-void TaskWidget::readFromFile(QString & fileName){
-    std::ifstream file;
-    file.open(fileName.toStdString());
-    if(!file.is_open())
-        QMessageBox::information(this, tr("Could not open file."),
-                                 tr("Can't read content from file!"));
+void TaskWidget::readFromFile(const QString & fileName){
+   QFile file(fileName);
+   if(!file.open(QIODevice::ReadOnly)){
+       QMessageBox::information(this, "File error", tr("Failed to open file %1")
+                                .arg(fileName));
+       return;
+   }
+   int n, m;
+   QDataStream data(&file);
+   data >> n >> m;
+   QModelIndex index;
+   taskList->insertRows(0, n, QModelIndex());
+   REP(i, n)
+           REP(j, m){
+                index = taskList->index(i, j, QModelIndex());
+                taskList->setData(index, data, Qt::CheckStateRole);
+                taskList->setData(index, data, Qt::DisplayRole);
+                taskList->setData(index, data, Qt::EditRole);
 
-    std::vector<std::pair<std::string, std::string>> task;
-    std::vector<std::string> getInfo;
-    std::string temp, bufor;
-
-    while(std::getline(file, temp)){
-        std::stringstream sstream(temp);
-        while(std::getline(sstream, bufor, ';'))
-            getInfo.push_back(bufor);
-
-        QString formatNotes = QString::fromStdString(getInfo[2]);
-        formatNotes.replace("~", "\n");
-
-        addTask(QString::fromStdString(getInfo[1]), formatNotes, Status(getInfo[0]));
-
-        sstream.str("");
-        getInfo.clear();
-    }
-    file.close();    
+   }
+   file.close();
 }
 
