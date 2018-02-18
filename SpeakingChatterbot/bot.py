@@ -1,10 +1,9 @@
 import speak
-import random
 import wish_interpreter
 import sys
+import csv
 from time import sleep
 from threading import Thread
-
 
 class speaker_bot:
 
@@ -14,10 +13,12 @@ class speaker_bot:
         self.question = None
         self.end_of_file_position = 0
         self.recognizer = speak.Speech()
+        self.memory = None
 
-        with open("memory.txt") as words:
-            self.answers = [line.rstrip('\n') for line in words]
-            self.end_of_file_position = words.tell()
+        with open("new_memory.csv", "r") as csv_memo:
+            reader = csv.reader(csv_memo)
+            self.memory = dict(reader)
+            self.memory = dict(map(str.strip, x) for x in self.memory.items())
 
     def interaction(self):
         user = self.recognizer.record()
@@ -31,29 +32,26 @@ class speaker_bot:
             self.refresh_data()
 
     def find_answer(self):
-        for index, search_answer in enumerate(self.answers):
-            if self.question in search_answer.lower():
-                if index + 1 < len(self.answers):
-                    self.answer = self.answers[index+1]
-                else:
-                    self.answer = self.continue_dialogue()
-                return True
-        return False
+        if self.question in self.memory.keys():
+            self.answer = self.memory[self.question]
+            print(self.answer)
+            return True
+        else:
+            return False            
 
     def refresh_data(self):
-        with open("memory.txt") as new_words:
-            new_words.seek(self.end_of_file_position)
-            new_data = [line.rstrip('\n') for line in new_words]
-            for append_data in new_data:
-                self.answers.append(append_data)
-            self.end_of_file_position = new_words.tell()
+        self.memory.clear()
+        with open("new_memory.csv", "r") as csv_memo:
+            reader = csv.reader(csv_memo)
+            self.memory = dict(reader)
+            self.memory = dict(map(str.strip, x) for x in self.memory.items())
 
     def ask_question(self):
         self.speaker.say(self.question)
         user = self.recognizer.record()
-        save_file = open("memory.txt", "a")
-        save_file.write('\n' + self.question.lower() + '\n' + user.lower())
-        save_file.close()
+        with open("new_memory.csv", "a") as append_csv:
+            writer = csv.writer(append_csv)
+            writer.writerow([self.question.lower(), user.lower()])
 
     def random_line(self, file):
         line = next(file)
@@ -86,7 +84,14 @@ class speaker_bot:
                 self.answer = word_mean["Noun"]
             else:
                 self.answer = "Can't found meaning of this word"    
-            self.speaker.say(self.answer[0])
+            self.speaker.say(self.answer)
+            return True
+        elif "search in" in self.question:
+            search_key = self.question[self.question.index("search in")+10:]
+            find_specific_for_me = search_key[search_key.index(" ")+1:]
+            specific_web = search_key[:search_key.index(" ")]
+            print(find_specific_for_me, specific_web)
+            wish_interpreter.search_in_web("!" + specific_web + " " + find_specific_for_me)
             return True
         elif "search" in self.question:
             find_for_me = self.question[self.question.index("search")+7:]
@@ -112,8 +117,7 @@ class speaker_bot:
             wish_interpreter.show_on_googlemaps(show_for_me)
             return True
         elif "exit" in self.question:
-            self.speaker.say("except from program, good bye!")
-            sleep(3)
+            sleep(1)
             sys.exit()    
         else:
             return False

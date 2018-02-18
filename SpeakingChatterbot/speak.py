@@ -9,10 +9,19 @@ class Speak:
         self.text_to_speech = None
 
     def say(self, tts, language='en'):
-        self.text_to_speech = gTTS(text=tts, lang=language)
-        self.text_to_speech.save("speak.mp3")
-        play_sound = vlc.MediaPlayer("speak.mp3")
-        play_sound.play()
+        if type(tts) != list:
+            self.text_to_speech = gTTS(text=tts, lang=language)
+            self.text_to_speech.save("speak.mp3")
+            play_sound = vlc.MediaPlayer("speak.mp3")
+            play_sound.play()
+        else:
+            statement = str("")
+            for words in tts:
+               statement = statement + words + ". "
+            self.text_to_speech = gTTS(text=statement, lang=language)
+            self.text_to_speech.save("speak.mp3")
+            play_sound = vlc.MediaPlayer("speak.mp3")
+            play_sound.play()
 
 
 class Speech():

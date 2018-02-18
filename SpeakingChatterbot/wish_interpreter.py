@@ -16,7 +16,7 @@ def show_on_googlemaps(place):
     webbrowser.open("https://www.google.com/maps/place/" + place + "/&amp;")
 
 def search_in_web(find):
-    webbrowser.open("www.duckduckgo.com/"+find)
+    webbrowser.open("https://www.duckduckgo.com/?q="+find)
 
 def play_music(mp3):
     play_audio = vlc.MediaPlayer(mp3)
@@ -39,5 +39,7 @@ def play_prefer_music(preferred):
 
 def word_meaning(word):
     dictionary = PyDictionary()
-    word_mean = return dictionary.meaning(word)
+    word_mean = dictionary.meaning(word)
+    if word_mean is None:
+    	word_mean["Noun"] = "No description of this word"
     return word_mean
