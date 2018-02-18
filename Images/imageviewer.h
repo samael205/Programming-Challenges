@@ -3,6 +3,9 @@
 
 #include <QtWidgets>
 #include <QMainWindow>
+#ifndef QT_NO_PRINTER
+#include <QtPrintSupport/QPrinter>
+#endif
 
 #define REP(i, n) for(int i=0; i<n; i++)
 
@@ -23,6 +26,7 @@ private slots:
     void zoomOut();
     void copy();
     void paste();
+    void print();
     void emptyShow();
     void deleteSelectedIcon();
     void ChangeThumbnailVisible();
@@ -40,6 +44,10 @@ private:
     void scaleImage(double);
     void adjustScrollBar(QScrollBar*, double);
 
+#ifndef QT_NO_PRINTER
+    QPrinter printer;
+#endif
+
     bool saveImage(const QString&);
 
     QScrollArea * scroll;
@@ -54,6 +62,7 @@ private:
     QAction * save;
     QAction * close;
     QAction * clearImage;
+    QAction * printAct;
     QAction * exit;
 
     QMenu * recentMenu;

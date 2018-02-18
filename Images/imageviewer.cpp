@@ -1,4 +1,7 @@
 #include "imageviewer.h"
+#include <QtPrintSupport/QPrintDialog>
+#include <QPainter>
+
 
 ImageViewer::ImageViewer()
 {
@@ -87,6 +90,14 @@ void ImageViewer::setActions(){
     connect(close, SIGNAL(triggered(bool)), imageShow, SLOT(clear()));
 
     fileMenu->addSeparator();
+
+    printAct = new QAction("Print", this);
+    fileMenu->addAction(printAct);
+    printAct->setShortcut(QKeySequence::Print);
+    connect(printAct, SIGNAL(triggered(bool)), this, SLOT(print()));
+
+    fileMenu->addSeparator();
+
     exit = new QAction("Exit", this);
     fileMenu->addAction(exit);
     exit->setShortcut(QKeySequence::Quit);
@@ -338,6 +349,24 @@ void ImageViewer::paste(){
         statusBar()->showMessage(msg);
     }
 #endif
+}
+
+void ImageViewer::print(){
+    if(imageShow->pixmap() == 0){
+        QMessageBox::information(this, "No File Loaded", "Viewer is empty, load a image!");
+        return;
+    }
+
+    QPrintDialog dialog(&printer, this);
+    if(dialog.exec()){
+        QPainter painter(&printer);
+        QRect rect = painter.viewport();
+        QSize size = imageShow->pixmap()->size();
+        size.scale(rect.size(), Qt::KeepAspectRatio);
+        painter.setViewport(rect.x(), rect.y(), size.width(), size.height());
+        painter.setWindow(imageShow->pixmap()->rect());
+        painter.drawPixmap(0, 0, *imageShow->pixmap());
+    }
 }
 
 void ImageViewer::setNormalSize(){
