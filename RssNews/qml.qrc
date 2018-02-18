@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>subcontent/NewsDelegate.qml</file>
+        <file>subcontent/Rss.qml</file>
+        <file>subcontent/CategoryDelegate.qml</file>
+        <file>subcontent/icons/hacker.png</file>
+        <file>subcontent/icons/space.jpeg</file>
+        <file>subcontent/icons/close.png</file>
+        <file>subcontent/icons/rocket.png</file>
+        <file>subcontent/icons/science.jpeg</file>
+        <file>subcontent/icons/busy.png</file>
+        <file>subcontent/Busy.qml</file>
+        <file>subcontent/icons/space.png</file>
+        <file>subcontent/icons/japan.png</file>
+        <file>subcontent/icons/reddit.png</file>
+        <file>subcontent/icons/technology.png</file>
+    </qresource>
+</RCC>
