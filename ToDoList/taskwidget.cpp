@@ -9,10 +9,6 @@
 #include <QTextCodec>
 #include <QDebug>
 #include <QRegExp>
-#include <fstream>
-#include <vector>
-#include <sstream>
-#include <boost/algorithm/string.hpp>
 
 TaskWidget::TaskWidget(QWidget * parent)
     : QTabWidget(parent){
