@@ -8,7 +8,8 @@ HEADERS += \
     downloaderwidget.h \
     downloadertable.h \
     downloaderitemdelegate.h \
-    newdownloaddialog.h
+    newdownloaddialog.h \
+    downloadprogresssingleconnect.h
 
 SOURCES += \
     mainwindow.cpp \
@@ -16,4 +17,5 @@ SOURCES += \
     downloaderwidget.cpp \
     downloadertable.cpp \
     downloaderitemdelegate.cpp \
-    newdownloaddialog.cpp
+    newdownloaddialog.cpp \
+    downloadprogresssingleconnect.cpp

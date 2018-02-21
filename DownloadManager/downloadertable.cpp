@@ -103,7 +103,6 @@ bool DownloaderTable::setData(const QModelIndex &index, const QVariant &value, i
             return false;
 
         downloadsInfo.replace(index.row(), setDataInfo);
-        emit dataChanged(index, index);
 
         return true;
     }

@@ -10,7 +10,6 @@
 #include <QFileDialog>
 #include <QDesktopServices>
 #include <QListView>
-#include <QLocale>
 
 downloaderWidget::downloaderWidget(QWidget *parent)
     : QTabWidget(parent){
@@ -19,15 +18,13 @@ downloaderWidget::downloaderWidget(QWidget *parent)
 
     setupTable();
 
-    connect(&manager, SIGNAL(finished(QNetworkReply*)),
-            this, SLOT(downloadFinished(QNetworkReply*)));
-
     load();
 }
 
 downloaderWidget::~downloaderWidget(){
     save();
 }
+
 void downloaderWidget::setupTable(){
     proxy = new QSortFilterProxyModel(this);
     proxy->setSourceModel(downloadTable);
@@ -49,7 +46,7 @@ void downloaderWidget::setupTable(){
     dataViewer->setItemDelegate(downloadPainter);
 
     connect(dataViewer, SIGNAL(doubleClicked(QModelIndex)),
-            this, SLOT(showDownloadedFileLocation(QModelIndex)));
+            this, SLOT(showDownloadedFileLocation()));
 
     QIcon icon("icons/download.png");
 
@@ -57,49 +54,19 @@ void downloaderWidget::setupTable(){
 }
 
 void downloaderWidget::Download(QUrl & url){
-    QNetworkRequest request(url);
-    currentDownload = manager.get(request);
+    DownloadProgressSingleConnect * downloadProcess;
+    downloadProcess = new DownloadProgressSingleConnect(url, downloadTable);
 
-    connect(currentDownload, SIGNAL(downloadProgress(qint64,qint64)),
-            this, SLOT(downloadProgress(qint64,qint64)));
+    connect(downloadProcess, SIGNAL(downloadFinished(QNetworkReply*)), this, SLOT(downloadFinished(QNetworkReply*)));
 
-    downloadTime.start();
+    downloads.append(downloadProcess);
 }
 
-void downloaderWidget::showDownloadedFileLocation(QModelIndex index){
+void downloaderWidget::showDownloadedFileLocation(){
     QString file = QFileDialog::getOpenFileName(this, tr("Open file"), QDir::homePath());
     QDesktopServices::openUrl(file);
 }
 
-void downloaderWidget::downloadProgress(qint64 bytesReceived, qint64 bytesTotal){
-    double speed = bytesReceived * 1000.0 / downloadTime.elapsed();
-    QString unit;
-
-    if(speed < 1024)
-        unit = "bytes/sec";
-    else if(speed < 1024 * 1024){
-        speed /= 1024;
-        unit = "kB/s";
-    }else{
-        speed /= (1024 * 1024);
-        unit = "MB/s";
-    }
-
-    QString speedFormat;
-    speedFormat.sprintf("%6.2f", speed);
-    QString speedProgress = speedFormat + " " + unit;
-    QString fileSizeBeforeDownload = sizeHuman(bytesTotal);
-    qint64 progressPercent = (bytesReceived*100)/bytesTotal;
-
-    QModelIndex index = downloadTable->index(0, 1, QModelIndex());
-    downloadTable->setData(index, progressPercent, Qt::EditRole);
-
-    index = downloadTable->index(0, 2, QModelIndex());
-    downloadTable->setData(index, fileSizeBeforeDownload, Qt::EditRole);
-
-    index = downloadTable->index(0, 3, QModelIndex());
-    downloadTable->setData(index, speedProgress, Qt::EditRole);
-}
 
 QString downloaderWidget::saveFileName(QUrl & url){
     QString path = url.path();
@@ -146,7 +113,6 @@ QString downloaderWidget::getDownloadLink(){
 void downloaderWidget::startDownloadProcess(){
     QUrl url = queueOfDownloads.dequeue();
     Download(url);
-    downloadTime.start();
 }
 
 void downloaderWidget::remove(){
@@ -164,42 +130,33 @@ void downloaderWidget::remove(){
 
 void downloaderWidget::setDownload(){
     QString url = getDownloadLink();
-    QString downloadFileName = QUrl(url).fileName();
+    QUrl downloadData = QUrl::fromEncoded(url.toLocal8Bit());
 
-    if(downloadTable->checkForDuplicateName(downloadFileName)){
+    if(downloadTable->checkForDuplicateName(downloadData.fileName())){
         QMessageBox::information(this, "Duplicate data!",
                                  tr("There is %1 already in downloads!")
-                                 .arg(downloadFileName));
+                                 .arg(downloadData.fileName()));
         return;
     }
 
     if(!url.isEmpty()){
-        queueOfDownloads.enqueue(QUrl::fromEncoded(url.toLocal8Bit()));
+        queueOfDownloads.enqueue(downloadData);
         downloadTable->insertRows(0, 1, QModelIndex());
         QModelIndex index = downloadTable->index(0, 0, QModelIndex());
-        downloadTable->setData(index, downloadFileName, Qt::EditRole);
+        downloadTable->setData(index, downloadData.fileName(), Qt::EditRole);
         startDownloadProcess();
     }
 }
 
-QString downloaderWidget::sizeHuman(qint64 fileSize){
-    QStringList sizeExt;
-    sizeExt << "KB" << "MB" << "GB" << "TB";
-
-    QStringListIterator it(sizeExt);
-    QString units("bytes");
-
-    float num = fileSize;
-
-    while(num >= 1024.0 && it.hasNext()){
-        units = it.next();
-        num /= 1024.0;
-    }
-    return QString().setNum(num, 'f', 2) + " " + units;
-}
-
 void downloaderWidget::downloadFinished(QNetworkReply * reply){
     QUrl url = reply->url();
+
+    for(int i = 0; i<downloads.size(); i++)
+            if(downloads.at(i)->getUrl() == url){
+                downloads.remove(i);
+                break;
+            }
+
     if(!reply->error()){
         if(!isHttpRedricted(reply)){
             QString filename = saveFileName(url);
@@ -207,7 +164,6 @@ void downloaderWidget::downloadFinished(QNetworkReply * reply){
                 QMessageBox::information(this, "Download successed!",
                                          tr("Download of %1 succesed!")
                                          .arg(filename));
-
         }else{
             downloadTable->removeRows(0, 1, QModelIndex());
             QMessageBox::information(this, "Http Redricted",
@@ -234,9 +190,9 @@ void downloaderWidget::save(){
                 REP(j, m){
                         index = downloadTable->index(i, j, QModelIndex());
                         stream << downloadTable->data(index, Qt::DisplayRole);
-        }
-        file.close();
+        }     
     }
+     file.close();
 }
 
 void downloaderWidget::load(){
@@ -253,4 +209,5 @@ void downloaderWidget::load(){
                     downloadTable->setData(index, stream, Qt::EditRole);
         }
     }
+    file.close();
 }

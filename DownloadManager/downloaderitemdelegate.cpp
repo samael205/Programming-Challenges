@@ -20,6 +20,16 @@ void DownloaderItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem
 
             QApplication::style()->drawControl(QStyle::CE_ProgressBar,
                                                &progressbar, painter);
+
+        }else if(index.column() != 1 && index.isValid()){
+           QStyleOptionViewItem boldText(option);
+           boldText.font.setBold(true);
+           boldText.palette.setColor(QPalette::HighlightedText, Qt::yellow);
+           QStyledItemDelegate::paint(painter, boldText, index);
         }else
             QStyledItemDelegate::paint(painter, option, index);
+}
+
+QSize DownloaderItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const{
+    return option.widget->size();
 }
