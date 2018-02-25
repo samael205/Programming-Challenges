@@ -13,10 +13,12 @@ SOURCES += \
     scanner.cpp \
     main.cpp \
     scaninfomodel.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    scanstatusdelegate.cpp
 
 HEADERS += \
     scanner.h \
     scaninfomodel.h \
-    mainwindow.h
+    mainwindow.h \
+    scanstatusdelegate.h
 

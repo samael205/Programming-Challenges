@@ -1,5 +1,5 @@
 #include "scanner.h"
-#include "error.h"
+#include "scanstatusdelegate.h"
 
 #include <QTextStream>
 #include <QIcon>
@@ -64,6 +64,11 @@ Scanner::Scanner(QWidget * p)
     showResults->horizontalHeader()->setStretchLastSection(true);
     showResults->setColumnWidth(1, 200);
 
+    scanStatusDelegate * delegateModel;
+    delegateModel = new scanStatusDelegate;
+
+    showResults->setItemDelegate(delegateModel);
+
     background->addWidget(showResults, 3, 0, 1, Qt::AlignHorizontal_Mask);
 
     QProgressBar * progressbar = new QProgressBar(this);
@@ -91,6 +96,7 @@ void Scanner::HostDown(){
     noHost->setWindowTitle("ping error");
     noHost->setText("Destination Host Unreachable");
     noHost->setStandardButtons(QMessageBox::Cancel);
+    noHost->setAutoFillBackground(true);
     noHost->exec();
     delete noHost;
 }
@@ -133,8 +139,8 @@ QString Scanner::portInfo(int port){
             break;
         }
         else if(port < splitContent[0].toInt())
-            break;
-        splitContent.clear();
+            return "  ";
+       splitContent.clear();
     }
     file.close();
     return line;
