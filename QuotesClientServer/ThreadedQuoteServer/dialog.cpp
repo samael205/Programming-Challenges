@@ -35,7 +35,7 @@ Dialog::Dialog(QWidget * parent)
     if(ipAddress.isEmpty())
         ipAddress = QHostAddress(QHostAddress::LocalHost).toString();
 
-    status->setText(tr("Server is running\n IP %1\nPORT %2\n")
+    status->setText(tr("Server is running\nIP: %1\nPORT: %2\n")
                     .arg(ipAddress)
                     .arg(server.serverPort()));
 
