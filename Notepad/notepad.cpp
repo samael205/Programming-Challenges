@@ -240,8 +240,7 @@ void Notepad::find(const QString & find){
    int wordPosition = cursorPositionOnWord.indexOf(find); 
    std::string wordExistInNotepad = ui->textEdit->toPlainText().toStdString();
    std::string searchedWord = ui->lineEdit->text().toStdString();
-
-    QList<QTextEdit::ExtraSelection> selectAllFound;
+    
    if(wordExistInNotepad.find(searchedWord) != std::string::npos){
        ui->lineEdit->setStyleSheet("background-color: green;");
        setCursorPosition.setPosition(wordPosition);
