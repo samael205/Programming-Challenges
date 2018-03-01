@@ -2,9 +2,7 @@
 #include <QtPrintSupport/QPrintDialog>
 #include <QPainter>
 
-
-ImageViewer::ImageViewer()
-{
+ImageViewer::ImageViewer(){
     imageShow = new QLabel(tr("No Images selected"));
     imageShow->setStyleSheet("font-weight: 800;");
     imageShow->setBackgroundRole(QPalette::Dark);
@@ -49,9 +47,8 @@ ImageViewer::ImageViewer()
     int x = screenSize.width();
     int y = screenSize.height();
 
-    animation->setEndValue(QRect(x/2-300, y/2-300, 1000, 700));
+    animation->setEndValue(QRect(x/2-300, y/2-300, 800, 500));
     animation->start();
-
 }
 
 ImageViewer::~ImageViewer(){
@@ -59,7 +56,6 @@ ImageViewer::~ImageViewer(){
 }
 
 void ImageViewer::setActions(){
-
     fileMenu = menuBar()->addMenu("File");
 
     clearImage = new QAction("New", this);
@@ -186,7 +182,7 @@ bool ImageViewer::iconExist(const QString & imgToCheck){
             if(iconsShow->item(i)->data(Qt::DisplayRole).toString() == imgToCheck){
                     iconsShow->setCurrentRow(i);
                     return true;
-                 }
+            }
     return false;
 }
 
@@ -407,5 +403,3 @@ void ImageViewer::ChangeThumbnailVisible(){
    bool isIconEnabled =  ThumbnailShow->isChecked();
    iconsShow->setVisible(isIconEnabled);
 }
-
-
