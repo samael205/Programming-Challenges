@@ -6,8 +6,7 @@
 #include <QAction>
 #include "taskwidget.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow{
     Q_OBJECT
 public:
     MainWindow();
