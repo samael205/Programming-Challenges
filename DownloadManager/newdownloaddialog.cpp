@@ -15,7 +15,7 @@ void newDownloadDialog::setup(){
     dataLayout = new QGridLayout;
 
     linkToData = new QLineEdit;
-    linkLabel = new QLabel(tr("Url "));
+    linkLabel = new QLabel(tr("URL "));
     dataLayout->addWidget(linkLabel, 0, 0);
     dataLayout->addWidget(linkToData, 0, 1);
 
