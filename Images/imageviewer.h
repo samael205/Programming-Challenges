@@ -3,14 +3,14 @@
 
 #include <QtWidgets>
 #include <QMainWindow>
+
 #ifndef QT_NO_PRINTER
-#include <QtPrintSupport/QPrinter>
+    #include <QtPrintSupport/QPrinter>
 #endif
 
 #define REP(i, n) for(int i=0; i<n; i++)
 
-class ImageViewer : public QMainWindow
-{
+class ImageViewer : public QMainWindow{
     Q_OBJECT
 public:
     ImageViewer();
