@@ -5,7 +5,6 @@
 #include "connection.h"
 #include "connectionmanager.h"
 
-#include <QDebug>
 #include <QMultiHash>
 
 class ConnectionManager;
