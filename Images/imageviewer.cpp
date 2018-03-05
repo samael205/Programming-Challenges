@@ -31,6 +31,7 @@ ImageViewer::ImageViewer(){
     iconsShow->setVisible(false);
     iconsShow->setEnabled(true);
     iconsShow->setStyleSheet("font-size: 1px; color: transparent; white-space: nowrap;");
+    iconsShow->setDragEnabled(false);
 
     mainLayout->addWidget(iconsShow, 0, 0, Qt::AlignLeft);
     centralWidget()->setLayout(mainLayout);
