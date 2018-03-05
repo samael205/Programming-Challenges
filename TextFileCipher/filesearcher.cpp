@@ -15,8 +15,4 @@ void FileSearcher::search(const fs::path &dirRoot){
 			filePaths.push_back(it->path().string());
 		it++;
 	}
-
-	std::cout<<"Found files:\n";
-	for(int i=0; i<filePaths.size(); i++)
-		std::cout<<"\t"<<filePaths[i]<<"\n";
 }
