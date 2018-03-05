@@ -14,9 +14,6 @@
 #include <QCheckBox>
 #include <QLabel>
 #include <QFutureWatcher>
-
-#include <string>
-#include <fstream>
 #include <sstream>
 #include <SFML/Network.hpp>
 #include <QSortFilterProxyModel>
