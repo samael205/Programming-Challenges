@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title></title>
+</head>
+<body>
+
+<div style="width: 350px; height: auto; background-color: rgb(255, 170, 0); margin: 50px auto; padding: 5px; box-shadow: 3px 2px 5px black;">
+	<table style="width: 100%; font-weight: 600; text-shadow: 2px 1px 1px rgb(255, 170, 0);">
+	<tr>
+		<th>Username</th>
+		<th>Score</th>
+		<th>Time</th>
+	</tr>		
+	{% for user in scores %}
+			<tr>
+				<td>{{user}}</td>
+				{% for score in scores[user]%}
+					<td>{{score[0]}}</td>
+					<td>{{score[1]}}</td>
+					<tr></tr>
+					<td></td>
+				{% endfor %}
+			</tr>
+	{% endfor %}
+	</table>
+	
+</div>
+</body>
+</html>
