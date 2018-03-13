@@ -13,7 +13,3 @@ def show_scores():
 
 def start_web_server():
     app.run(debug=True, use_reloader=False)
-
-
-
-
