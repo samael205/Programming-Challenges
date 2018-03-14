@@ -44,7 +44,7 @@ def score(score):
 
 
 def show_time(time):
-    timer_text = game_timer_font.render("Time: " + "{0:.2f}s".format(time), True, (195, 95, 0))
+    timer_text = game_timer_font.render(time_human(time), True, (195, 95, 0))
     game_display.blit(timer_text, (width - 200, 0))
 
 
@@ -52,7 +52,7 @@ def save_score(username, score, time):
     with open("snake_score.json", 'r', encoding='utf-8') as read_scores:
         scores = json.load(read_scores)
 
-    time_format = "{0:.2f}s".format(time)
+    time_format = time_human(time)
 
     if username in scores.keys():
         scores[username].append((score, time_format))
@@ -122,6 +122,10 @@ def wait_to_user_choice():
                 if event.key == pygame.K_q:
                     pygame.quit()
                     sys.exit()
+
+def time_human(seconds):
+	time_format = time.strftime("%M:%S", time.gmtime(seconds))
+	return time_format
 
 def main_loop():
     username = get_username()
