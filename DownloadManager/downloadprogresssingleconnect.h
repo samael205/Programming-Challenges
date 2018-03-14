@@ -26,6 +26,7 @@ private:
     QTime downloadTime;
     QUrl url;
 protected:
+    QString timeHuman(const int);
     QString sizeHuman(const qint64);
 };
 

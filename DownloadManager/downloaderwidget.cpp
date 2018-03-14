@@ -41,6 +41,7 @@ void downloaderWidget::setupTable(){
     dataViewer->setColumnWidth(0, 350);
     dataViewer->setColumnWidth(1, 150);
     dataViewer->setColumnWidth(2, 100);
+    dataViewer->setColumnWidth(3, 100);
     dataViewer->horizontalHeader()->setStretchLastSection(true);
 
     dataViewer->setItemDelegate(downloadPainter);

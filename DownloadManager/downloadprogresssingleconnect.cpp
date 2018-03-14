@@ -1,4 +1,5 @@
 #include "downloadprogresssingleconnect.h"
+#include <QDebug>
 
 DownloadProgressSingleConnect::DownloadProgressSingleConnect(QUrl downloadUrl, DownloaderTable * pointerToDataModel){
     dataModel = pointerToDataModel;
@@ -33,6 +34,19 @@ QString DownloadProgressSingleConnect::sizeHuman(qint64 fileSize){
     return QString().setNum(num, 'f', 2) + " " + units;
 }
 
+QString DownloadProgressSingleConnect::timeHuman(const int secondsToFinishDownload){
+    int seconds = secondsToFinishDownload%60;
+    int minutes = secondsToFinishDownload/60;
+    int hours = minutes/60;
+    minutes%=60;
+
+    QString secondsFormat = seconds < 10 ? "0" + QString::number(seconds) : QString::number(seconds);
+    QString minutesFormat = minutes < 10 ? "0" + QString::number(minutes) : QString::number(minutes);
+    QString hoursFormat = hours < 10 ? "0" + QString::number(hours) : QString::number(hours);
+
+    return hoursFormat + ":" + minutesFormat + ":" + secondsFormat;
+}
+
 void DownloadProgressSingleConnect::downloadProgress(qint64 received, qint64 total){
     double downloadSpeed = received * 1000.0 / downloadTime.elapsed();
     int progress = (100*received)/total;
@@ -55,6 +69,10 @@ void DownloadProgressSingleConnect::downloadProgress(qint64 received, qint64 tot
 
     QString speed = speedFormat+ " " + unit;
 
+    int secondsToFinishDownload = static_cast<int>(total/downloadSpeed);
+    secondsToFinishDownload/=1000;
+    QString timeLeft = timeHuman(secondsToFinishDownload);
+
     QString filenameToFind = url.fileName();
     int row = dataModel->getRowOfDownloadByName(filenameToFind);
 
@@ -66,6 +84,9 @@ void DownloadProgressSingleConnect::downloadProgress(qint64 received, qint64 tot
 
     index = dataModel->index(row, 3, QModelIndex());
     dataModel->setData(index, speed, Qt::EditRole);
+
+    index = dataModel->index(row, 4, QModelIndex());
+    dataModel->setData(index, timeLeft, Qt::EditRole);
 }
 
 const QUrl & DownloadProgressSingleConnect::getUrl() const{

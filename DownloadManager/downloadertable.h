@@ -10,6 +10,7 @@ struct singleDownloadInfo{
     qint64 progress;
     QString size;
     QString speed;
+    QString timeLeft;
 
     bool operator==(const singleDownloadInfo &);
 };

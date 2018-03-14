@@ -12,7 +12,7 @@ int DownloaderTable::rowCount(const QModelIndex &parent) const{
 
 int DownloaderTable::columnCount(const QModelIndex &parent) const{
     Q_UNUSED(parent);
-    return 4;
+    return 5;
 }
 
 QVariant DownloaderTable::headerData(int section, Qt::Orientation orientation, int role) const{
@@ -29,6 +29,8 @@ QVariant DownloaderTable::headerData(int section, Qt::Orientation orientation, i
                 return "Size";
             case 3:
                 return "Speed";
+            case 4:
+                return "Time left";
         }
     }
     return QVariant();
@@ -49,6 +51,8 @@ QVariant DownloaderTable::data(const QModelIndex &index, int role) const{
             return dataInfo.size;
         else if(index.column() == 3)
             return dataInfo.speed;
+        else if(index.column() == 4)
+            return dataInfo.timeLeft;
     }
 
     if(role == Qt::TextAlignmentRole)
@@ -57,6 +61,7 @@ QVariant DownloaderTable::data(const QModelIndex &index, int role) const{
             case 1:
             case 2:
             case 3:
+            case 4:
                 return Qt::AlignCenter;
             default:
                 return Qt::AlignLeft;
@@ -70,7 +75,7 @@ bool DownloaderTable::insertRows(int row, int count, const QModelIndex &parent){
 
     beginInsertRows(QModelIndex(), row, row + count - 1);
     REP(i, count)
-            downloadsInfo.insert(row, { QString(), qint64(), QString(), QString() });
+            downloadsInfo.insert(row, { QString(), qint64(), QString(), QString(), QString() });
     endInsertRows();
     return true;
 }
@@ -99,6 +104,8 @@ bool DownloaderTable::setData(const QModelIndex &index, const QVariant &value, i
             setDataInfo.size = value.toString();
         else if(index.column() == 3)
             setDataInfo.speed = value.toString();
+        else if(index.column() == 4)
+            setDataInfo.timeLeft = value.toString();
         else
             return false;
 

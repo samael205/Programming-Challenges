@@ -13,7 +13,7 @@ MainWindow::MainWindow(){
 
     QPropertyAnimation * animation;
     animation = new QPropertyAnimation(this, "size");
-    animation->setEndValue(QSize(800, 450));
+    animation->setEndValue(QSize(820, 450));
     animation->start();
 }
 
