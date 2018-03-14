@@ -24,5 +24,7 @@
         <file>content/images/anim15.jpg</file>
         <file>content/images/anim14.jpg</file>
         <file>content/ProgressBar.qml</file>
+        <file>content/images/previous.png</file>
+        <file>content/images/next.png</file>
     </qresource>
 </RCC>
