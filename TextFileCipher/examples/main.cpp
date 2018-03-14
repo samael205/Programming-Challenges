@@ -12,4 +12,10 @@ int main(void){
 
 	Cipher encryptFiles(findFiles.filesPath(), "rot13");
 	encryptFiles.StartEncrypt();
+
+	Cipher encryptFiles(findFiles.filesPath(), "caesar");
+	encryptFiles.StartEncrypt();
+
+	Cipher encryptFiles(findFiles.filesPath(), "vigenere");
+	encryptFiles.StartEncrypt();
 }
