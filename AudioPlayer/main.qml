@@ -14,6 +14,7 @@ Item{
     visible: true
     property bool musicPlaying: false
     property var noImageRepeat
+    property int currentMusicIndex: 0
 
     FolderListModel{
         id: folderModel
@@ -43,7 +44,6 @@ Item{
 
     function getNextImage(){
         var numberOfImages = folderModel.count
-
         var getIndexOfImages = Math.floor(Math.random() * numberOfImages);
 
         while(noImageRepeat === getIndexOfImages)
@@ -53,6 +53,14 @@ Item{
         var imagePath = folderModel.get(getIndexOfImages, "fileURL")
         wallpaper.source = imagePath;
         fadeInAnimation.start();
+    }
+
+    Playlist{
+        id: playlist
+    }
+
+    function setAudioIndex(index){
+        mediaPlayer.source = playlist.itemSource(index)
     }
 
     MediaPlayer{
@@ -69,6 +77,11 @@ Item{
 
         onPositionChanged: {
             progressChanged.start()
+        }
+
+        onPlaying: {
+            (!musicPlaying)
+                musicPlaying = true
         }
     }
 
@@ -110,10 +123,12 @@ Item{
         id: fileDialog
         title: "Set your audio"
         folder: shortcuts.music
+        selectMultiple: true
         onAccepted: {
-            mediaPlayer.source = fileDialog.fileUrl
-            musicPlaying = true
+            playlist.addItems(fileDialog.fileUrls)
             fileDialog.visible = false
+            if(!mediaPlayer.hasAudio)
+                setAudioIndex(currentMusicIndex);
         }
     }
 
@@ -150,6 +165,27 @@ Item{
             mediaPlayer.pause();
     }
 
+    function previousSong(){
+        if(currentMusicIndex - 1 >= 0)
+            currentMusicIndex--;
+        setAudioIndex(currentMusicIndex)
+    }
+
+    Image{
+        width: 54
+        height: 54
+        id: nextLeft
+        source: "./content/images/previous.png"
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: width
+        x: parent.width/2 - width - 150
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked: previousSong()
+        }
+    }
+
     Image{
         id: playButton
         width: 54
@@ -182,5 +218,25 @@ Item{
             onClicked:  fileDialog.visible = true
         }
     }
-}
 
+    function nextSong(){
+        if(currentMusicIndex + 1 < playlist.itemCount)
+            currentMusicIndex++;
+        setAudioIndex(currentMusicIndex)
+    }
+
+    Image{
+        width: 54
+        height: 54
+        id: nextRight
+        source: "./content/images/next.png"
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: width
+        x: parent.width/2 + width + 75
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked: nextSong()
+        }
+    }
+}

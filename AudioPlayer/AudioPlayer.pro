@@ -1,4 +1,4 @@
-QT += quick qml multimedia 3dcore 3dquick 3dinput
+QT += quick qml multimedia
 CONFIG += c++11
 
 DEFINES += QT_DEPRECATED_WARNINGS
