@@ -2,7 +2,6 @@
 #include <Python.h>
 #include <boost/filesystem.hpp>
 #include <vector>
-#include <iomanip>
 
 namespace fs = ::boost::filesystem;
 
@@ -18,7 +17,6 @@ struct search{
 
 	void find_files(const std::string & search_file, const fs::path & = fs::current_path());
 	void convert_files(py function_to_call, py arguments);
-	const void result() const;
 
 };
 
@@ -36,7 +34,6 @@ int main(void){
 		file_extension = "." + file_extension;
 	search test;
 	test.find_files(file_extension);
-	test.result();
 	test.convert_files(function, arguments);
 	Py_Finalize();
 }
@@ -44,9 +41,9 @@ int main(void){
 void search::convert_files(py function_to_call, py arguments){
 	FOREACH(i, files){
 		PyTuple_SetItem(arguments, 0, PyString_FromString(i->string().c_str()));
-		std::cout<<"Converting "<<i->filename();
+		std::cout<<i->filename()<<"\t\033[1;31mConverting\033[0m";
 		PyObject_CallObject(function_to_call, arguments);
-		std::cout<<"\tDone\n";
+		std::cout<<"\t\033[1;32mDone\033[0m\n";;
 	}
 }
 
@@ -60,13 +57,4 @@ void search::find_files(const std::string & search_file, const fs::path & root){
 			files.push_back(it->path());
 		it++;
 	}
-}
-
-const void search::result() const{
-	std::cout<<std::setw(15)<<"Found files:\n";
-	if(files.size() == 0)
-		std::cout<<std::setw(15)<<"None\n";
-	FOREACH(i, files)
-		std::cout<<std::setw(15)<<i->filename()<<'\n';
-	std::cout<<'\n';	
 }
