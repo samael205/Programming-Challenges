@@ -1,0 +1,28 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>content/images/anim0.jpg</file>
+        <file>content/images/anim1.jpg</file>
+        <file>content/images/anim2.jpg</file>
+        <file>content/images/anim3.jpg</file>
+        <file>main.cpp</file>
+        <file>content/images/play.png</file>
+        <file>content/images/stop.png</file>
+        <file>content/images/music.png</file>
+        <file>content/images/anim10.jpg</file>
+        <file>content/images/anim13.jpg</file>
+        <file>content/images/anim12.jpg</file>
+        <file>content/images/anim11.jpg</file>
+        <file>content/images/anim9.jpg</file>
+        <file>content/images/anim8.jpg</file>
+        <file>content/images/anim7.jpg</file>
+        <file>content/images/anim6.jpg</file>
+        <file>content/images/anim5.jpg</file>
+        <file>content/images/anim4.jpg</file>
+        <file>content/images/anim17.jpg</file>
+        <file>content/images/anim16.jpg</file>
+        <file>content/images/anim15.jpg</file>
+        <file>content/images/anim14.jpg</file>
+        <file>content/ProgressBar.qml</file>
+    </qresource>
+</RCC>

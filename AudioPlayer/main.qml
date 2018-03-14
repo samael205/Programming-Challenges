@@ -1,0 +1,186 @@
+import QtQuick 2.10
+import QtQuick.Layouts 1.3
+import QtMultimedia 5.9
+import QtQuick.Dialogs 1.2
+import QtGraphicalEffects 1.0
+import QtQuick.Scene3D 2.0
+import Qt.labs.folderlistmodel 2.2
+import "./content"
+
+Item{
+    id: mainview
+    width: 1215
+    height: 720
+    visible: true
+    property bool musicPlaying: false
+    property var noImageRepeat
+
+    FolderListModel{
+        id: folderModel
+        nameFilters: ["*.jpg"]
+        folder: "./content/images"
+    }
+
+    Image{
+        id: wallpaper
+        anchors.fill: parent
+        source: "./content/images/anim0.jpg"
+        NumberAnimation on opacity{
+            id: fadeInAnimation
+            from: 0
+            to: 1
+            duration: 1000
+        }
+
+    }
+
+    Timer{
+        interval: 10000
+        running: musicPlaying
+        repeat: true
+        onTriggered: getNextImage()
+    }
+
+    function getNextImage(){
+        var numberOfImages = folderModel.count
+
+        var getIndexOfImages = Math.floor(Math.random() * numberOfImages);
+
+        while(noImageRepeat === getIndexOfImages)
+            getIndexOfImages = Math.floor(Math.random() * numberOfImages);
+
+        noImageRepeat = getIndexOfImages;
+        var imagePath = folderModel.get(getIndexOfImages, "fileURL")
+        wallpaper.source = imagePath;
+        fadeInAnimation.start();
+    }
+
+    MediaPlayer{
+        id: mediaPlayer
+        autoLoad: true
+        autoPlay: true
+        volume: 0.8
+        onError: console.error("Error with audio " + mediaPlayer.error)
+
+        onStatusChanged: {
+            if(status == MediaPlayer.EndOfMedia)
+                musicPlaying = false
+        }
+
+        onPositionChanged: {
+            progressChanged.start()
+        }
+    }
+
+    function songNameAndAuthor(){
+        if(!mediaPlayer.hasAudio)
+            return ""
+        var getSong = mediaPlayer.source.toString()
+        var getName = getSong.split("/")
+        getName = getName[getName.length - 1]
+        var songInfo = getName.split("-")
+        var title = songInfo[1]
+        var author = songInfo[0]
+        return author + "\n" + title
+    }
+
+    function timeFormatDuration(milliseconds){
+        var seconds = parseInt((milliseconds / 1000) % 60)
+        var minutes = parseInt(((milliseconds / (1000*60)) % 60))
+        if(seconds < 10)
+            return minutes + ":0" + seconds
+        else
+            return minutes + ":" + seconds
+    }
+
+    ProgressBar{
+        id: songProgress
+        anchors.verticalCenter: parent.verticalCenter
+        anchors.horizontalCenter: parent.horizontalCenter
+        property int previousPositionStatus
+
+        NumberAnimation on currentProgress {
+            id: progressChanged
+            to: (mediaPlayer.position * 100) / mediaPlayer.duration
+            duration: 500
+        }
+    }
+
+    FileDialog{
+        id: fileDialog
+        title: "Set your audio"
+        folder: shortcuts.music
+        onAccepted: {
+            mediaPlayer.source = fileDialog.fileUrl
+            musicPlaying = true
+            fileDialog.visible = false
+        }
+    }
+
+    Text{
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        anchors.left: parent.left
+        anchors.leftMargin: 25
+        id: songTitle
+        text: songNameAndAuthor()
+        font.family: "Comic Sans"
+        font.bold: true
+        font.pointSize: 14
+        color: "red"
+    }
+
+    DropShadow{
+        anchors.fill: songTitle
+        source: songTitle
+        horizontalOffset: 3
+        verticalOffset: 2
+        radius: 1
+        samples: 3
+        color: "black"
+    }
+
+    function audioStatus(){
+        musicPlaying = !musicPlaying
+        if(musicPlaying){
+            var currentMusicPosition = mediaPlayer.position
+            mediaPlayer.seek(currentMusicPosition)
+            mediaPlayer.play();
+        }else
+            mediaPlayer.pause();
+    }
+
+    Image{
+        id: playButton
+        width: 54
+        height: 54
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: width
+        x: parent.width/2 - width - 10
+        source: musicPlaying ?  "./content/images/stop.png" : "./content/images/play.png"
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked:{
+                if(mediaPlayer.hasAudio)
+                    audioStatus()
+            }
+        }
+    }
+
+    Image{
+        id: setMusic
+        width: 54
+        height: 54
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: width
+        x: parent.width/2
+        source: "./content/images/music.png"
+
+        MouseArea{
+            anchors.fill: parent
+            onClicked:  fileDialog.visible = true
+        }
+    }
+}
+

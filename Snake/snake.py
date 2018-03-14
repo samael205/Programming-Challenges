@@ -6,6 +6,8 @@ import threading
 from score_board import start_web_server
 
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("sounds/coin.mp3")
 threading._start_new_thread(start_web_server, ())
 
 width = 800
@@ -121,7 +123,6 @@ def wait_to_user_choice():
                     pygame.quit()
                     sys.exit()
 
-
 def main_loop():
     username = get_username()
     username_display = pygame.font.SysFont("Verdana", 39)
@@ -205,10 +206,12 @@ def main_loop():
                     snake_length += 1
                     fruit_x, fruit_y = generate_fruit()
                     my_score += 10
+                    pygame.mixer.music.play()
                 elif lead_y > fruit_y and lead_y < fruit_y + block_size:
                     snake_length += 1
                     fruit_x, fruit_y = generate_fruit()
                     my_score += 10
+                    pygame.mixer.music.play()	
 
             clock.tick(FPS)
             draw(snake_body)
@@ -216,9 +219,4 @@ def main_loop():
 
 
 main_loop()
-
-
-
-
-
 
