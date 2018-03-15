@@ -19,9 +19,19 @@ void queue_threads(vq & queue);
 
 int main(void){
 	std::srand(std::time(0));
-	vq test = queues_to_simulate(10);
+	vq test = queues_to_simulate(5, 8);
 	queue_threads(test);
 	cout<< "\033[2J\033[1;1H";
+	summary(test.back());
+
+	cout<<"\n\n";
+	test = queues_to_simulate(10);
+	queue_threads(test);
+	summary(test.back());
+
+	cout<<"\n\n";
+	test = queues_to_simulate();
+	queue_threads(test);
 	summary(test.back());
 }
 
