@@ -32,7 +32,7 @@ public:
 	ConvertImages();
 	~ConvertImages();
 
-	friend void Call(const ConvertImages &, const Images &);
+	friend void Convert(const ConvertImages &, const Images &);
 
 protected:
 
@@ -48,7 +48,7 @@ public:
 	~Images();
 
 	void get_data(std::string &);
-	friend void Call(const ConvertImages &, const Images &);
+	friend void Convert(const ConvertImages &, const Images &);
 protected:
 	vs split(const std::string);
 	void search(const vs &,  const fs::path & rootDirPath = fs::current_path());

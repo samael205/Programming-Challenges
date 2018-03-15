@@ -57,7 +57,7 @@ ConvertImages::~ConvertImages(){
 	Py_Finalize();
 }
 
-void Call(const ConvertImages & convert, const Images & imagesToConvert){
+void Convert(const ConvertImages & convert, const Images & imagesToConvert){
 	FOREACH(imageToConvert, imagesToConvert.filesPath){
 		PyTuple_SetItem(convert.arguments, 0, PyString_FromString(imageToConvert->filename().string().c_str()));
 		FOREACH(extensionToSet, imagesToConvert.extensionsToConvert){

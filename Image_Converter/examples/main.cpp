@@ -9,5 +9,5 @@ int main(void){
 	std::cout<<"Write files or extension to convert: "<<std::flush;
 	std::getline(std::cin, instruction);
 	getImages.get_data(instruction);
-	Call(convertThen, getImages);	
+	Convert(convertThen, getImages);	
 }
