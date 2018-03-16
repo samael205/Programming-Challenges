@@ -63,6 +63,13 @@ Item{
         mediaPlayer.source = playlist.itemSource(index)
     }
 
+    function changeMusicWhenSongEnded(){
+        currentMusicIndex++;
+        if(currentMusicIndex >= playlist.itemCount)
+            currentMusicIndex = 0;
+        setAudioIndex(currentMusicIndex);
+    }
+
     MediaPlayer{
         id: mediaPlayer
         autoLoad: true
@@ -72,7 +79,7 @@ Item{
 
         onStatusChanged: {
             if(status == MediaPlayer.EndOfMedia)
-                musicPlaying = false
+                changeMusicWhenSongEnded()
         }
 
         onPositionChanged: {
