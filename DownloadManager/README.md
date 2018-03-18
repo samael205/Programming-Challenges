@@ -1,0 +1,1 @@
+![screenshot](../guiIntroduction/download.png)
