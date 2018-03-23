@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import QtQuick.Scene3D 2.0
 import Qt.labs.folderlistmodel 2.2
+import QtQuick.Controls 2.2
 import "./content"
 
 Item{
@@ -245,5 +246,32 @@ Item{
             anchors.fill: parent
             onClicked: nextSong()
         }
+    }
+
+    function formatVolumeToBetterRead(volume){
+        var getVolume = volume
+        getVolume *= 100
+        getVolume = Math.floor(getVolume)
+        getVolume = getVolume.toString() + "%"
+        return getVolume
+    }
+
+    Slider{
+        id: musicVolume
+        value: mediaPlayer.volume
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 5
+        anchors.horizontalCenter: parent.horizontalCenter
+        onValueChanged: mediaPlayer.volume = musicVolume.value
+    }
+
+    Text{
+        id: volumeShow
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 3
+        anchors.horizontalCenter: musicVolume.horizontalCenter
+        color: "green"
+        text: formatVolumeToBetterRead(musicVolume.value)
+        visible: musicVolume.hovered
     }
 }
