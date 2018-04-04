@@ -28,8 +28,8 @@ clock = pygame.time.Clock()
 
 
 def generate_fruit():
-    random_x = round(random.randrange(50, width, block_size))
-    random_y = round(random.randrange(50, height, block_size))
+    random_x = round(random.randrange(50, width - 50, block_size))
+    random_y = round(random.randrange(50, height - 50, block_size))
     return random_x, random_y
 
 
@@ -60,7 +60,7 @@ def save_score(username, score, time):
         scores[username] = [[score, time_format]]
 
     with open("snake_score.json", 'w', encoding='utf-8') as append_scores:
-        json.dump(scores, append_scores)
+        json.dump(scores, append_scores, indent=2, sort_keys=True)
 
 
 def get_username():
@@ -110,7 +110,7 @@ def wait_to_user_choice():
     game_display.fill((255, 255, 255))
     play_again = False
     font = pygame.font.Font(None, 38)
-    tip = "C to play again, Q to quit"
+    tip = "C to play again, Q to quit."
     message = font.render(tip, True, (0, 85, 125))
     game_display.blit(message, (width/2 - 150, height/2))
     pygame.display.flip()
@@ -129,7 +129,7 @@ def time_human(seconds):
 
 def main_loop():
     username = get_username()
-    username_display = pygame.font.SysFont("Verdana", 39)
+    username_display = pygame.font.SysFont("Italic", 39)
 
     game_display.fill((0, 0, 0))
 
@@ -190,13 +190,13 @@ def main_loop():
             if len(snake_body) > snake_length:
                 del snake_body[0]
 
-            if lead_x < 0:
+            if lead_x <= 0:
                 lead_x = width
             elif lead_x > width:
                 lead_x = 0
-            elif lead_y < 0:
+            elif lead_y <= 0:
                 lead_y = height
-            elif lead_y > height:
+            elif lead_y > height - 5:
                 lead_y = 0
 
             head = (snake_body[-1][0], snake_body[-1][-1])
