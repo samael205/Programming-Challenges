@@ -3,7 +3,6 @@ import QtQuick.Layouts 1.3
 import QtMultimedia 5.9
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
-import QtQuick.Scene3D 2.0
 import Qt.labs.folderlistmodel 2.2
 import QtQuick.Controls 2.2
 import "./content"
@@ -270,8 +269,11 @@ Item{
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 3
         anchors.horizontalCenter: musicVolume.horizontalCenter
-        color: "green"
+        color: "red"
         text: formatVolumeToBetterRead(musicVolume.value)
         visible: musicVolume.hovered
+        font.bold: true
+        font.italic: true
+        font.family: "Arial"
     }
 }

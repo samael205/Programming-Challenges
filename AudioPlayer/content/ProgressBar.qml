@@ -53,18 +53,18 @@ Canvas{
             anchors.centerIn: parent
             text: timeFormatDuration((showCurrentAudioTimeOrDuration) ? mediaPlayer.position : mediaPlayer.duration)
             color: "#3DF736"
-            font.pointSize: 18
+            font.pointSize: 21
 
             NumberAnimation on font.pointSize{
                 id: textToUpper
                 from: 1
-                to: 18
+                to: 21
                 duration: 100
             }
 
             NumberAnimation on font.pointSize{
                 id: textToLower
-                from: 18
+                from: 21
                 to: 1
                 duration: 100
             }
