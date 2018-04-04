@@ -2,7 +2,7 @@
 
 example for debian
 
-We need export c++ path
+We need export python path
 
 ```sh
 $ export CPLUS_INCLUDE_PATH=/usr/include/python2.7
