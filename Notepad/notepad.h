@@ -29,6 +29,7 @@ public slots:
     void onOpen();
     void onSave();
     void onSaveAs();
+    void onSaveAsAudio();
     void setFont();
 
     void countText();
@@ -65,6 +66,7 @@ private:
     QAction * open;
     QAction * save;
     QAction * saveAs;
+    QAction * saveAsAudio;
     QAction * printAct;
     QAction * exit;
 

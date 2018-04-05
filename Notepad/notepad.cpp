@@ -1,10 +1,12 @@
 #include "notepad.h"
 #include "ui_notepad.h"
+#include <Python.h>
 #include <QMessageBox>
 #include <string>
 #include <algorithm>
 #include <cctype>
 #include <sstream>
+#include <QDebug>
 
 Notepad::Notepad(QWidget *parent) :
     QMainWindow(parent),
@@ -68,6 +70,11 @@ void Notepad::setupMenus(){
     fileMenu->addAction(saveAs);
     saveAs->setShortcut(QKeySequence::SaveAs);
     connect(saveAs, SIGNAL(triggered(bool)), this, SLOT(onSaveAs()));
+
+    saveAsAudio = new QAction("Save As Audio", this);
+    fileMenu->addAction(saveAsAudio);
+    saveAsAudio->setShortcut(QKeySequence(tr("ALT+SHIFT+S")));
+    connect(saveAsAudio, SIGNAL(triggered(bool)), this, SLOT(onSaveAsAudio()));
 
     fileMenu->addSeparator();
 
@@ -167,6 +174,32 @@ void Notepad::onSaveAs(){
     statusBar()->showMessage(tr("Saved as %1").arg(filePath.split("/").back()));
 }
 
+void Notepad::onSaveAsAudio(){
+    QString filePath = QFileDialog::getSaveFileName(this, "Save Audio File", QDir::homePath(), tr("Audio(*.mp3 *.wav)"));
+
+    if(filePath.isEmpty())
+        return;
+
+    Py_Initialize();
+    PyObject * module = PyImport_ImportModule("text_to_audio");
+    PyObject * dict = PyModule_GetDict(module);
+    PyObject * arguments = PyTuple_New(2);
+    PyObject * function = PyDict_GetItem(dict, PyString_FromString("convert_to_audio"));
+    QString textContent = ui->textEdit->toPlainText();
+    PyTuple_SetItem(arguments, 0, PyString_FromString(textContent.toStdString().c_str()));
+    PyTuple_SetItem(arguments, 1, PyString_FromString(filePath.toStdString().c_str()));
+
+    if(PyErr_Occurred()){
+        PyErr_Print();
+        Py_Finalize();
+        return;
+    }
+
+    PyObject_CallObject(function, arguments);
+    Py_Finalize();
+
+    statusBar()->showMessage(tr("Saved as %1").arg(filePath.split("/").back()));
+}
 
 void Notepad::setFont(){
     bool fontSelected;
