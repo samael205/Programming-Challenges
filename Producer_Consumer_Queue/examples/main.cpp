@@ -21,7 +21,6 @@ int main(void){
 	std::srand(std::time(0));
 	vq test = queues_to_simulate(5, 8);
 	queue_threads(test);
-	cout<< "\033[2J\033[1;1H";
 	summary(test.back());
 
 	cout<<"\n\n";
