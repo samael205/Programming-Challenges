@@ -51,16 +51,23 @@ int main(int argc, char *argv[]){
 	std::cout<<"Words:\t"<<count.first;	
 	if(wc::readChars)
 		std::cout<<"\tChars:\t"<<count.second;
+	if(wc::readNewLines)
+		std::cout<<"\tLines:\t"<<wc::newLines;
 	std::cout<<"\n";
 }
 
 void findOptions(int argc, char ** arguments){
-	REP(i, argc, 1)
+	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--chars") == 0 ||
 			std::strcmp(arguments[i], "-c") == 0){
 			wc::readChars = true;
 			arguments[i][0] = '\0';
-			break;
+		} 
+		if(std::strcmp(arguments[i], "--lines") == 0 ||
+			std::strcmp(arguments[i], "-l") == 0){
+			wc::readNewLines = true;
+			arguments[i][0] = '\0';
 		}
+	}
 }
 

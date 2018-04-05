@@ -7,23 +7,37 @@
 #include <utility>
 #include <algorithm>
 #include <cctype>
+#include <iostream>
 
 namespace wc{
 	typedef std::vector<std::string> filesContent;
 	typedef std::vector<std::pair<int, int>>counter;
 
 	static counter words;
+	static int newLines = 0;
 
 	std::mutex threadGuard;
 
 	bool readChars = false;
+	bool readNewLines = false;
+
+	int numberOfNewLines;
+	int numberOfWords;
+	int numberOfChars;
 
 	std::string getFileContent(std::ifstream & file){
 		std::string bufor = "\0";
 		std::string data = "\0";
 
-		while(file >> bufor)	
+		while(file >> bufor){	
 			data += bufor + " ";
+		}
+
+		file.clear();
+		file.seekg(0, std::ios::beg);
+
+		numberOfNewLines = std::count(std::istreambuf_iterator<char>(file),
+			std::istreambuf_iterator<char>(), '\n');
 		
 		return data;
 	}
@@ -37,15 +51,17 @@ namespace wc{
 
 	void countWords(const std::string & content){
 		std::stringstream sstream(content);
-		int numberOfWords = std::distance(std::istream_iterator<std::string>(sstream), 
+		numberOfWords = std::distance(std::istream_iterator<std::string>(sstream), 
 			std::istream_iterator<std::string>());
 
-		int numberOfChars = std::count_if(content.begin(), content.end(), [](char c){
+		numberOfChars = std::count_if(content.begin(), content.end(), [](char c){
 			return std::isalpha(c);
 		});
 
 		threadGuard.lock();
+		newLines += numberOfNewLines;
 		words.push_back(std::pair<int, int>(numberOfWords, numberOfChars));
 		threadGuard.unlock();
 	}
+
 }
