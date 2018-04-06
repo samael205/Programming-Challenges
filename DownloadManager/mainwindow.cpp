@@ -4,6 +4,7 @@
 #include <QPropertyAnimation>
 #include <QFile>
 #include <QGuiApplication>
+#include <QRect>
 
 MainWindow::MainWindow(){
     downloader = new downloaderWidget;
@@ -11,9 +12,8 @@ MainWindow::MainWindow(){
 
     setup();
 
-    QPropertyAnimation * animation;
-    animation = new QPropertyAnimation(this, "size");
-    animation->setEndValue(QSize(820, 450));
+    QPropertyAnimation * animation = new QPropertyAnimation(this, "size");
+    animation->setEndValue(QSize(920, 480));
     animation->start();
 }
 
