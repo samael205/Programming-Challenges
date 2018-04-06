@@ -47,7 +47,8 @@ int main(int argc, char *argv[]){
 
 	auto count = std::accumulate(wc::words.begin(), wc::words.end(), std::make_pair<int, int>(0, 0),
 		wc::sumPair<int, int>());
-	
+
+		
 	std::cout<<"Words:\t"<<count.first;	
 	if(wc::readChars)
 		std::cout<<"\tChars:\t"<<count.second;

@@ -1,13 +1,4 @@
-#include <vector>
-#include <fstream>
-#include <string>
-#include <sstream>
-#include <iterator>
-#include <mutex>
-#include <utility>
-#include <algorithm>
-#include <cctype>
-#include <iostream>
+#include <bits/stdc++.h>
 
 namespace wc{
 	typedef std::vector<std::string> filesContent;
