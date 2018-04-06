@@ -7,7 +7,7 @@
 
 #define REP(i, n, v) for(int i=v; i<n; i++)
 
-void findOptions(int argc, char ** argv);
+void Options(int argc, char ** argv);
 
 int main(int argc, char *argv[]){
 	std::ios_base::sync_with_stdio(false);
@@ -15,7 +15,7 @@ int main(int argc, char *argv[]){
 	if(argc < 2)
 		std::exit(EXIT_FAILURE);
 
-	findOptions(argc, argv);
+	Options(argc, argv);
 
 	wc::filesContent content;
 
@@ -43,7 +43,6 @@ int main(int argc, char *argv[]){
 
 	for(auto it = threads.begin(); it != threads.end(); it++)
 		it->get();		
-
 
 	auto count = std::accumulate(wc::words.begin(), wc::words.end(), std::make_pair<int, int>(0, 0),
 		wc::sumPair<int, int>());
