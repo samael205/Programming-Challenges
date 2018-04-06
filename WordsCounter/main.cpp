@@ -6,6 +6,7 @@
 #include "wordsCounter.h"
 
 #define REP(i, n, v) for(int i=v; i<n; i++)
+#define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 
 void Options(int argc, char ** argv);
 
@@ -38,10 +39,10 @@ int main(int argc, char *argv[]){
 	}
 
 	std::vector<std::future<void> > threads;
-	for(auto it = content.begin(); it != content.end(); it++)
+	FOREACH(it, content)
 		threads.push_back(std::async(std::launch::async, wc::countWords, std::ref(*it)));
 
-	for(auto it = threads.begin(); it != threads.end(); it++)
+	FOREACH(it, threads)
 		it->get();		
 
 	auto count = std::accumulate(wc::words.begin(), wc::words.end(), std::make_pair<int, int>(0, 0),
@@ -55,7 +56,7 @@ int main(int argc, char *argv[]){
 	std::cout<<"\n";
 }
 
-void findOptions(int argc, char ** arguments){
+void Options(int argc, char ** arguments){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--chars") == 0 ||
 			std::strcmp(arguments[i], "-c") == 0){
