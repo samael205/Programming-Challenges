@@ -6,7 +6,6 @@
 #include <algorithm>
 #include <cctype>
 #include <sstream>
-#include <QDebug>
 
 Notepad::Notepad(QWidget *parent) :
     QMainWindow(parent),
@@ -38,7 +37,8 @@ Notepad::Notepad(QWidget *parent) :
     QRect screenSize = QApplication::desktop()->screenGeometry();
     int x = screenSize.width();
     int y = screenSize.height();
-    animation->setEndValue(QRect(x/3, y/3, 700, 500));
+    animation->setEndValue(QRect(x/3 - 100, y/3 - 100, 710, 430));
+    animation->setDuration(70);
     animation->start();
 }
 
@@ -142,7 +142,6 @@ void Notepad::onOpen(){
 }
 
 void Notepad::onSave(){
-
     QFile file(currentFile);
     if(!file.open(QIODevice::WriteOnly | QFile::Text)){
         statusBar()->showMessage("No file opened!");
