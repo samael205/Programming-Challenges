@@ -1,1 +1,2 @@
-![screenshot](../guiIntroduction/webPicker.png)
+![screenshot](~/guiIntroduction/webPicker.png)
+

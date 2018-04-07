@@ -1,0 +1,1 @@
+![screenshot](~/guiIntroduction/guiPicker.png)
