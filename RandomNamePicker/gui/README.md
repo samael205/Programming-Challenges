@@ -1,1 +1,1 @@
-![screenshot](~/guiIntroduction/guiPicker.png)
+![screenshot](../../guiIntroduction/guiPicker.png)
