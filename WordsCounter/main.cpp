@@ -8,6 +8,7 @@
 #define REP(i, n, v) for(int i=v; i<n; i++)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 
+void CheckIfUserAskForHelp(int argc, char ** argv);
 void Options(int argc, char ** argv);
 
 int main(int argc, char *argv[]){
@@ -16,6 +17,7 @@ int main(int argc, char *argv[]){
 	if(argc < 2)
 		std::exit(EXIT_FAILURE);
 
+	CheckIfUserAskForHelp(argc, argv);
 	Options(argc, argv);
 
 	wc::filesContent content;
@@ -55,6 +57,17 @@ int main(int argc, char *argv[]){
 	if(wc::readNewLines)
 		std::cout<<"\tLines:\t"<<wc::newLines;
 	std::cout<<"\n";
+}
+
+void CheckIfUserAskForHelp(int argc, char ** arguments){
+	REP(i, argc, 1){
+		if(std::strcmp(arguments[i], "--help") == 0 ||
+			std::strcmp(arguments[i], "-h") == 0){
+			std::string helpMessage = "\e[1m-c, --chars\n\t\e[0mprint the character counts\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts";
+				std::cout<<helpMessage<<"\n";
+				std::exit(EXIT_SUCCESS);
+		}
+	}
 }
 
 void Options(int argc, char ** arguments){
