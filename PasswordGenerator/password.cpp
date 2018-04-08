@@ -1,15 +1,12 @@
 #include "password.h"
 #include <cctype>
 
-PasswordGenerator::PasswordGenerator(){
-	passwordSettings = new bool[n];
+PasswordGenerator::PasswordGenerator() : passwordSettings(new bool[n]){
 	password = "\0";
 	length = 10;
 }
 
-PasswordGenerator::~PasswordGenerator(){
-	delete [] passwordSettings;
-}
+PasswordGenerator::~PasswordGenerator(){}
 
 const int PasswordGenerator::random(int n){
 	return std::rand()%n;
@@ -34,17 +31,17 @@ void PasswordGenerator::Settings(){
 
 const void PasswordGenerator::Show(){
 	cout << "\033[2J\033[1;1H";
-	cout<<"Password Generator v1.0\n";
+	cout<<"Password Generator v1.1\n";
 	cout<<"u.\t"<<checked(passwordSettings[0])<<" Upper Case"
 		<<"\tStrength: "<<passwordStrength()<<"\n";
 	cout<<"l.\t"<<checked(passwordSettings[1])<<" Lower Case\n";
 	cout<<"n.\t"<<checked(passwordSettings[2])<<" Numbers\n";
 	cout<<"s.\t"<<checked(passwordSettings[3])<<" Symbols\n";
-	cout<<"t.\t"<<"Length: "<<length<<"\n";
+	cout<<"t.\t"<<"Length: \033[1;31m"<<length<<"\033[0m\n";
 	cout<<"g.\tGenerate\n";
 	cout<<"e.\tExit\n";
 	if(password.length() >= 10)
-		cout<<"Your generated password: "<<password<<'\n';
+		cout<<"Your generated password: \e[1m"<<password<<"\e[0m\n";
 	cout<<"-: "<<std::flush;
 }
 
@@ -77,8 +74,9 @@ void PasswordGenerator::setSettings(const char set){
 			while(cin.get() != '\n' || length < 10 || length > 255){
 				std::cout<<"Password length should be (10-255)\n"
 					<<"Enter new Password: "<<std::flush;
-				while(cin>>length)
+				while(!(cin>>length))
 					break;
+				cin.clear();
 				continue;
 			}
 		break;

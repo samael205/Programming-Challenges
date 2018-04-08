@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <string>
 #include <ctime>
+#include <memory>
 
 #define REP(i, n) for(int i=0; i<n; i++)
 
@@ -16,7 +17,7 @@ using std::cin;
 class PasswordGenerator{
 private:
 	enum { n = 4};
-	bool * passwordSettings;
+	std::unique_ptr<bool[]> passwordSettings;
 	string password;
 	int length;
 public:
