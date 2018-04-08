@@ -27,7 +27,7 @@ ImageViewer::ImageViewer(){
     iconsShow = new QListWidget;
     iconsShow->setViewMode(QListWidget::IconMode);
     iconsShow->setIconSize(QSize(80, 80));
-    iconsShow->setFixedWidth(97);
+    iconsShow->setFixedWidth(100);
     iconsShow->setVisible(false);
     iconsShow->setEnabled(true);
     iconsShow->setStyleSheet("font-size: 1px; color: transparent; white-space: nowrap;");
