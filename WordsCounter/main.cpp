@@ -1,6 +1,4 @@
 #include <iostream>
-#include <future>
-#include <numeric>
 #include <cstring>
 
 #include "wordsCounter.h"
@@ -20,7 +18,7 @@ int main(int argc, char *argv[]){
 	CheckIfUserAskForHelp(argc, argv);
 	Options(argc, argv);
 
-	wc::filesContent content;
+	wc::result filesResult;
 
 	REP(i, argc, 1){
 		if(std::strlen(argv[i]) == 0)
@@ -34,29 +32,18 @@ int main(int argc, char *argv[]){
 			continue;
 		}
 
-		std::string readContent = wc::getFileContent(file);
+		std::string fileSummary = wc::countWords(file);
 		file.close();
+		fileSummary += " " + std::string(argv[i]);
 
-		content.push_back(readContent);
+		filesResult.push_back(fileSummary);
 	}
 
-	std::vector<std::future<void> > threads;
-	FOREACH(it, content)
-		threads.push_back(std::async(std::launch::async, wc::countWords, std::ref(*it)));
+	FOREACH(it, filesResult)
+		std::cout<<*it<<"\n";
 
-	FOREACH(it, threads)
-		it->get();		
-
-	auto count = std::accumulate(wc::words.begin(), wc::words.end(), std::make_pair<int, int>(0, 0),
-		wc::sumPair<int, int>());
-
-		
-	std::cout<<"Words:\t"<<count.first;	
-	if(wc::readChars)
-		std::cout<<"\tChars:\t"<<count.second;
-	if(wc::readNewLines)
-		std::cout<<"\tLines:\t"<<wc::newLines;
-	std::cout<<"\n";
+	if(filesResult.size() > 1)
+		std::cout<<wc::totalSummary();				
 }
 
 void CheckIfUserAskForHelp(int argc, char ** arguments){
@@ -64,8 +51,8 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
 			std::string helpMessage = "\e[1m-c, --chars\n\t\e[0mprint the character counts\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts";
-				std::cout<<helpMessage<<"\n";
-				std::exit(EXIT_SUCCESS);
+			std::cout<<helpMessage<<"\n";
+			std::exit(EXIT_SUCCESS);
 		}
 	}
 }

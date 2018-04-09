@@ -1,7 +1,7 @@
 ```sh
-time ./wc --chars file1.txt file2.txt file3.txt > test.out
+./wc -c -l file1.txt file2.txt file3.txt > test.out  
 
-user 0.03s
-system 0.01s
-total 0.033 
+user 0,01s
+system 0,00s
+total 0,015 
 ```

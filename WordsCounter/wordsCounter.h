@@ -1,13 +1,11 @@
 #include <bits/stdc++.h>
 
 namespace wc{
-	typedef std::vector<std::string> filesContent;
-	typedef std::vector<std::pair<int, int>>counter;
+	typedef std::vector<std::string> result;
 
-	static counter words;
-	static int newLines = 0;
-
-	std::mutex threadGuard;
+	static int allWords = 0;
+	static int allChars = 0;
+	static int allNewLines = 0;
 
 	bool readChars = false;
 	bool readNewLines = false;
@@ -23,36 +21,54 @@ namespace wc{
 		while(file >> bufor){	
 			data += bufor + " ";
 		}
-
-		file.clear();
-		file.seekg(0, std::ios::beg);
-
-		numberOfNewLines = std::count(std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>(), '\n');
 		
 		return data;
 	}
 
-	template <class T1, class T2>
-	struct sumPair : public std::binary_function<std::pair<T1, T2>, std::pair<T1, T2>, std::pair<T1, T2>>{
-		std::pair<T1, T2> operator()(const std::pair<T1, T2>&a, const std::pair<T1, T2>&b){
-			return std::pair<T1, T2>(a.first + b.first, a.second + b.second);
-		}
-	};
+	std::string countWords(std::ifstream & file){
+		auto content = getFileContent(file);
 
-	void countWords(const std::string & content){
 		std::stringstream sstream(content);
 		numberOfWords = std::distance(std::istream_iterator<std::string>(sstream), 
 			std::istream_iterator<std::string>());
+		allWords += numberOfWords;
 
-		numberOfChars = std::count_if(content.begin(), content.end(), [](char c){
-			return std::isalpha(c);
-		});
+		std::stringstream summary;
+		summary <<numberOfWords;
 
-		threadGuard.lock();
-		newLines += numberOfNewLines;
-		words.push_back(std::pair<int, int>(numberOfWords, numberOfChars));
-		threadGuard.unlock();
+		if(readChars){
+			numberOfChars = std::count_if(content.begin(), content.end(), [=](char c){
+				return std::isalpha(c);	
+			});
+			allChars += numberOfChars;
+			summary << " "<<numberOfChars;
+		}
+
+		if(readNewLines){
+			file.clear();
+			file.seekg(0, std::ios_base::beg);
+
+			numberOfNewLines = std::count(std::istreambuf_iterator<char>(file), 
+					std::istreambuf_iterator<char>(), '\n');
+			allNewLines += numberOfNewLines;
+
+			summary<<" "<<numberOfNewLines;
+		}
+
+		return summary.str();
+	}
+
+	std::string totalSummary(){
+		std::stringstream summaryTotal;
+
+		summaryTotal << allWords;
+		if(readChars)
+			summaryTotal << " "<<allChars;
+		if(readNewLines)
+			summaryTotal << " "<<allNewLines;
+		summaryTotal<<" total\n";
+
+		return summaryTotal.str();
 	}
 
 }

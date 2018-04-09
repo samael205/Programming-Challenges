@@ -1,7 +1,7 @@
 # Compile 
 
 ```sh
-$ g++ -std=c++11 -lpthread main.cpp wordsCounter.h -o wc
+$ g++ -std=c++11 main.cpp wordsCounter.h -o wc
 ```
 
 # Usage
