@@ -4,7 +4,8 @@ import QtMultimedia 5.9
 import QtQuick.Dialogs 1.2
 import QtGraphicalEffects 1.0
 import Qt.labs.folderlistmodel 2.2
-import QtQuick.Controls 2.2
+import QtQuick.Controls 1.4
+import QtQuick.Controls.Styles 1.4
 import "./content"
 
 Item{
@@ -258,22 +259,36 @@ Item{
     Slider{
         id: musicVolume
         value: mediaPlayer.volume
+        width: 180
+        tickmarksEnabled: true
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 5
         anchors.horizontalCenter: parent.horizontalCenter
         onValueChanged: mediaPlayer.volume = musicVolume.value
-    }
-
-    Text{
-        id: volumeShow
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 3
-        anchors.horizontalCenter: musicVolume.horizontalCenter
-        color: "red"
-        text: formatVolumeToBetterRead(musicVolume.value)
-        visible: musicVolume.hovered
-        font.bold: true
-        font.italic: true
-        font.family: "Arial"
+        style: SliderStyle{
+            groove: Rectangle{
+                implicitHeight: 8
+                implicitWidth: 180
+                color: "gray"
+                radius: 8
+            }
+            handle: Rectangle{
+                anchors.centerIn: parent
+                color: musicVolume.pressed ? "green" : "lightgray"
+                implicitHeight: 24
+                implicitWidth: 24
+                radius: 12
+                border.width: 1
+                border.color: "gray"
+            }
+            tickmarks: Text{
+                font.pointSize: 10
+                y: parent.y - 12
+                x: parent.x + 75
+                color: "red"
+                font.bold: true
+                text: musicVolume.pressed ? formatVolumeToBetterRead(musicVolume.value) : ""
+            }
+        }
     }
 }
