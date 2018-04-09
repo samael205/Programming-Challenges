@@ -69,6 +69,8 @@ public:
 	void enqueue(const Customer&);
 	void dequeue(Customer &);
 
+	void clearResults();
+
 	friend void simulate(Queue & queue);
 	friend void summary(const Queue & queue);
 	

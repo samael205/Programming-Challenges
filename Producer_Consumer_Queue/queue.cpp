@@ -84,6 +84,10 @@ void Queue::save(){
 	results.push_back(sstream.str());
 }
 
+void Queue::clearResults(){
+	results.clear();
+}
+
 void summary(const Queue & queue){
 	auto wait = std::chrono::milliseconds(3);
 	for(auto it = queue.results.begin(); it != queue.results.end(); it++){

@@ -1,42 +1,39 @@
-8 customers	sum: 6m 28s 	avg: 48s	slow: Edie 1m 14s 	quick: Janeen 21s 
-8 customers	sum: 6m 13s 	avg: 46s	slow: Zena 1m 7s 	quick: Almeda 19s 
-8 customers	sum: 5m 7s 	avg: 38s	slow: Jayna 1m 13s 	quick: Royal 12s 
-8 customers	sum: 5m 38s 	avg: 42s	slow: Glady 59s 	quick: Harrison 19s 
-8 customers	sum: 7m 8s 	avg: 53s	slow: Everette 1m 13s 	quick: Viola 11s 
+8 customers	sum: 6m 25s 	avg: 48s	slow: Everette 1m 12s 	quick: Augustina 10s 
+8 customers	sum: 7m 39s 	avg: 57s	slow: Everette 1m 14s 	quick: Janeen 39s 
+8 customers	sum: 6m 37s 	avg: 49s	slow: Luigi 1m 13s 	quick: Almeda 13s 
+8 customers	sum: 5m 53s 	avg: 44s	slow: Royal 1m 8s 	quick: Edie 21s 
+8 customers	sum: 4m 35s 	avg: 34s	slow: Zena 58s 	quick: Rossana 13s 
 
 
-8 customers	sum: 6m 28s 	avg: 48s	slow: Edie 1m 14s 	quick: Janeen 21s 
-8 customers	sum: 6m 13s 	avg: 46s	slow: Zena 1m 7s 	quick: Almeda 19s 
-8 customers	sum: 5m 7s 	avg: 38s	slow: Jayna 1m 13s 	quick: Royal 12s 
-8 customers	sum: 5m 38s 	avg: 42s	slow: Glady 59s 	quick: Harrison 19s 
-8 customers	sum: 7m 8s 	avg: 53s	slow: Everette 1m 13s 	quick: Viola 11s 
-28 customers	sum: 17m 41s 	avg: 37s	slow: Augustina 1m 13s 	quick: Yvone 11s 
-10 customers	sum: 7m 19s 	avg: 43s	slow: Glady 1m 8s 	quick: Yvone 10s 
-15 customers	sum: 12m 1s 	avg: 48s	slow: Zena 1m 10s 	quick: Augustina 14s 
-11 customers	sum: 6m 42s 	avg: 36s	slow: Rossana 1m 3s 	quick: Edie 12s 
-1 customers	sum: 1m 1s 	avg: 61s	slow: Harrison 1m 1s 	quick: Harrison 1m 1s 
-23 customers	sum: 15m 11s 	avg: 39s	slow: Arlena 1m 1s 	quick: Rossana 11s 
-5 customers	sum: 3m 52s 	avg: 46s	slow: Yvone 1m 3s 	quick: Viola 28s 
-29 customers	sum: 19m 3s 	avg: 39s	slow: Luigi 1m 13s 	quick: Dayle 10s 
-2 customers	sum: 1m 43s 	avg: 51s	slow: Royal 1m 12s 	quick: Augustina 31s 
-24 customers	sum: 17m 6s 	avg: 42s	slow: Ferdinand 1m 12s 	quick: Dayle 12s 
+8 customers	sum: 6m 23s 	avg: 47s	slow: Luigi 1m 13s 	quick: Rossana 23s 
+17 customers	sum: 10m 1s 	avg: 35s	slow: Dayle 1m 12s 	quick: Jayna 11s 
+4 customers	sum: 2m 54s 	avg: 43s	slow: Glen 1m 3s 	quick: Harrison 23s 
+7 customers	sum: 4m 8s 	avg: 35s	slow: Harrison 48s 	quick: Royal 18s 
+20 customers	sum: 12m 19s 	avg: 36s	slow: Juan 1m 14s 	quick: Everette 13s 
+19 customers	sum: 14m 1s 	avg: 44s	slow: Royal 1m 12s 	quick: Augustina 14s 
+21 customers	sum: 16m 43s 	avg: 47s	slow: Juan 1m 10s 	quick: Rossana 12s 
+9 customers	sum: 7m 27s 	avg: 49s	slow: Everette 1m 11s 	quick: Juan 27s 
+18 customers	sum: 11m 13s 	avg: 37s	slow: Dayle 1m 5s 	quick: Tammera 13s 
+9 customers	sum: 4m 10s 	avg: 27s	slow: Yvone 1m 6s 	quick: Yvone 12s 
 
 
-8 customers	sum: 6m 28s 	avg: 48s	slow: Edie 1m 14s 	quick: Janeen 21s 
-8 customers	sum: 6m 13s 	avg: 46s	slow: Zena 1m 7s 	quick: Almeda 19s 
-8 customers	sum: 5m 7s 	avg: 38s	slow: Jayna 1m 13s 	quick: Royal 12s 
-8 customers	sum: 5m 38s 	avg: 42s	slow: Glady 59s 	quick: Harrison 19s 
-8 customers	sum: 7m 8s 	avg: 53s	slow: Everette 1m 13s 	quick: Viola 11s 
-28 customers	sum: 17m 41s 	avg: 37s	slow: Augustina 1m 13s 	quick: Yvone 11s 
-10 customers	sum: 7m 19s 	avg: 43s	slow: Glady 1m 8s 	quick: Yvone 10s 
-15 customers	sum: 12m 1s 	avg: 48s	slow: Zena 1m 10s 	quick: Augustina 14s 
-11 customers	sum: 6m 42s 	avg: 36s	slow: Rossana 1m 3s 	quick: Edie 12s 
-1 customers	sum: 1m 1s 	avg: 61s	slow: Harrison 1m 1s 	quick: Harrison 1m 1s 
-23 customers	sum: 15m 11s 	avg: 39s	slow: Arlena 1m 1s 	quick: Rossana 11s 
-5 customers	sum: 3m 52s 	avg: 46s	slow: Yvone 1m 3s 	quick: Viola 28s 
-29 customers	sum: 19m 3s 	avg: 39s	slow: Luigi 1m 13s 	quick: Dayle 10s 
-2 customers	sum: 1m 43s 	avg: 51s	slow: Royal 1m 12s 	quick: Augustina 31s 
-24 customers	sum: 17m 6s 	avg: 42s	slow: Ferdinand 1m 12s 	quick: Dayle 12s 
-21 customers	sum: 13m 31s 	avg: 38s	slow: Lu 1m 14s 	quick: Una 10s 
-16 customers	sum: 12m 	avg: 45s	slow: Royal 1m 12s 	quick: Rossana 12s 
-28 customers	sum: 20m 38s 	avg: 44s	slow: Rossana 1m 12s 	quick: Juan 12s 
+5 customers	sum: 3m 42s 	avg: 44s	slow: Luigi 1m 6s 	quick: Everette 18s 
+14 customers	sum: 9m 35s 	avg: 41s	slow: Everette 1m 12s 	quick: Harrison 10s 
+12 customers	sum: 8m 39s 	avg: 43s	slow: Dayle 1m 10s 	quick: Zena 12s 
+27 customers	sum: 18m 42s 	avg: 41s	slow: Rossana 1m 13s 	quick: Arlena 10s 
+4 customers	sum: 2m 15s 	avg: 33s	slow: Rossana 1m 	quick: Teodoro 17s 
+17 customers	sum: 10m 24s 	avg: 36s	slow: Ferdinand 1m 7s 	quick: Rossana 10s 
+8 customers	sum: 5m 48s 	avg: 43s	slow: Edie 1m 9s 	quick: Everette 28s 
+9 customers	sum: 6m 32s 	avg: 43s	slow: Kris 1m 9s 	quick: Teodoro 14s 
+16 customers	sum: 10m 48s 	avg: 40s	slow: Yvone 1m 12s 	quick: Ferdinand 14s 
+7 customers	sum: 4m 43s 	avg: 40s	slow: Ginger 1m 11s 	quick: Everette 16s 
+6 customers	sum: 4m 38s 	avg: 46s	slow: Edie 1m 4s 	quick: Augustina 29s 
+22 customers	sum: 13m 34s 	avg: 37s	slow: Una 1m 13s 	quick: Everette 12s 
+23 customers	sum: 19m 1s 	avg: 49s	slow: Harrison 1m 11s 	quick: Harrison 18s 
+29 customers	sum: 18m 36s 	avg: 38s	slow: Glady 1m 13s 	quick: Rossana 12s 
+12 customers	sum: 8m 5s 	avg: 40s	slow: Juan 1m 12s 	quick: Una 10s 
+6 customers	sum: 4m 10s 	avg: 41s	slow: Rossana 1m 14s 	quick: Almeda 22s 
+7 customers	sum: 4m 24s 	avg: 37s	slow: Edie 1m 6s 	quick: Luigi 15s 
+30 customers	sum: 21m 27s 	avg: 42s	slow: Edie 1m 14s 	quick: Viola 10s 
+15 customers	sum: 9m 56s 	avg: 39s	slow: Jayna 1m 8s 	quick: Juan 12s 
+27 customers	sum: 19m 53s 	avg: 44s	slow: Royal 1m 12s 	quick: Augustina 10s 

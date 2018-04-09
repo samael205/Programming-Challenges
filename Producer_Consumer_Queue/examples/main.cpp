@@ -23,14 +23,14 @@ int main(void){
 	queue_threads(test);
 	summary(test.back());
 
-	test.clear();
 	cout<<"\n\n";
+	test.back().clearResults();
 	test = queues_to_simulate(10);
 	queue_threads(test);
 	summary(test.back());
 
-	test.clear();
 	cout<<"\n\n";
+	test.back().clearResults();
 	test = queues_to_simulate();
 	queue_threads(test);
 	summary(test.back());
