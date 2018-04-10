@@ -19,21 +19,20 @@ Item{
 
     FolderListModel{
         id: folderModel
-        nameFilters: ["*.jpg"]
+        nameFilters: ["*.jpg", "*jpeg"]
         folder: "./content/images"
     }
 
     Image{
         id: wallpaper
         anchors.fill: parent
-        source: "./content/images/anim0.jpg"
+        source: folderModel.get(Math.floor(Math.random() * folderModel.count), "fileURL")
         NumberAnimation on opacity{
             id: fadeInAnimation
             from: 0
             to: 1
             duration: 1000
         }
-
     }
 
     Timer{
