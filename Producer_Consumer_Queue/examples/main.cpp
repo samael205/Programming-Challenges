@@ -1,5 +1,7 @@
 #include "queue.h"
 #include <fstream>
+#include <iterator>
+#include <algorithm>
 
 const int random(int n) { return rand()%n+10; }
 
@@ -16,6 +18,7 @@ vq queues_to_simulate(int);
 vq queues_to_simulate();
 
 void queue_threads(vq & queue);
+int countFileLines(std::fstream & file);
 
 int main(void){
 	std::srand(std::time(0));
@@ -70,13 +73,23 @@ void simulate(Queue & queue){
 	guard.unlock();
 }
 
+
+int countFileLines(std::fstream & file){
+	file.unsetf(std::ios_base::skipws);
+	int lines = std::count(std::istream_iterator<char>(file),
+			std::istream_iterator<char>(), '\n');
+	return lines;
+}
+
+
 string setname(){
 	std::fstream file;
 	file.open("names.txt");
 	if(!file.is_open())
 		exit(EXIT_FAILURE);
 	file.seekg(std::ios::beg);
-	REP(i, rand()%99+1)
+	int n = countFileLines(file);
+	REP(i, rand()%n)
 		file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::string name;
 	file >> name;
