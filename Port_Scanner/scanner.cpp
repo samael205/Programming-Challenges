@@ -16,7 +16,7 @@
 
 Scanner::Scanner(QWidget * p)
     : QWidget(p){
-    QIcon icon(QCoreApplication::applicationDirPath() + "/scan.png");
+    QIcon icon("./icons/scan.png");
     QGridLayout * background;
     background = new QGridLayout;
 
