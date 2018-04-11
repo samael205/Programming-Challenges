@@ -10,7 +10,6 @@
 #include <QMessageBox>
 #include <QCoreApplication>
 
-
 #include <QTableView>
 #include <QtWidgets>
 
@@ -30,7 +29,8 @@ Scanner::Scanner(QWidget * p)
     enter->setWindowTitle("Scan ports!");
 
     QRegExpValidator *v = new QRegExpValidator;
-    QRegExp rx("((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.){3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})");
+    QRegExp rx("((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.)"
+                    "{3,3}(1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})");
     v->setRegExp(rx);
     QRegExpValidator *vx = new QRegExpValidator;
     QRegExp rc("[0-9,-]+");
