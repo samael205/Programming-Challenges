@@ -161,11 +161,11 @@ void Scanner::Scan(){
         QTextStream show{&msg};
 
         int i = 0;
-        auto Ports_To_Check = PortList(ports.toStdString());
+        auto portsToCheck = PortList(ports.toStdString());
         emit start();
-        emit setMax(Ports_To_Check.size());
+        emit setMax(portsToCheck.size());
 
-     for(auto & port : Ports_To_Check){
+     for(auto & port : portsToCheck){
         if(isOpen(host.toStdString(), port))
             show <<"OPEN";
         else
