@@ -1,1 +1,1 @@
-![screenshot](../guiIntroduction/rss1.png)
+![screenshot](../../guiIntroduction/rss1.png)

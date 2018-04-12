@@ -37,7 +37,6 @@ Column{
 
     Text{
         id: descriptionText
-
         text: description
         width: parent.width
         wrapMode: Text.WordWrap
