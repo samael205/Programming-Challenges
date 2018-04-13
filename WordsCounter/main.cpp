@@ -32,11 +32,12 @@ int main(int argc, char *argv[]){
 			continue;
 		}
 
-		std::string fileSummary = wc::countWords(file);
+		std::stringstream fileSummary;
+		fileSummary	<< wc::countWords(file);
 		file.close();
-		fileSummary += " " + std::string(argv[i]);
+		fileSummary << '\t' << std::string(argv[i]);
 
-		filesResult.push_back(fileSummary);
+		filesResult.push_back(fileSummary.str());
 	}
 
 	FOREACH(it, filesResult)
@@ -50,8 +51,9 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
-			std::string helpMessage = "\e[1m-m, --chars\n\t\e[0mprint the character counts\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts";
-			std::cout<<helpMessage<<"\n";
+			std::cout << "\e[1m-m, --chars\n\t\e[0mprint the character counts"
+				<< "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
+				<<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
 			std::exit(EXIT_SUCCESS);
 		}
 	}

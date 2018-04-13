@@ -44,7 +44,7 @@ namespace wc{
 				return std::isalpha(c);	
 			});
 			allChars += numberOfChars;
-			summary <<" "<<numberOfChars;
+			summary << std::setw(4)<<numberOfChars;
 		}
 
 		if(readNewLines){
@@ -55,7 +55,7 @@ namespace wc{
 					std::istreambuf_iterator<char>(), '\n');
 			allNewLines += numberOfNewLines;
 
-			summary<<" "<<numberOfNewLines;
+			summary<<std::setw(4)<<numberOfNewLines;
 		}
 
 		if(readBytes){
@@ -65,7 +65,7 @@ namespace wc{
 			numberOfBytes = file.tellg();
 			allBytes += numberOfBytes;
 
-			summary<<" "<<numberOfBytes;
+			summary<<std::setw(4)<<numberOfBytes;
 		}
 
 		return summary.str();
@@ -76,12 +76,12 @@ namespace wc{
 
 		summaryTotal << allWords;
 		if(readChars)
-			summaryTotal << " "<<allChars;
+			summaryTotal << std::setw(4)<<allChars;
 		if(readNewLines)
-			summaryTotal << " "<<allNewLines;
+			summaryTotal << std::setw(4)<<allNewLines;
 		if(readBytes)
-			summaryTotal << " " << allBytes;
-		summaryTotal<<" total\n";
+			summaryTotal << std::setw(4) << allBytes;
+		summaryTotal<<"\ttotal\n";
 
 		return summaryTotal.str();
 	}
