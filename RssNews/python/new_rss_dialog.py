@@ -14,15 +14,10 @@ class NewRss(QtWidgets.QDialog):
 
         main_layout = QtWidgets.QGridLayout()
 
-        url_label = QtWidgets.QLabel("URL")
-        category_label = QtWidgets.QLabel("Category")
-
         url_layout = QtWidgets.QHBoxLayout()
-        url_layout.addWidget(url_label)
         url_layout.addWidget(self.rss_url)
 
         category_layout = QtWidgets.QHBoxLayout()
-        category_layout.addWidget(category_label)
         category_layout.addWidget(self.rss_category)
 
         ok_button = QtWidgets.QPushButton("ok")
