@@ -5,14 +5,17 @@ namespace wc{
 
 	static int allWords = 0;
 	static int allChars = 0;
+	static int allBytes = 0;
 	static int allNewLines = 0;
 
 	bool readChars = false;
+	bool readBytes = false;
 	bool readNewLines = false;
 
 	int numberOfNewLines;
 	int numberOfWords;
 	int numberOfChars;
+	int numberOfBytes;
 
 	std::string getFileContent(std::ifstream & file){
 		std::string bufor = "\0";
@@ -41,7 +44,7 @@ namespace wc{
 				return std::isalpha(c);	
 			});
 			allChars += numberOfChars;
-			summary << " "<<numberOfChars;
+			summary <<" "<<numberOfChars;
 		}
 
 		if(readNewLines){
@@ -55,6 +58,16 @@ namespace wc{
 			summary<<" "<<numberOfNewLines;
 		}
 
+		if(readBytes){
+			file.clear();
+			file.seekg(0, std::ios_base::end);
+
+			numberOfBytes = file.tellg();
+			allBytes += numberOfBytes;
+
+			summary<<" "<<numberOfBytes;
+		}
+
 		return summary.str();
 	}
 
@@ -66,6 +79,8 @@ namespace wc{
 			summaryTotal << " "<<allChars;
 		if(readNewLines)
 			summaryTotal << " "<<allNewLines;
+		if(readBytes)
+			summaryTotal << " " << allBytes;
 		summaryTotal<<" total\n";
 
 		return summaryTotal.str();

@@ -25,7 +25,7 @@ int main(int argc, char *argv[]){
 			continue;
 
 		std::ifstream file;
-		file.open(argv[i]);
+		file.open(argv[i], std::ios_base::binary);
 
 		if(!file.is_open()){
 			std::cerr<<"Can't read "<<argv[i]<<" file!\n";
@@ -50,7 +50,7 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
-			std::string helpMessage = "\e[1m-c, --chars\n\t\e[0mprint the character counts\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts";
+			std::string helpMessage = "\e[1m-m, --chars\n\t\e[0mprint the character counts\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts";
 			std::cout<<helpMessage<<"\n";
 			std::exit(EXIT_SUCCESS);
 		}
@@ -60,13 +60,18 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 void Options(int argc, char ** arguments){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--chars") == 0 ||
-			std::strcmp(arguments[i], "-c") == 0){
+			std::strcmp(arguments[i], "-m") == 0){
 			wc::readChars = true;
 			arguments[i][0] = '\0';
 		} 
 		if(std::strcmp(arguments[i], "--lines") == 0 ||
 			std::strcmp(arguments[i], "-l") == 0){
 			wc::readNewLines = true;
+			arguments[i][0] = '\0';
+		}
+		if(std::strcmp(arguments[i], "-c") == 0 ||
+			std::strcmp(arguments[i], "--bytes") == 0){
+			wc::readBytes = true;
 			arguments[i][0] = '\0';
 		}
 	}
