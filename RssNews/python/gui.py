@@ -52,7 +52,7 @@ class RssWidget(QtWidgets.QWidget):
         self.categories = QtWidgets.QListWidget()
         self.categories.setFixedWidth(100)
         font = QtGui.QFont("Garamond")
-        font.setPointSize(9)
+        font.setPointSize(8)
         font.setBold(True)
         self.categories.setFont(font)
 
@@ -118,11 +118,8 @@ class MainWindow(QtWidgets.QMainWindow):
         QtWidgets.QMainWindow.__init__(self)
 
         self.resize(850, 450)
-
         self.setWindowTitle("Rss Reader")
-
         self.rss_widget = RssWidget()
-
         self.setCentralWidget(self.rss_widget)
 
         rss_menu = self.menuBar()
@@ -135,6 +132,10 @@ class MainWindow(QtWidgets.QMainWindow):
         export.setShortcut(QtCore.Qt.Key_Save)
         export.triggered.connect(self.export_rss)
         menu.addAction(export)
+        edit = QtWidgets.QAction("Edit", self)
+        edit.setShortcut(QtCore.Qt.Key_Tab)
+        edit.triggered.connect(self.edit_current_rss)
+        menu.addAction(edit)
         menu.addSeparator()
         exit = QtWidgets.QAction("Exit", self)
         exit.setShortcut(QtCore.Qt.Key_Exit)
@@ -163,7 +164,7 @@ class MainWindow(QtWidgets.QMainWindow):
         selected = self.rss_widget.categories.selectedItems()
 
         if not selected:
-            return
+            return    
 
         rss.pop(selected[0].text(), None)
 
@@ -172,6 +173,21 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def quit(self):
         QtWidgets.QApplication.quit()
+
+    def edit_current_rss(self):
+        current_rss = self.rss_widget.categories.currentItem().text()
+
+        edit_rss = NewRss("Edit RSS", rss[current_rss], current_rss)
+
+        if edit_rss.exec_():
+            if current_rss == edit_rss.rss_category.text():
+                return   
+
+            rss.pop(current_rss, None)
+            self.delete_category() 
+            rss[edit_rss.rss_category.text()] = edit_rss.rss_url.text()
+            self.rss_widget.get_rss_categories()
+            set_rss()
 
     def add_new_rss(self):
         new_rss_dialog = NewRss()
@@ -185,11 +201,10 @@ class MainWindow(QtWidgets.QMainWindow):
             if "https://" not in url:
                 url = "https://" + url
 
-            if url not in rss:
+            if url not in rss.keys() and category not in rss.keys():
                 rss[category] = url
                 self.rss_widget.get_rss_categories()
                 set_rss()
-
 
 if __name__ == '__main__':
     import sys

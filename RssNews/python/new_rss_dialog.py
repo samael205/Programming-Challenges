@@ -2,14 +2,14 @@ from PyQt5 import QtWidgets, QtGui, QtCore
 
 
 class NewRss(QtWidgets.QDialog):
-    def __init__(self):
+    def __init__(self, title="Add new rss",url="", category=""):
         QtWidgets.QDialog.__init__(self)
 
-        self.setWindowTitle("Add new rss")
+        self.setWindowTitle(title)
 
-        self.rss_url = QtWidgets.QLineEdit()
+        self.rss_url = QtWidgets.QLineEdit(url)
         self.rss_url.setPlaceholderText("Feed Url")
-        self.rss_category = QtWidgets.QLineEdit()
+        self.rss_category = QtWidgets.QLineEdit(category)
         self.rss_category.setPlaceholderText("Feed Category")
 
         main_layout = QtWidgets.QGridLayout()

@@ -21,7 +21,6 @@ def set_rss():
         rss_data = reader.get_data(rss[key])
         rss_contents[key] = rss_data
 
-
 set_rss()
 
 
