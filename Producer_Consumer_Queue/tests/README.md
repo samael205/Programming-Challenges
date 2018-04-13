@@ -1,7 +1,7 @@
 ```sh
-$ ./queue > test.out
+$ ./queue > test.out  
 
-user 0,00s
-system 0,01s
-total 0,116 
+user 0,03s
+system 0,00s
+total  0,130 
 ```

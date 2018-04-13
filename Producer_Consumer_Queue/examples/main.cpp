@@ -18,7 +18,7 @@ vq queues_to_simulate(int);
 vq queues_to_simulate();
 
 void queue_threads(vq & queue);
-int countFileLines(std::fstream & file);
+int countFileLines(std::ifstream & file);
 
 int main(void){
 	std::srand(std::time(0));
@@ -74,22 +74,21 @@ void simulate(Queue & queue){
 }
 
 
-int countFileLines(std::fstream & file){
-	file.unsetf(std::ios_base::skipws);
-	int lines = std::count(std::istream_iterator<char>(file),
-			std::istream_iterator<char>(), '\n');
+int countFileLines(std::ifstream & file){
+	int lines = std::count(std::istreambuf_iterator<char>(file),
+			std::istreambuf_iterator<char>(), '\n');
 	return lines;
 }
 
 
 string setname(){
-	std::fstream file;
-	file.open("names.txt");
+	std::ifstream file;
+	file.open("names.txt", std::ios::out);
 	if(!file.is_open())
 		exit(EXIT_FAILURE);
-	file.seekg(std::ios::beg);
 	int n = countFileLines(file);
-	REP(i, rand()%n)
+	file.seekg(std::ios::beg);
+	REP(i, rand()%n-1)
 		file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::string name;
 	file >> name;

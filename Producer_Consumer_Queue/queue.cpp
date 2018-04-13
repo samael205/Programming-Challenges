@@ -1,4 +1,5 @@
 #include "queue.h"
+#include <iomanip>
 
 Customer::Customer(){
 	name = '\0';
@@ -28,7 +29,7 @@ bool Customer::operator>(const Customer & customer){
 }
 
 std::ostream & operator<<(std::ostream & os, const Customer & customer){
-	os<<customer.name<<" "<<time_format(customer.wait_time);
+	os<<customer.name<<" "<< std::setw(8)<<time_format(customer.wait_time);
 	return os;
 }
 
@@ -79,8 +80,11 @@ void Queue::dequeue(Customer & leaver){
 
 void Queue::save(){
 	std::stringstream sstream;
-	sstream<<number_of_customers<<" customers\tsum: "<<time_format(allwaittime)
-		<<"\tavg: "<<average<<"s\tslow: "<<longest_time<<"\tquick: "<<shortest_time;
+	sstream<<std::left<<std::setw(3)<<" customers: "<<number_of_customers<<'\t'<<std::setw(3)<<"sum: "
+		<<time_format(allwaittime)<<'\t'<< std::setw(3)
+			<<"average: "<<average<<"s\t"<<std::setw(10)<<"slowest: "
+			 	<< std::setw(9)<<longest_time << std::setw(10)<<" quickest: "
+			 		<< std::setw(9) << shortest_time;
 	results.push_back(sstream.str());
 }
 
