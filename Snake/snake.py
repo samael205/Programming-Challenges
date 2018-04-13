@@ -79,7 +79,7 @@ def get_username():
                 break
         game_display.fill((255, 255, 255))
         block = font.render(name, True, (0, 75, 200))
-        message_screen = font.render("Enter you name", True, (0, 85, 185))
+        message_screen = font.render("Enter your name", True, (0, 85, 185))
         rect = block.get_rect()
         rect.center = game_display.get_rect().center
         game_display.blit(message_screen, (width / 2 - 130, height / 2 - 100))
