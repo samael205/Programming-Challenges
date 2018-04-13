@@ -35,7 +35,7 @@ class RSSModel(QtCore.QAbstractTableModel):
 
     def get_title(self, index):
         if not index.isValid:
-            return ""
+            return QtCore.QVariant()
 
         row = index.row()
         title = str(self.data[row])
