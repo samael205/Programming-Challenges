@@ -5,7 +5,6 @@
 #include <QtGui/QOpenGLContext>
 #include <QtQml/QQmlContext>
 #include <QDir>
-#include <QDebug>
 
 int main(int argc, char *argv[])
 {

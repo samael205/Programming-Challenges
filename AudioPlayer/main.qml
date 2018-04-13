@@ -36,7 +36,7 @@ Item{
     }
 
     Timer{
-        interval: 10000
+        interval: 15000
         running: musicPlaying
         repeat: true
         onTriggered: getNextImage()
@@ -70,6 +70,31 @@ Item{
         setAudioIndex(currentMusicIndex);
     }
 
+    function getIndexBySource(source){
+        for(var i = 0; i<playlist.itemCount; i++)
+            if(source === playlist.itemSource(i))
+                return i;
+    }
+
+   ListView{
+        id: songs
+        width: 100
+        height: 500
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.topMargin: 25
+        spacing: 2
+        model: playlist
+        delegate: PlaylistDelegate {
+            currentSongSource: playlist.itemSource(currentMusicIndex)
+            onClicked: {
+                var index = getIndexBySource(source)
+                setAudioIndex(index)
+                currentMusicIndex = index
+            }
+        }
+   }
+
     MediaPlayer{
         id: mediaPlayer
         autoLoad: true
@@ -87,7 +112,7 @@ Item{
         }
 
         onPlaying: {
-            (!musicPlaying)
+            if(!musicPlaying)
                 musicPlaying = true
         }
     }
@@ -128,7 +153,7 @@ Item{
 
     FileDialog{
         id: fileDialog
-        title: "Set your audio"
+        title: "Add your audio"
         folder: shortcuts.music
         selectMultiple: true
         onAccepted: {

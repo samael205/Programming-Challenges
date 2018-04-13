@@ -26,5 +26,6 @@
         <file>content/ProgressBar.qml</file>
         <file>content/images/previous.png</file>
         <file>content/images/next.png</file>
+        <file>content/PlaylistDelegate.qml</file>
     </qresource>
 </RCC>
