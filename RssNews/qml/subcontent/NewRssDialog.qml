@@ -60,21 +60,27 @@ Dialog{
                 id: addFile
                 visible: false
                 folder: shortcuts.pictures
-                nameFilters: ["*.png", "*.jpg", "*.jpeg"]
-                onAccepted: {
-                    iconUrl = addFile.fileUrl
-                    console.log(iconUrl)
-                   if(iconUrl.length == 0)
-                       iconUrl = "/icons/none.png"
-                }
+                nameFilters: ["*.png", "*.jpg", "*.jpeg", "*.svg"]
+                onAccepted: iconUrl = addFile.fileUrl
             }
         }
+
+       Image{
+           id: iconShow
+           source: iconUrl
+           width: 50
+           height: 50
+           scale: 0.7
+           anchors.bottom: parent.bottom
+           anchors.left: parent.left
+           anchors.leftMargin: 80
+       }
 
        Image{
             source: "./icons/cancel.png"
             width: 70
             height: 70
-            scale: 0.6
+            scale: 0.7
             anchors.bottom: parent.bottom
             anchors.right: parent.right
             anchors.rightMargin: 60

@@ -165,6 +165,7 @@ Window {
         MouseArea{
             anchors.fill: parent
             onClicked:{
+                newRss.iconUrl = "./icons/none.png"
                 newRss.setText("", "")
                 newRss.visible = true
             }
