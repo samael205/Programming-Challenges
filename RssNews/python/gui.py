@@ -11,6 +11,7 @@ class RSSModel(QtCore.QAbstractTableModel):
         self.data = data
 
     def rowCount(self, parent=QtCore.QModelIndex(), *args, **kwargs):
+        self.data = list(filter(None, self.data))
         return len(self.data)
 
     def columnCount(self, parent=QtCore.QModelIndex(), *args, **kwargs):
@@ -65,7 +66,7 @@ class RssWidget(QtWidgets.QWidget):
         self.description.setOpenExternalLinks(True)
         self.description.setReadOnly(True)
         self.description.setPlaceholderText("RSS Description")
-        self.description.setFontPointSize(15)
+        self.description.setFontPointSize(13)
         self.description.setFont(QtGui.QFont("Helvetica"))
         self.description.setLineWidth(2)
         self.description.acceptRichText()
@@ -84,7 +85,7 @@ class RssWidget(QtWidgets.QWidget):
         main_layout.addLayout(content_layout)
 
         self.setLayout(main_layout)
-
+            
     def show_rss_titles_from_categories(self, data):
         content = data.text()
         titles = list(rss_contents[content].keys())
@@ -166,10 +167,18 @@ class MainWindow(QtWidgets.QMainWindow):
         if not selected:
             return    
 
-        rss.pop(selected[0].text(), None)
+        confirm_delete = QtWidgets.QMessageBox()   
+        confirm_delete.setText("Delete " + selected[0].text() + "?")
+        confirm_delete.setWindowTitle("Remove RSS")
+        confirm_delete.setStandardButtons(QtWidgets.QMessageBox.Ok | QtWidgets.QMessageBox.Cancel)
+        
+        decision = confirm_delete.exec_()
 
-        for item in selected:
-            self.rss_widget.categories.takeItem(self.rss_widget.categories.row(item))
+        if decision == QtWidgets.QMessageBox.Ok:
+            rss.pop(selected[0].text(), None)
+
+            for item in selected:
+                self.rss_widget.categories.takeItem(self.rss_widget.categories.row(item))
 
     def quit(self):
         QtWidgets.QApplication.quit()
@@ -197,9 +206,6 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if not url or not category:
                 return
-
-            if "https://" not in url:
-                url = "https://" + url
 
             if url not in rss.keys() and category not in rss.keys():
                 rss[category] = url
