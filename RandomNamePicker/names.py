@@ -1,4 +1,5 @@
 import pickle
+from os.path import isfile
 
 names = {
     "prefixes" : [
@@ -35,3 +36,6 @@ def save_name_paths():
     file = open("names_paths", "wb")
     pickle.dump(names, file)
     file.close()
+
+if not isfile("names_path"):
+    save_name_paths()
