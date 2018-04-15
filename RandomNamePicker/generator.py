@@ -5,7 +5,7 @@ import pickle
 
 def get_random_surname():
     line = random.choice(open("surnames.txt").readlines())
-    return ''.join(line[0].upper() + line[1:])
+    return ''.join(line[0].upper() + line[1:len(line)-1])
 
 
 def random_name_pick():
@@ -13,8 +13,8 @@ def random_name_pick():
     paths = pickle.load(file)
     file.close()
 
-    first_path = paths["prefixes"][random.randint(0, len(paths["prefixes"]) - 1)]
-    second_path = paths["suffixes"][random.randint(0, len(paths["suffixes"]) - 1)]
+    first_path = paths["prefixes"][random.randint(0, len(paths["prefixes"])-1)]
+    second_path = paths["suffixes"][random.randint(0, len(paths["suffixes"])-1)]
 
     surname = get_random_surname()
 
