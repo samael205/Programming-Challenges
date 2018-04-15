@@ -181,18 +181,30 @@ void Notepad::onSaveAsAudio(){
 
     Py_Initialize();
     PyObject * module = PyImport_ImportModule("text_to_audio");
-    PyObject * dict = PyModule_GetDict(module);
-    PyObject * arguments = PyTuple_New(2);
-    PyObject * function = PyDict_GetItem(dict, PyString_FromString("convert_to_audio"));
-    QString textContent = ui->textEdit->toPlainText();
-    PyTuple_SetItem(arguments, 0, PyString_FromString(textContent.toStdString().c_str()));
-    PyTuple_SetItem(arguments, 1, PyString_FromString(filePath.toStdString().c_str()));
-
-    if(PyErr_Occurred()){
-        PyErr_Print();
+    if(module == nullptr){
+        QMessageBox moduleError;
+        moduleError.critical(0, "Error", "Can't found text_to_audio module!");
+        moduleError.setFixedWidth(300);
+        moduleError.exec();
         Py_Finalize();
         return;
     }
+
+    PyObject * dict = PyModule_GetDict(module);
+    PyObject * arguments = PyTuple_New(2);
+    PyObject * function = PyDict_GetItem(dict, PyString_FromString("convert_to_audio"));
+    if(function == nullptr){
+        QMessageBox functionError;
+        functionError.critical(0, "Error", "Can't load convert_to_audio method!");
+        functionError.setFixedWidth(300);
+        functionError.exec();
+        Py_Finalize();
+        return;
+    }
+
+    QString textContent = ui->textEdit->toPlainText();
+    PyTuple_SetItem(arguments, 0, PyString_FromString(textContent.toStdString().c_str()));
+    PyTuple_SetItem(arguments, 1, PyString_FromString(filePath.toStdString().c_str()));
 
     PyObject_CallObject(function, arguments);
     Py_Finalize();
