@@ -26,7 +26,7 @@ Scanner::Scanner(QWidget * p)
     enter->setIcon(icon);
     enter->setText("Scan");
     enter->setStyleSheet("background-color: #68ADC4;");
-    enter->setWindowTitle("Scan ports!");
+    enter->setToolTip("Scan ports");
 
     QRegExpValidator *v = new QRegExpValidator;
     QRegExp rx("((1{0,1}[0-9]{0,2}|2[0-4]{1,1}[0-9]{1,1}|25[0-5]{1,1})\\.)"
@@ -38,8 +38,9 @@ Scanner::Scanner(QWidget * p)
 
     data[0].setWindowTitle("Host addres");
     data[0].setValidator(v);
+    data[0].setToolTip("Set Host to scan");
     data[0].setPlaceholderText("Host");
-    data[1].setWindowTitle("Set Ports to scan");
+    data[1].setToolTip("Set Ports to scan");
     data[1].setPlaceholderText("Ports");
     data[1].setValidator(vx);
     background->addWidget(data, 0, 0);
@@ -68,6 +69,7 @@ Scanner::Scanner(QWidget * p)
     delegateModel = new scanStatusDelegate;
 
     showResults->setItemDelegate(delegateModel);
+    showResults->setToolTip("Scan result");
 
     background->addWidget(showResults, 3, 0, 1, Qt::AlignHorizontal_Mask);
 
