@@ -1,4 +1,5 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 from rss import rss, rss_contents, set_rss
 from new_rss_dialog import NewRss
 from pickle import dump
@@ -11,7 +12,6 @@ class RSSModel(QtCore.QAbstractTableModel):
         self.data = data
 
     def rowCount(self, parent=QtCore.QModelIndex(), *args, **kwargs):
-        self.data = list(filter(None, self.data))
         return len(self.data)
 
     def columnCount(self, parent=QtCore.QModelIndex(), *args, **kwargs):
@@ -27,7 +27,7 @@ class RSSModel(QtCore.QAbstractTableModel):
             return QtCore.QVariant()
 
     def data(self, index, role=QtCore.Qt.DisplayRole):
-        if role == QtCore.Qt.DisplayRole:
+        if role == QtCore.Qt.DisplayRole and index.isValid:
             row = index.row()
             item = str(self.data[row])
             return item
@@ -62,19 +62,17 @@ class RssWidget(QtWidgets.QWidget):
         keys = list(rss_contents.keys())
         self.data_table = RSSModel(list(rss_contents[keys[0]].keys()))
 
-        self.description = QtWidgets.QTextBrowser()
-        self.description.setOpenExternalLinks(True)
-        self.description.setReadOnly(True)
-        self.description.setPlaceholderText("RSS Description")
-        self.description.setFontPointSize(13)
+        self.description = QWebEngineView()
         self.description.setFont(QtGui.QFont("Helvetica"))
-        self.description.setLineWidth(2)
-        self.description.acceptRichText()
+        self.description.setFocusPolicy(QtCore.Qt.NoFocus)
+
         content_layout = QtWidgets.QVBoxLayout()
 
         self.data_table_view = QtWidgets.QTableView()
         self.data_table_view.horizontalHeader().setStretchLastSection(True)
         self.data_table_view.setModel(self.data_table)
+        x = self.frameGeometry().height()
+        self.data_table_view.setFixedHeight(x/2-10)
         self.data_table_view.clicked.connect(self.show_rss_description)
 
         content_layout.addWidget(self.data_table_view)
@@ -89,8 +87,8 @@ class RssWidget(QtWidgets.QWidget):
     def show_rss_titles_from_categories(self, data):
         content = data.text()
         titles = list(rss_contents[content].keys())
+
         self.data_table.update(titles)
-        self.description.clear()
 
         for i in range(self.data_table.rowCount(), 0, -1):
             self.data_table_view.selectRow(i)
@@ -103,8 +101,7 @@ class RssWidget(QtWidgets.QWidget):
             return
 
         description = current_rss_dict[title]
-        description.replace(".", ". ")
-        self.description.setText(description)
+        self.description.setHtml(description)
 
     def get_rss_categories(self):
         for key in rss.keys():
