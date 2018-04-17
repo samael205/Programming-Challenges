@@ -151,6 +151,7 @@ void ImageViewer::setActions(){
     connect(ThumbnailShow, SIGNAL(triggered(bool)), this, SLOT(ChangeThumbnailVisible()));
     ThumbnailShow->setCheckable(true);
     ThumbnailShow->setChecked(false);
+    ThumbnailShow->setShortcut(tr("CTRL+T"));
 }
 
 void ImageViewer::setImage(const QImage & getImg){
