@@ -151,13 +151,24 @@ Item{
         }
     }
 
+    function addSongsWithoutDuplicate(songs){
+        for(var i=0; i<songs.length; i++){
+            var duplicate = false
+            for(var j=0; j<playlist.itemCount; j++)
+                if(songs[i] == playlist.itemSource(j))
+                    duplicate = true
+            if(!duplicate)
+                playlist.addItem(songs[i])
+        }
+    }
+
     FileDialog{
         id: fileDialog
         title: "Add your audio"
         folder: shortcuts.music
         selectMultiple: true
         onAccepted: {
-            playlist.addItems(fileDialog.fileUrls)
+            addSongsWithoutDuplicate(fileDialog.fileUrls)
             fileDialog.visible = false
             if(!mediaPlayer.hasAudio)
                 setAudioIndex(currentMusicIndex);
