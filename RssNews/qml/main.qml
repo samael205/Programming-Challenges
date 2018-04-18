@@ -88,15 +88,9 @@ Window {
         }
     }
 
-    function checkFeedForHTTP(feed){
-        if(feed[0] !== "h")
-            feed = "http://" + feed;
-        return feed;
-    }
-
     XmlListModel{
         id: feedModel
-        source: checkFeedForHTTP(window.currentFeed)
+        source: window.currentFeed
         query: "/rss/channel/item"
 
 
