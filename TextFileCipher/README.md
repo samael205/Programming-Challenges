@@ -42,7 +42,9 @@ encryptFiles.StartEncrypt();
 
 # Installation
 
-` Compile
+- Copy main.cpp from examples
+
+- Compile
 
 ```sh
 $ g++ -std=c++11 -lboost_system -lboost_filesystem cipher.cpp cipher.h filesearcher.cpp filesearcher.h main.cpp -o run
