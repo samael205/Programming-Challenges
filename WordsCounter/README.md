@@ -1,4 +1,8 @@
-# Compile 
+# Description
+
+Counts all words, chars, lines or bytes in specific files
+
+# Installation 
 
 ```sh
 $ g++ -std=c++11 main.cpp wordsCounter.h -o wc

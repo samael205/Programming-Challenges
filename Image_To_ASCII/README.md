@@ -1,20 +1,34 @@
-# Linux
+# Description
 
-example for debian
+Search all Image files with specific extension in current folder
 
-We need export python path
+```cpp
+struct search{
+	vp files;
+	search() : files(0) { }
+
+	void find_files(const std::string & search_file, const fs::path & = fs::current_path());
+	void convert_files(py function_to_call, py arguments);
+
+};
+```
+and convert them to ASCII art using python script
+
+# Installation
+
+- export python path
 
 ```sh
 $ export CPLUS_INCLUDE_PATH=/usr/include/python2.7
 ```
-
-Now compile using g++
+- compile 
 
 ```sh
 $ g++ -std=c++11 -lpython2.7 -lboost_system -lboost_filesystem Images.cpp -o run
 ```
 
-Be sure that your linux has installed boost libraries
+Be sure that your system has installed boost libraries
+
 ```sh
 $ sudo aptitude install libboost-all-dev
 ```
