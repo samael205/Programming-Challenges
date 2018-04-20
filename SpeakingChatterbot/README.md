@@ -37,7 +37,7 @@ elif "search in" in self.question:
         find_specific_for_me = search_key[search_key.index(" ")+1:]
         specific_web = search_key[:search_key.index(" ")]
         print(find_specific_for_me, specific_web)
-	wish_interpreter.search_in_web("!" + specific_web + " " + find_specific_for_me) "Play music"
+	wish_interpreter.search_in_web("!" + specific_web + " " + find_specific_for_me)
 ```
 or play music
 
