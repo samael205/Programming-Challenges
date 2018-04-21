@@ -17,15 +17,13 @@ Customer & Customer::operator=(const Customer & absorb){
 }
 
 bool Customer::operator<(const Customer & customer){
-	if(customer.first() < this->wait_time)
-			return true;
-	return false;
+	return customer.first() < this->wait_time
+			
 }
 
 bool Customer::operator>(const Customer & customer){
-		if(customer.first() > this->wait_time)
-			return true;
-	return false;
+	return customer.first() > this->wait_time;
+			
 }
 
 std::ostream & operator<<(std::ostream & os, const Customer & customer){
@@ -80,11 +78,11 @@ void Queue::dequeue(Customer & leaver){
 
 void Queue::save(){
 	std::stringstream sstream;
-	sstream<<std::left<<std::setw(3)<<" customers: "<<number_of_customers<<'\t'<<std::setw(3)<<"sum: "
-		<<time_format(allwaittime)<<'\t'<< std::setw(3)
-			<<"average: "<<average<<"s\t"<<std::setw(10)<<"slowest: "
-			 	<< std::setw(9)<<longest_time << std::setw(10)<<" quickest: "
-			 		<< std::setw(9) << shortest_time;
+	sstream<<std::left<<std::setw(3)<<" customers: "<<number_of_customers<<'\t'
+		<<std::setw(3)<<"sum: "<<time_format(allwaittime)<<'\t'
+		<<std::setw(3)<<"average: "<<average<<"s\t"
+		<<std::setw(10)<<"slowest: "<< std::setw(9)<<longest_time 
+		<<std::setw(10)<<" quickest: "<<std::setw(9)<< shortest_time;
 	results.push_back(sstream.str());
 }
 
