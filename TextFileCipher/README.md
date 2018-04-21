@@ -47,7 +47,7 @@ encryptFiles.StartEncrypt();
 - Compile
 
 ```sh
-$ g++ -std=c++11 -lboost_system -lboost_filesystem cipher.cpp cipher.h filesearcher.cpp filesearcher.h main.cpp -o run
+$ g++ -std=c++11 -lboost_system -lboost_filesystem cipher.cpp cipher.h filesearcher.cpp filesearcher.h main.cpp -o encryptTextFiles
 ```
 
 Be sure that your system has installed boost libraries
