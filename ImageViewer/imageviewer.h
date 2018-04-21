@@ -47,7 +47,6 @@ private:
 #ifndef QT_NO_PRINTER
     QPrinter printer;
 #endif
-
     bool saveImage(const QString&);
 
     QScrollArea * scroll;
@@ -64,9 +63,6 @@ private:
     QAction * clearImage;
     QAction * printAct;
     QAction * exit;
-
-    QMenu * recentMenu;
-    QAction * openRecent;
 
     QMenu * editMenu;
     QAction * copyThis;
