@@ -55,9 +55,9 @@ def save_score(username, score, time):
     time_format = time_human(time)
 
     if username in scores.keys():
-        scores[username].append((score, time_format))
+        scores[username].append({"score" : score, "time" : time_format})
     else:
-        scores[username] = [[score, time_format]]
+        scores[username] = [{"score" : score, "time" : time_format}]  
 
     with open("snake_score.json", 'w', encoding='utf-8') as append_scores:
         json.dump(scores, append_scores, indent=2, sort_keys=True)
