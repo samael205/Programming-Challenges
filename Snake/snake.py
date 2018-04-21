@@ -106,7 +106,7 @@ def game_paused():
         clock.tick(5)
 
 
-def wait_to_user_choice():
+def wait_for_user_choice():
     game_display.fill((255, 255, 255))
     play_again = False
     font = pygame.font.Font(None, 38)
@@ -148,7 +148,7 @@ def main_loop():
 
     while game_running:
         while game_over:
-            wait_to_user_choice()
+            wait_for_user_choice()
             main_loop()
 
         while not game_over:
