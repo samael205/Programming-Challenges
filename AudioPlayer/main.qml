@@ -17,6 +17,22 @@ Item{
     property var noImageRepeat
     property int currentMusicIndex: 0
 
+    ToolButton{
+        action: removeSong
+    }
+
+    function removeCurrentSong(){
+        playlist.removeItem(currentMusicIndex)
+        currentMusicIndex = currentMusicIndex >= playlist.itemCount ? 0 : currentMusicIndex
+        setAudio(currentMusicIndex)
+    }
+
+    Action{
+        id: removeSong
+        shortcut: "Del"
+        onTriggered: removeCurrentSong()
+    }
+
     FolderListModel{
         id: folderModel
         nameFilters: ["*.jpg", "*jpeg"]
@@ -59,21 +75,15 @@ Item{
         id: playlist
     }
 
-    function setAudioIndex(index){
+    function setAudio(index){
         mediaPlayer.source = playlist.itemSource(index)
-    }
-
-    function changeMusicWhenSongEnded(){
-        currentMusicIndex++;
-        if(currentMusicIndex >= playlist.itemCount)
-            currentMusicIndex = 0;
-        setAudioIndex(currentMusicIndex);
     }
 
     function getIndexBySource(source){
         for(var i = 0; i<playlist.itemCount; i++)
             if(source === playlist.itemSource(i))
                 return i;
+        return 0;
     }
 
    ListView{
@@ -86,11 +96,18 @@ Item{
         spacing: 2
         model: playlist
         delegate: PlaylistDelegate {
-            currentSongSource: playlist.itemSource(currentMusicIndex)
+            currentSongSource: mediaPlayer.source
             onClicked: {
-                var index = getIndexBySource(source)
-                setAudioIndex(index)
-                currentMusicIndex = index
+                var musicIndexInPlaylist = getIndexBySource(source)
+                setAudio(musicIndexInPlaylist)
+                currentMusicIndex = musicIndexInPlaylist
+            }
+        }
+
+        remove: Transition{
+            ParallelAnimation{
+                NumberAnimation { property: "opacity"; to: 0; duration: 1000 }
+                NumberAnimation { properties: "x, y"; to: 100; duration: 1000 }
             }
         }
    }
@@ -104,15 +121,13 @@ Item{
 
         onStatusChanged: {
             if(status == MediaPlayer.EndOfMedia)
-                changeMusicWhenSongEnded()
+                nextSong()
+            else if(status == MediaPlayer.NoMedia)
+                musicPlaying = false
         }
-
-        onPositionChanged: {
-            progressChanged.start()
-        }
-
+        onPositionChanged:  progressChanged.start()
         onPlaying: {
-            if(!musicPlaying)
+            if(!musicPlaying && playlist.itemCount >= 1)
                 musicPlaying = true
         }
     }
@@ -120,6 +135,7 @@ Item{
     function songNameAndAuthor(){
         if(!mediaPlayer.hasAudio)
             return ""
+
         var getSong = mediaPlayer.source.toString()
         var getName = getSong.split("/")
         getName = getName[getName.length - 1]
@@ -171,7 +187,7 @@ Item{
             addSongsWithoutDuplicate(fileDialog.fileUrls)
             fileDialog.visible = false
             if(!mediaPlayer.hasAudio)
-                setAudioIndex(currentMusicIndex);
+                setAudio(currentMusicIndex);
         }
     }
 
@@ -209,9 +225,8 @@ Item{
     }
 
     function previousSong(){
-        if(currentMusicIndex - 1 >= 0)
-            currentMusicIndex--;
-        setAudioIndex(currentMusicIndex)
+        currentMusicIndex = currentMusicIndex - 1  < 0 ? playlist.itemCount-1 : currentMusicIndex - 1
+        setAudio(currentMusicIndex)
     }
 
     Image{
@@ -263,9 +278,8 @@ Item{
     }
 
     function nextSong(){
-        if(currentMusicIndex + 1 < playlist.itemCount)
-            currentMusicIndex++;
-        setAudioIndex(currentMusicIndex)
+        currentMusicIndex = currentMusicIndex + 1 >= playlist.itemCount ? 0 : currentMusicIndex + 1
+        setAudio(currentMusicIndex)
     }
 
     Image{

@@ -17,11 +17,8 @@ Canvas{
     property real currentProgress: 0
 
     property bool showCurrentAudioTimeOrDuration: true
-
     property real angle: (currentProgress - minimumValue) / (maximumValue - minimumValue) * 2 * Math.PI
-
     property real angleOffset: -Math.PI / 2
-
     property string text: "\0"
 
     signal clicked()

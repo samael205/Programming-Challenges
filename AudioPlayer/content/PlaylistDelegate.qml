@@ -4,6 +4,7 @@ Rectangle{
     id: delegate
 
     property url currentSongSource
+    property int currentSongIndex
 
     signal clicked(url currentSource)
 
@@ -29,9 +30,7 @@ Rectangle{
 
         MouseArea{
             anchors.fill: parent
-            onClicked: {
-                delegate.clicked(source)
-            }
+            onClicked: delegate.clicked(source)
         }
     }
 }
