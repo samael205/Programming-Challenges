@@ -23,18 +23,30 @@ struct search{
 int main(void){
 	setenv("PYTHONPATH", ".", 1);
 	Py_Initialize();
+
 	py module = PyImport_ImportModule("image_to_ascii");
+	if(module == nullptr){
+		std::cerr<<"Can't import image_to_ascii module!\n";
+		std::exit(EXIT_FAILURE);
+	}
 	py call = PyModule_GetDict(module);
 	py arguments = PyTuple_New(1); 
 	py function = PyDict_GetItem(call, PyString_FromString("convert"));
+	if(function == nullptr){
+		std::cerr<<"Could not find convert function\n";
+		std::exit(EXIT_FAILURE);
+	}
+
 	std::string file_extension;
 	std::cout<<"Write file extension: "<<std::flush;
 	std::cin>>file_extension;
 	if(file_extension[0] != '.')
 		file_extension = "." + file_extension;
+
 	search test;
 	test.find_files(file_extension);
 	test.convert_files(function, arguments);
+
 	Py_Finalize();
 }
 
