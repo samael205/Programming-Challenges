@@ -10,7 +10,9 @@ You can pick your name in Web Browser or GUI application
 
 Flask required
 
-- Copy all content from Web
+- Copy all content from web
+
+- Execute python
 
 ```sh
 $ python web.py
@@ -21,6 +23,8 @@ $ python web.py
 PyQt5 required
 
 - Copy all content from gui
+
+- Execute python
 
 ```sh
 $ python gui.py
