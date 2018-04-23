@@ -13,7 +13,7 @@ Flask required
 - Copy all content from Web
 
 ```sh
-$ python web.y
+$ python web.py
 ```
 
 ### GUI
