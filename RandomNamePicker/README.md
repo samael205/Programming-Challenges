@@ -4,7 +4,7 @@ Generate random name
 
 # Installation
 
-You can pick your name in Web Browser or GUI application
+You can pick your name in Web Browser or Gui application
 
 ### Web
 
@@ -18,7 +18,7 @@ Flask required
 $ python web.py
 ```
 
-### GUI
+### Gui
 
 PyQt5 required
 
