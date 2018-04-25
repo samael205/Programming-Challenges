@@ -1,6 +1,6 @@
 from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWebEngineWidgets import QWebEngineView
-from rss import rss, rss_contents, set_rss
+from feeds import rss, rss_contents, set_rss
 from new_rss_dialog import NewRss
 from pickle import dump
 
