@@ -8,19 +8,13 @@
 #include <QtWidgets>
 #include <QObject>
 
-class addTaskDialog : public QDialog
-{
+class addTaskDialog : public QDialog{
     Q_OBJECT
 public:
-    addTaskDialog(QWidget * parenet = 0);
-    QLineEdit * taskName;
-    QTextEdit * noteName;
-private:
-    QPushButton * okButton;
-    QPushButton * cancelButton;
-    QLabel * taskLabel;
-    QLabel * noteLabel;
+    addTaskDialog(QWidget * parent = nullptr);
 
+    QLineEdit * taskName = nullptr;
+    QTextEdit * noteName = nullptr;
 };
 
 #endif // ADDTASKDIALOG_H

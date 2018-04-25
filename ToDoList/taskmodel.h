@@ -12,12 +12,11 @@
 #define FOREACH(i, x) for(VAR(i, x.begin()); i != x.end(); i++)
 
 struct Task{
-    QCheckBox * progress;
+    QCheckBox * progress = nullptr;
     QString description;
 };
 
-class TaskModel : public QAbstractTableModel
-{
+class TaskModel : public QAbstractTableModel{
     Q_OBJECT
 public:
     TaskModel(QObject * parent = 0);

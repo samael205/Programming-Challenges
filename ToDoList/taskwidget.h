@@ -4,11 +4,10 @@
 #include <QTabWidget>
 #include <QSortFilterProxyModel>
 #include <QDir>
+
 #include "taskmodel.h"
 
-
-class TaskWidget : public QTabWidget
-{
+class TaskWidget : public QTabWidget{
     Q_OBJECT
 public:
     TaskWidget(QWidget * parent = 0);
@@ -27,8 +26,8 @@ signals:
 private:
     void Setup();
 
-    TaskModel * taskList;
-    QSortFilterProxyModel * proxy;
+    TaskModel * taskList = nullptr;
+    QSortFilterProxyModel * proxy = nullptr;
 };
 
 #endif // TASKWIDGET_H

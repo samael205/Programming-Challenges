@@ -2,15 +2,15 @@
 #include <QMenuBar>
 #include <QFileDialog>
 
-QString MainWindow::path = QDir::currentPath() + "/myToDo";
-
-MainWindow::MainWindow(){
+MainWindow::MainWindow()
+    : savedTasksPath(QDir::currentPath() + "/myToDo"){
     ToDoList = new TaskWidget(this);
 
     QVBoxLayout * mainLayout = new QVBoxLayout;
     notes = new QTextEdit;
     notes->setReadOnly(true);
     notes->setFixedHeight(100);
+    notes->setPlaceholderText(tr("Description"));
 
     mainLayout->addWidget(ToDoList);
 
@@ -37,17 +37,16 @@ MainWindow::MainWindow(){
 }
 
 MainWindow::~MainWindow(){
-    ToDoList->saveToFile(path);
+    ToDoList->saveToFile(savedTasksPath);
 }
 
 void MainWindow::Restore(){
-    QFile file(path);
+    QFile file(savedTasksPath);
     if(file.exists())
-        ToDoList->readFromFile(path);
+        ToDoList->readFromFile(savedTasksPath);
 }
 
 void MainWindow::SetupMenu(){
-
     fileMenu = menuBar()->addMenu(tr("&File"));
     saveToFile = new QAction("Save", this);
     saveToFile->setShortcut(QKeySequence::Save);
@@ -105,10 +104,7 @@ void MainWindow::read(){
 
 void MainWindow::showTaskNote(){
     QString desc = ToDoList->taskDescription();
-    if(desc != "NONE")
-        notes->setText(ToDoList->taskDescription());
-    else
-        notes->setText("");
+    notes->setText(ToDoList->taskDescription());
 }
 
 void MainWindow::exitProgram(){

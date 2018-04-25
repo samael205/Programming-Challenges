@@ -76,6 +76,7 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
         auto task = tasks.value(index.row());
         task.progress->setChecked(value.toBool());
         tasks.replace(index.row(), task);
+        emit(dataChanged(index, index));
         return true;
     }
     if(index.isValid() && role == Qt::EditRole){
@@ -91,7 +92,7 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
 QString TaskModel::showNote(QModelIndex & index, int role){
     if(index.isValid() && role == Qt::DisplayRole){
         const auto & task = tasks.value(index.row());
-         return task.description;
+        return task.description;
     }
     return QString();
 }
@@ -112,4 +113,3 @@ bool TaskModel::containCheckBox(QString nameTask){
 QList<Task> TaskModel::getTasks() const{
     return tasks;
 }
-

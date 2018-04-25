@@ -9,6 +9,7 @@
 class MainWindow : public QMainWindow{
     Q_OBJECT
 public:
+    const QString savedTasksPath;
     MainWindow();
     ~MainWindow();
 private slots:
@@ -17,23 +18,22 @@ private slots:
      void showTaskNote();
      void exitProgram();
 private:
-    QTextEdit * notes;
-    TaskWidget * ToDoList;
+    QTextEdit * notes = nullptr;
+    TaskWidget * ToDoList = nullptr;
 
     void SetupMenu();
 
-    static QString path;
 
-    QMenu * taskMenu;
-    QMenu * fileMenu;
-    QAction * editTask;
-    QAction * removeTask;
-    QAction * clearAll;
-    QAction * saveToFile;
-    QAction * readFromFile;
-    QAction * addTask;
+    QMenu * taskMenu = nullptr;
+    QMenu * fileMenu = nullptr;
+    QAction * editTask = nullptr;
+    QAction * removeTask = nullptr;
+    QAction * clearAll = nullptr;
+    QAction * saveToFile = nullptr;
+    QAction * readFromFile = nullptr;
+    QAction * addTask = nullptr;
 
-    QAction * exit;
+    QAction * exit = nullptr;
 protected:
     void Restore();
 };

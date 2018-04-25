@@ -18,9 +18,9 @@ TaskWidget::TaskWidget(QWidget * parent)
 }
 
 void TaskWidget::Setup(){
-
     proxy = new QSortFilterProxyModel(this);
     proxy->setSourceModel(taskList);
+    proxy->setSortRole(Qt::CheckStateRole);
 
     QTableView * viewModel = new QTableView;
     viewModel->setModel(proxy);
@@ -33,14 +33,10 @@ void TaskWidget::Setup(){
     QIcon tabIcon(iconPath);
 
     addTab(viewModel, tabIcon, "Productivity");
-
 }
 
 void TaskWidget::addTask(QString taskDescription, QString note, bool status){
-
     if(!taskList->containCheckBox(taskDescription)){
-        if(note.isEmpty())
-            note = "NONE";
         taskList->insertRows(0, 1, QModelIndex());
         QModelIndex index = taskList->index(0, 0, QModelIndex());
         taskList->setData(index, taskDescription, Qt::DisplayRole);
@@ -53,18 +49,19 @@ void TaskWidget::addTask(QString taskDescription, QString note, bool status){
 }
 
 void TaskWidget::showAddTaskDialog(){
-
     addTaskDialog addNewTask;
 
     if(addNewTask.exec()){
         QString task = addNewTask.taskName->text();
         QString note = addNewTask.noteName->toPlainText();
+        if(task.isEmpty())
+            return;
+
         addTask(task, note);
     }
 }
 
 void TaskWidget::editTask(){
-
     QTableView * view = static_cast<QTableView*>(currentWidget());
     QSortFilterProxyModel * proxy = static_cast<QSortFilterProxyModel*>(view->model());
     QItemSelectionModel * selectModel = view->selectionModel();
@@ -81,8 +78,6 @@ void TaskWidget::editTask(){
         QVariant noteName = taskList->data(nameIndex, Qt::EditRole);
         description = taskName.toString();
         note = noteName.toString();
-        if(note == "NONE")
-            note.clear();
 
         addTaskDialog aDialog;
         aDialog.setWindowTitle("Edit Task");
@@ -95,8 +90,8 @@ void TaskWidget::editTask(){
             QString newTask = aDialog.taskName->text();
             QString newNote = aDialog.noteName->toPlainText();
             QModelIndex index = taskList->index(row, 0, QModelIndex());
-             taskList->setData(index, newTask, Qt::DisplayRole);
-             taskList->setData(index, newNote, Qt::EditRole);
+            taskList->setData(index, newTask, Qt::DisplayRole);
+            taskList->setData(index, newNote, Qt::EditRole);
         }
     }
 }
@@ -155,7 +150,7 @@ void TaskWidget::saveToFile(const QString & fileName){
                 data << taskList->data(index, Qt::CheckStateRole);
                 data << taskList->data(index, Qt::DisplayRole);
                 data << taskList->data(index, Qt::EditRole);
-    }
+        }
 
     file.close();
 
@@ -180,7 +175,6 @@ void TaskWidget::readFromFile(const QString & fileName){
                 taskList->setData(index, data, Qt::DisplayRole);
                 taskList->setData(index, data, Qt::EditRole);
 
-   }
+    }
    file.close();
 }
-

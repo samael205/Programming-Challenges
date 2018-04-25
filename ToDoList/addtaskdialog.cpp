@@ -5,24 +5,25 @@
 #include <QHBoxLayout>
 
 addTaskDialog::addTaskDialog(QWidget * parent)
-    : QDialog(parent){
-
+    : QDialog(parent){ 
     taskName = new QLineEdit;
-    taskLabel = new QLabel("Task");
+    taskName->setPlaceholderText(("Title"));
+    QLabel *taskLabel = new QLabel("Task");
 
     QGridLayout * descriptionLayout = new QGridLayout;
     descriptionLayout->addWidget(taskLabel, 0, 0);
     descriptionLayout->addWidget(taskName, 0, 1);
 
-    noteLabel = new QLabel("Note");
+    QLabel * noteLabel = new QLabel("Note");
     noteName = new QTextEdit;
+    noteName->setPlaceholderText(tr("Description"));
     noteName->setFixedHeight(100);
 
     descriptionLayout->addWidget(noteLabel, 1, 0);
     descriptionLayout->addWidget(noteName, 1, 1);
 
-    okButton = new QPushButton("ok");
-    cancelButton = new QPushButton("cancel");
+    QPushButton * okButton = new QPushButton("ok");
+    QPushButton * cancelButton = new QPushButton("cancel");
 
     QHBoxLayout * buttons = new QHBoxLayout;
     buttons->addWidget(okButton);
