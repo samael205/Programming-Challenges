@@ -2,6 +2,7 @@ import reader
 import atexit
 from pickle import dump, load
 from os.path import isfile
+from os import remove
 
 if not isfile("./rss"):
     rss = {
@@ -25,6 +26,10 @@ set_rss()
 
 
 def save():
+    if not rss:
+        remove("rss")
+        return
+
     save_rss = open("rss", "wb")
     save_rss.truncate()
     dump(rss, save_rss)

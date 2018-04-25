@@ -60,7 +60,10 @@ class RssWidget(QtWidgets.QWidget):
         self.get_rss_categories()
 
         keys = list(rss_contents.keys())
-        self.data_table = RSSModel(list(rss_contents[keys[0]].keys()))
+        if keys:
+            self.data_table = RSSModel(list(rss_contents[keys[0]].keys()))
+        else:
+            self.data_table = RSSModel([])   
 
         self.description = QWebEngineView()
         self.description.setFont(QtGui.QFont("Helvetica"))
@@ -83,21 +86,29 @@ class RssWidget(QtWidgets.QWidget):
         main_layout.addLayout(content_layout)
 
         self.setLayout(main_layout)
+
+    def refresh_table(self):
+        self.description.setHtml("")
+        for i in range(self.data_table.rowCount(), 0, -1):
+            self.data_table_view.selectRow(i)    
             
     def show_rss_titles_from_categories(self, data):
+        if data is None:
+            self.data_table.update([])
+            return
+
         content = data.text()
         titles = list(rss_contents[content].keys())
 
         self.data_table.update(titles)
 
-        for i in range(self.data_table.rowCount(), 0, -1):
-            self.data_table_view.selectRow(i)
+        self.refresh_table()
 
     def show_rss_description(self, index):
         title = self.data_table.get_title(index)
         current_rss_dict = rss_contents[self.categories.currentItem().text()]
         if title not in current_rss_dict:
-            self.description.setText("")
+            self.description.setHtml("")
             return
 
         description = current_rss_dict[title]
@@ -176,6 +187,11 @@ class MainWindow(QtWidgets.QMainWindow):
 
             for item in selected:
                 self.rss_widget.categories.takeItem(self.rss_widget.categories.row(item))
+
+            if self.rss_widget.categories.count != 0:    
+                self.rss_widget.categories.setCurrentRow(0)  
+                self.rss_widget.show_rss_titles_from_categories(self.rss_widget.categories.item(0)) 
+
 
     def quit(self):
         QtWidgets.QApplication.quit()
