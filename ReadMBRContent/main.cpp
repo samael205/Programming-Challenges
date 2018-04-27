@@ -5,7 +5,6 @@
 #include <linux/hdreg.h>
 
 int main(void){
-	using std::wcout;
 	static struct hd_driveid hd;	
 	
 	const int device = open("/dev/sda", O_RDONLY | O_NONBLOCK);
@@ -18,15 +17,15 @@ int main(void){
 		char username[1024];
 		getlogin_r(username, 1024);
 
-		wcout<<"Hello, "<<username<<"!\n\n";
-		wcout<<"Bytes: "<<sizeof(hd)<<"\n";
-		wcout<<"Multisect: "<<hd.multsect<<"\n";
-		wcout<<"Config: "<<hd.config<<"\n";
-		wcout<<"Cyls: "<<hd.cyls<<"\n";
-		wcout<<"Bufer size: "<<hd.buf_size<<"\n";
-		wcout<<"Heads: "<<hd.heads<<"\n";
-		wcout<<"Sector Bytes: "<<hd.sector_bytes<<"\n";
-		wcout<<"Sectors: "<<hd.sectors<<"\n";
+		std::wcout<<"Hello, "<<username<<"!\n\n"
+			<<"Bytes: "<<sizeof(hd)<<"\n"
+			<<"Multisect: "<<hd.multsect<<"\n"
+			<<"Config: "<<hd.config<<"\n"
+			<<"Cyls: "<<hd.cyls<<"\n"
+			<<"Bufer size: "<<hd.buf_size<<"\n"
+			<<"Heads: "<<hd.heads<<"\n"
+			<<"Sector Bytes: "<<hd.sector_bytes<<"\n"
+			<<"Sectors: "<<hd.sectors<<"\n";
 	}else{
 		perror("ERROR: HDIO_GET_IDENTITY");
 		std::exit(EXIT_FAILURE);
