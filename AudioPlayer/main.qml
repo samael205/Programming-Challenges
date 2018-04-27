@@ -35,7 +35,7 @@ Item{
 
     FolderListModel{
         id: folderModel
-        nameFilters: ["*.jpg", "*jpeg"]
+        nameFilters: ["*.jpg", "*.jpeg"]
         folder: "./content/images"
     }
 
@@ -60,13 +60,13 @@ Item{
 
     function getNextImage(){
         var numberOfImages = folderModel.count
-        var getIndexOfImages = Math.floor(Math.random() * numberOfImages);
+        var getIndexOfImage = Math.floor(Math.random() * numberOfImages);
 
-        while(noImageRepeat === getIndexOfImages)
-            getIndexOfImages = Math.floor(Math.random() * numberOfImages);
+        while(noImageRepeat === getIndexOfImage)
+            getIndexOfImage = Math.floor(Math.random() * numberOfImages);
 
-        noImageRepeat = getIndexOfImages;
-        var imagePath = folderModel.get(getIndexOfImages, "fileURL")
+        noImageRepeat = getIndexOfImage;
+        var imagePath = folderModel.get(getIndexOfImage, "fileURL")
         wallpaper.source = imagePath;
         fadeInAnimation.start();
     }
