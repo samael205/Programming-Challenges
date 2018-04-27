@@ -31,4 +31,5 @@ int main(void){
 		perror("ERROR: HDIO_GET_IDENTITY");
 		std::exit(EXIT_FAILURE);
 	}
+	close(device);
 }
