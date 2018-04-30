@@ -206,10 +206,17 @@ class MainWindow(QtWidgets.QMainWindow):
                 return   
 
             rss.pop(current_rss, None)
-            self.delete_category() 
+            
+            selected = self.rss_widget.categories.selectedItems()
+            self.rss_widget.categories.takeItem(self.rss_widget.categories.row(selected[0]))
+ 
             rss[edit_rss.rss_category.text()] = edit_rss.rss_url.text()
             self.rss_widget.get_rss_categories()
             set_rss()
+
+            edited_item = self.rss_widget.categories.findItems(edit_rss.rss_category.text(), QtCore.Qt.MatchExactly)
+            item_row = self.rss_widget.categories.row(edited_item[0])
+            self.rss_widget.categories.setCurrentRow(item_row)
 
     def add_new_rss(self):
         new_rss_dialog = NewRss()

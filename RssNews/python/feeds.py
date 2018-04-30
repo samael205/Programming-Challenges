@@ -19,13 +19,14 @@ rss_contents = dict()
 
 def set_rss():
     for key in rss.keys():
-        rss_data = reader.get_data(rss[key])
-        rss_contents[key] = rss_data
+        if key not in rss_contents.keys():
+            rss_data = reader.get_data(rss[key])
+            rss_contents[key] = rss_data
 
 set_rss()
 
 def save():
-    if not rss:
+    if not rss and isfile("./rss"):
         remove("rss")
         return
 
