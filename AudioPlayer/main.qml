@@ -171,8 +171,10 @@ Item{
         for(var i=0; i<songs.length; i++){
             var duplicate = false
             for(var j=0; j<playlist.itemCount; j++)
-                if(songs[i] == playlist.itemSource(j))
+                if(songs[i] == playlist.itemSource(j)){
                     duplicate = true
+                    break
+                }
             if(!duplicate)
                 playlist.addItem(songs[i])
         }
