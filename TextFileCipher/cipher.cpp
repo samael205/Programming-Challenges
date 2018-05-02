@@ -22,15 +22,16 @@ std::string Cipher::encrypt(std::string & contentToEncrypt){
 	std::string encrypted;
 	switch(cipherMethod){
 		case rot13:
-			return rot13Cipher(contentToEncrypt);
+			encrypted = rot13Cipher(contentToEncrypt);
 		break;
 		case caesar:
-			return caesarCipher(contentToEncrypt);
+			encrypted = caesarCipher(contentToEncrypt);
 		break;
 		case vigenere:
-			return vigenereCipher(contentToEncrypt);
+			encrypted = vigenereCipher(contentToEncrypt);
 		break;
 	}
+	return encrypted;
 }
 
 void Cipher::encryptFile(const std::string & fileToEncrypt){
@@ -48,10 +49,10 @@ void Cipher::encryptFile(const std::string & fileToEncrypt){
 	saveFile << encrypt(content);
 	saveFile.close();
 
-	cout<<"\033[1;34mDone\033[0m\n";
+	cout<<"\nDone";
 }
 
-void Cipher::StartEncrypt(){
+void Cipher::startEncrypt(){
 	cout<<"Encrypt: \n";
 	FOREACH(file, filesToEncrypt)
 		encryptFile(*file);		

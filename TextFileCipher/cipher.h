@@ -28,7 +28,7 @@ public:
 	~Cipher();
 
 	void encryptFile(const std::string&);
-	void StartEncrypt();
+	void startEncrypt();
 protected:
 	std::string fileContent(std::ifstream&);
 	std::string encrypt(std::string&);

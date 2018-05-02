@@ -22,15 +22,16 @@ std::string Cipher::encrypt(std::string & contentToEncrypt){
 	std::string encrypted;
 	switch(cipherMethod){
 		case rot13:
-			return rot13Cipher(contentToEncrypt);
+			encrypted =  rot13Cipher(contentToEncrypt);
 		break;
 		case caesar:
-			return caesarCipher(contentToEncrypt);
+			encrypted =  caesarCipher(contentToEncrypt);
 		break;
 		case vigenere:
-			return vigenereCipher(contentToEncrypt);
+			encrypted =  vigenereCipher(contentToEncrypt);
 		break;
 	}
+	return encrypted;
 }
 ```
 in Cipher constructor you set a cipher method 

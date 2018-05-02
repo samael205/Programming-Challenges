@@ -10,12 +10,6 @@ int main(void){
 
 	findFiles.search(pathToTextFiles);
 
-	Cipher encryptFiles(findFiles.filesPath(), "rot13");
-	encryptFiles.StartEncrypt();
-
-	Cipher encryptFiles(findFiles.filesPath(), "caesar");
-	encryptFiles.StartEncrypt();
-
 	Cipher encryptFiles(findFiles.filesPath(), "vigenere");
-	encryptFiles.StartEncrypt();
+	encryptFiles.startEncrypt();
 }
