@@ -1,6 +1,6 @@
 #include "password.h"
 
 int main(void){
-	PasswordGenerator generator;
-	generator.Settings();
+	PasswordGenerator passwordGenerator;
+	passwordGenerator.Settings();
 }

@@ -24,7 +24,7 @@ public:
 	PasswordGenerator();
 	~PasswordGenerator();
 
-	void Generate();
+	void GeneratePassword();
 	void Settings();
 	const void Show();
 
