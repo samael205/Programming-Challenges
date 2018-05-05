@@ -3,15 +3,12 @@ import wish_interpreter
 import sys
 import csv
 from time import sleep
-from threading import Thread
 
 class speaker_bot:
-
     def __init__(self):
         self.speaker = speak.Speak()
         self.answer = None
         self.question = None
-        self.end_of_file_position = 0
         self.recognizer = speak.Speech()
         self.memory = None
 
@@ -19,6 +16,7 @@ class speaker_bot:
             reader = csv.reader(csv_memo)
             self.memory = dict(reader)
             self.memory = dict(map(str.strip, x) for x in self.memory.items())
+
 
     def interaction(self):
         user = self.recognizer.record()
@@ -31,6 +29,7 @@ class speaker_bot:
             self.ask_question()
             self.refresh_data()
 
+
     def find_answer(self):
         if self.question in self.memory.keys():
             self.answer = self.memory[self.question]
@@ -38,6 +37,7 @@ class speaker_bot:
             return True
         else:
             return False            
+
 
     def refresh_data(self):
         self.memory.clear()
@@ -53,6 +53,7 @@ class speaker_bot:
             writer = csv.writer(append_csv)
             writer.writerow([self.question.lower(), user.lower()])
 
+
     def random_line(self, file):
         line = next(file)
         for num, aline in enumerate(file):
@@ -61,15 +62,18 @@ class speaker_bot:
             line = aline
         return line
 
+
     def question_from_bot(self):
         with open("questions.txt") as questions:
             question = self.random_line(questions)
             return question
 
+
     def continue_dialogue(self):
         with open("sentences.txt") as sentences:
             sentence = self.random_line(sentences)
             return sentence
+
 
     def is_that_wish(self):
         if "what is" in self.question:
@@ -100,17 +104,13 @@ class speaker_bot:
             return True
         elif "play" in self.question and "music" in self.question:
             self.answer = "Happy listen!"
-            music_thread = Thread(wish_interpreter.play_some_music())
-            music_thread.start()
-            music_thread.join()
+            wish_interpreter.play_some_music()
             return True
         elif "play" in self.question:
             play_preferred_music = self.question[self.question.index("play")+5:]
-            self.answer = "Play " + play_preferred_music.split("/")[-1];
-            music_thread = Thread(wish_interpreter.play_prefer_music(play_preferred_music))
-            music_thread.start()
-            music_thread.join()
-            return True;
+            self.answer = "Play " + play_preferred_music.split("/")[-1]
+            wish_interpreter.play_prefer_music(play_preferred_music)
+            return True
         elif "where is" in self.question:
             show_for_me = self.question[self.question.index("where is")+9:]
             self.answer = "i show you " + show_for_me + " where is"
