@@ -171,7 +171,7 @@ void Interface::saveResults(bool muliResults){
 	file<<"\n";
 	file.close();	
 	std::cout << "\033[2J\033[1;1H"
-			  <<"Saved!\n";	 
+	          <<"Saved!\n";	 
 
 	std::this_thread::sleep_for(std::chrono::milliseconds(350)); 
 }
@@ -212,11 +212,8 @@ void Calculator::calculate(char & choice){
 		break;	
 		case 'm':
 			char userChoice;
-			std::cout << "\033[2J\033[1;1H";
-			if(memoryMode)
-				std::cout<<"off";
-			else
-				std::cout<<"on";
+			std::cout<<"\033[2J\033[1;1H";
+			memoryMode ? std::cout<<"off" : std::cout<<"on";			
 			std::cout<<" Memory mode? (Y/N) "<<std::flush;
 			std::cin>>userChoice;
 
@@ -240,7 +237,7 @@ void Calculator::calculate(char & choice){
 		break;
 		case 'x':
 			std::cout << "\033[2J\033[1;1H"
-					  <<"See you later!\n";
+				  <<"See you later!\n";
 			std::exit(EXIT_SUCCESS);	
 		break;
 		default:
