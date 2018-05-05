@@ -10,15 +10,14 @@ class SearchingSpider(HTMLParser):
         HTMLParser.__init__(self)
         self.links = []
         self.base_url = None
+        self.counter = 0
 
     def search_word(self, url, key_word, pages):
-        links = [url]
+        self.links = [url]
         current_page_number = 0
 
-        while current_page_number < pages:
-            current_url = links[0]
-            links.pop(0)
-
+        while current_page_number < pages and self.links != []:
+            current_url = self.links.pop(0)
             current_page_number += 1
 
             print(current_page_number, current_url)
@@ -29,11 +28,14 @@ class SearchingSpider(HTMLParser):
                 tags_with_key_word = parsed_html.find_all(text=re.compile(key_word))
                 for tag in tags_with_key_word:
                     if "http" not in tag:
+                        self.counter += 1
                         content = tag
                         content = content.replace(key_word, "\033[10;31m" + key_word + "\033[m")
                         print("\033[00;35m>\033[m", content.strip())
 
-            links.extend(new_links)
+            self.links.extend(new_links)
+
+        print("\nTags:", self.counter)
 
     def handle_starttag(self, tag, attrs):
         url_regex = re.compile(r'^(?:http|ftp)s?://', re.IGNORECASE)
