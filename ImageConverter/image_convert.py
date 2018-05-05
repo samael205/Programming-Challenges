@@ -1,15 +1,15 @@
 from PIL import Image
 import imghdr
 
-validImageFormat = ["png", "bmp", "jpeg", "jpg"]
+valid_image_format = ["png", "bmp", "jpeg", "jpg"]
 
 
-def changeExtension(imageName, newExtension):
-  	if imghdr.what(imageName) == newExtension:
-  		print('\033[33msame image format! ' + newExtension)		
-	elif newExtension in validImageFormat and imghdr.what(imageName):
-   		image = Image.open(imageName)
-   		print('\033[34mConvert ' + imageName + ' to ' + newExtension)
-  		image.save(imageName[:imageName.rfind(".")] + "." + newExtension)
+def change_extension(image_name, new_extension):
+  	if imghdr.what(image_name) == new_extension:
+  		print('\033[33msame image format! ' + new_extension)		
+	elif new_extension in valid_image_format and imghdr.what(image_name):
+   		image = Image.open(image_name)
+   		print('\033[34mConvert ' + image_name + ' to ' + new_extension)
+  		image.save(image_name[:image_name.rfind(".")] + "." + new_extension)
 
 

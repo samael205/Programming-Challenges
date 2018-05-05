@@ -20,40 +20,35 @@ typedef std::vector<fs::path> vp;
 typedef std::vector<std::string> vs;
 typedef PyObject * py;
 
-class Images;
+class Searcher;
 
-class ConvertImages{
+class Converter{
+public:
+	Converter();
+	~Converter();
+
+	friend void Convert(const Converter &, const Searcher &);
 private:
 	py module;
 	py moduleDict;
 	py function;
 	py arguments;
-public:
-	ConvertImages();
-	~ConvertImages();
-
-	friend void Convert(const ConvertImages &, const Images &);
-
-protected:
-
 };
 
-class Images{
-private:
-	vp filesPath;
-	vs extensionsToConvert;
-	vs extensionsOrNamesToSearch;
+class Searcher{
 public:
-	Images();
-	~Images();
+	Searcher();
+	~Searcher();
 
 	void get_data(std::string &);
-	friend void Convert(const ConvertImages &, const Images &);
+	friend void Convert(const Converter &, const Searcher &);
 protected:
 	vs split(const std::string);
 	void search(const vs &,  const fs::path & rootDirPath = fs::current_path());
 	std::string DotFormat(std::string);
+private:
+	vp filesPath;
+	vs extensionsToConvert;
+	vs extensionsOrNamesToSearch;
 };
-
-
 #endif

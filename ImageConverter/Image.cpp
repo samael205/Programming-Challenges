@@ -1,10 +1,14 @@
 #include "Image.h"
 
-Images::Images() : filesPath(0), extensionsToConvert(0), extensionsOrNamesToSearch(0){}
+Searcher::Searcher() : filesPath(0), extensionsToConvert(0), extensionsOrNamesToSearch(0){
 
-Images::~Images(){}
+}
 
-void Images::search(const vs & dataToSearch, const fs::path & rootDirPath){
+Searcher::~Searcher(){
+
+}
+
+void Searcher::search(const vs & dataToSearch, const fs::path & rootDirPath){
 	if(!fs::exists(rootDirPath) || !fs::is_directory(rootDirPath))
 		return;
 	fs::recursive_directory_iterator it(rootDirPath);
@@ -20,7 +24,7 @@ void Images::search(const vs & dataToSearch, const fs::path & rootDirPath){
 	filesPath.erase(std::unique(filesPath.begin(), filesPath.end()), filesPath.end());
 }
 
-void Images::get_data(std::string & data){
+void Searcher::get_data(std::string & data){
 	extensionsOrNamesToSearch = split(data.substr(0, data.find_first_of(">")-1));
 	extensionsToConvert = split(data.substr(data.find_first_of(">")+1, data.length()));
 	FOREACH(extension, extensionsToConvert){
@@ -30,7 +34,7 @@ void Images::get_data(std::string & data){
 	search(extensionsOrNamesToSearch);
 }
 
-vs Images::split(const std::string data){
+vs Searcher::split(const std::string data){
 	std::stringstream sstream(data);
 	std::string temp;
 	vs token;
@@ -39,25 +43,36 @@ vs Images::split(const std::string data){
 	return token;
 }
 
-std::string Images::DotFormat(std::string dotInExtension){
+std::string Searcher::DotFormat(std::string dotInExtension){
 	if(dotInExtension[0] == '.')
 		return dotInExtension.substr(1, dotInExtension.length());
 	return dotInExtension;
 }
 
-ConvertImages::ConvertImages(){
+Converter::Converter(){
 	Py_Initialize();
 	module = PyImport_Import(PyString_FromString("image_convert"));
+	if(module == nullptr){
+		std::cerr<<"Can't find image_convert module!\n";
+		Py_Finalize();
+		std::exit(EXIT_FAILURE);
+	}
+
 	moduleDict = PyModule_GetDict(module);
-	function = PyDict_GetItem(moduleDict, PyString_FromString("changeExtension"));
+	function = PyDict_GetItem(moduleDict, PyString_FromString("change_extension"));
+	if(function == nullptr){
+		std::cerr<<"Can't load changeExtension method!\n";
+		Py_Finalize();
+		std::exit(EXIT_FAILURE);
+	}
 	arguments = PyTuple_New(2); 
 }
 
-ConvertImages::~ConvertImages(){
+Converter::~Converter(){
 	Py_Finalize();
 }
 
-void Convert(const ConvertImages & convert, const Images & imagesToConvert){
+void Convert(const Converter & convert, const Searcher & imagesToConvert){
 	FOREACH(imageToConvert, imagesToConvert.filesPath){
 		PyTuple_SetItem(convert.arguments, 0, PyString_FromString(imageToConvert->filename().string().c_str()));
 		FOREACH(extensionToSet, imagesToConvert.extensionsToConvert){
