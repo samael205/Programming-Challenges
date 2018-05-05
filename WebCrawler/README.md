@@ -14,7 +14,7 @@ import spider module and use it
 Search url to find tags with text and show their content and number of found tags
 
 ```python
->>> spider.search_word("https://www.space.com/news", "rocket", 6)
+>>> web_searcher.search_word("https://www.space.com/news", "rocket", 6)
 1 https://www.space.com/news
 > NASA's InSight Mars lander launched today (May 5) atop an Atlas V rocket, rising off a pad at California's Vandenberg Air Force Base at 7:05 a.m. EDT. InSight is the first-ever interplanetary mission to launch from the U.S. West Coast.
 2 https://www.space.com/news
