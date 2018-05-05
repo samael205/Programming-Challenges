@@ -1,10 +1,7 @@
 #include "calculator.h"
-
 #include <fstream>
-#include <chrono>
-#include <thread>
 
-Calculator::Calculator() : output(0), results(0), stack() {
+Interface::Interface() : output(0), results(0), stack() {
 	result = 0;
 	std::ifstream checkFile("results.txt");
 	if(!checkFile.good()){
@@ -15,9 +12,11 @@ Calculator::Calculator() : output(0), results(0), stack() {
 	checkFile.close();
 }
 
-Calculator::~Calculator() {}
+Interface::~Interface() {
+	
+}
 
-std::string Calculator::buildPostfixExpression(const std::string & equation){
+std::string Interface::buildPostfixExpression(const std::string & equation){
 	std::stringstream postfix;
 	std::stack<char> stack;
 	stack.push('(');
@@ -61,7 +60,7 @@ std::string Calculator::buildPostfixExpression(const std::string & equation){
 	return postfix.str();	
 }
 
-bool Calculator::isOperator(const char & charToCheck){
+bool Interface::isOperator(const char & charToCheck){
 	switch(charToCheck){
 		case '+':
 		case '-':
@@ -74,7 +73,7 @@ bool Calculator::isOperator(const char & charToCheck){
 	}
 }
 
-bool Calculator::precedence(const char & leftOperator, const char & rightOperator){
+bool Interface::precedence(const char & leftOperator, const char & rightOperator){
 	if(leftOperator =='^')
 		return true;
 	else if(rightOperator == '^')
@@ -85,7 +84,7 @@ bool Calculator::precedence(const char & leftOperator, const char & rightOperato
 		return false;
 }
 
-double Calculator::rpn(const std::string& expression){
+double Interface::rpn(const std::string& expression){
 	std::istringstream iss(expression);
 	std::vector<double> stack;
 	std::string token;
@@ -116,42 +115,52 @@ double Calculator::rpn(const std::string& expression){
 	return stack.back();
 }
 
-const void Calculator::show(bool muliResults) const{
-	std::cout << "\033[2J\033[1;1H";
-	std::cout<<"\033[1;31m-: \033[0m";
-	std::cout<<"RPN Calculator v1.0";
+const void Interface::show(bool muliResults) const{
+	std::cout << "\033[2J\033[1;1H"
+			  <<"\033[1;31m-: \033[0m"
+		 	  <<"RPN Calculator v1.1";
+
 	if(!muliResults)
 		std::cout<<"\n"<<std::setw(15)<<"= "<<result;
 	else{
 		std::cout<<std::setw(7)<<results.size()<<"/"<<n<<"\n";
 		REP(i, 50)
 			std::cout<<"-";
+
 		std::cout<<'\n';
 		std::copy(results.begin(), results.end(), std::ostream_iterator<double>(std::cout, " "));
 		std::cout<<'\n';	
+
 		REP(i, 50)
 			std::cout<<"-";		
 	}
 }
 
-void Calculator::calculate(std::string & expression,  bool muliResults){
-	std::string::iterator it = std::unique(expression.begin(), expression.end(), isBothSpace);
+void Interface::calculate(std::string & expression,  bool muliResults){
+	std::string::iterator it = std::unique(expression.begin(), expression.end(), [&](char left, char right){
+		return left == ' ' && left == right;
+	});
+
 	expression.erase(it, expression.end());
 	if(isAlpha(expression))
 		return;
+
 	result = rpn(buildPostfixExpression(expression));
 	if(muliResults && results.size() < n)
 		results.push_back(result);
 }
 
-bool Calculator::isAlpha(std::string stringToCheck){
+bool Interface::isAlpha(std::string stringToCheck){
 	FOREACH(i, stringToCheck)
 		if(std::isalpha(*i))
 			return true;
 	return false;	
 }
 
-void Calculator::saveResults(bool muliResults){
+void Interface::saveResults(bool muliResults){
+	if(results.size() == 0 && muliResults)
+		return;
+
 	std::ofstream file;
 	file.open("results.txt", std::ios_base::app);
 	if(muliResults)
@@ -161,58 +170,56 @@ void Calculator::saveResults(bool muliResults){
 		file<<result;
 	file<<"\n";
 	file.close();	
-	std::cout << "\033[2J\033[1;1H";
-	std::cout<<"SAVED!\n";	
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));	 
+	std::cout << "\033[2J\033[1;1H"
+			  <<"Saved!\n";	 
+
+	std::this_thread::sleep_for(std::chrono::milliseconds(350)); 
 }
 
-void Calculator::clear(){
+void Interface::clear(){
 	results.clear();
 	result = 0;
 }
 
-Interface::Interface() : Calculator() {
+Calculator::Calculator() : Interface() {
 	memoryMode = false;
 }
 
-Interface::~Interface() {}
+Calculator::~Calculator() {
 
-void const Interface::showInterface() const{
-	std::cout<<"\nE.\tWrite Expression\n";
-	std::cout<<"M.\tMemory Mode\n";
-	std::cout<<"S.\tSave\n";
-	std::cout<<"C.\tClear\n";
-	std::cout<<"X.\tExit\n";
-	std::cout<<": "<<std::flush;
 }
 
-void Interface::doOperations(char & choice){
+void const Calculator::showMenu() const{
+	std::cout<<"\nE.\tWrite Expression\n"
+			 <<"M.\tMemory Mode\n"
+			 <<"S.\tSave\n"
+			 <<"C.\tClear\n"
+			 <<"X.\tExit\n"
+			 <<"-: "<<std::flush;
+}
+
+void Calculator::calculate(char & choice){
 	switch(std::tolower(choice)){
 		case 'e':
 		{
-			std::cout<<"\nWrite expression: "<<std::flush;
+			std::cout<<"\nExpression: "<<std::flush;
 			std::cin.clear();
 			std::cin.ignore();
 			std::string expression;
 			std::getline(std::cin, expression);
-			Calculator::calculate(expression, memoryMode);
+			Interface::calculate(expression, memoryMode);
 		}
 		break;	
 		case 'm':
 			char userChoice;
 			std::cout << "\033[2J\033[1;1H";
-			std::cout<<"Memory Mode ";
-			if(memoryMode)
-				std::cout<<"on";
-			else
-				std::cout<<"off";
-			std::cout<<", should it ";
 			if(memoryMode)
 				std::cout<<"off";
 			else
 				std::cout<<"on";
-			std::cout<<" now? (Y/N) "<<std::flush;
+			std::cout<<" Memory mode? (Y/N) "<<std::flush;
 			std::cin>>userChoice;
+
 			switch(std::tolower(userChoice)){
 				case 'y':
 					memoryMode = !memoryMode;
@@ -226,14 +233,14 @@ void Interface::doOperations(char & choice){
 			}		
 		break;
 		case 's':
-			Calculator::saveResults(memoryMode);
+			Interface::saveResults(memoryMode);
 		break;
 		case 'c':
-			Calculator::clear();
+			Interface::clear();
 		break;
 		case 'x':
-			std::cout << "\033[2J\033[1;1H";
-			std::cout<<"See you later!\n";
+			std::cout << "\033[2J\033[1;1H"
+					  <<"See you later!\n";
 			std::exit(EXIT_SUCCESS);	
 		break;
 		default:

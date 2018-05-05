@@ -1,13 +1,13 @@
 #include "calculator.h"
 
 int main(void){
-	Interface calculator;
+	Calculator calculator;
 	char operation;
-	for(;;){
+	while(true){
 		calculator.showCalculateResult();
-		calculator.showInterface();
+		calculator.showMenu();
 		std::cin>>operation;
-		calculator.doOperations(operation);
+		calculator.calculate(operation);
 	}
 }
 

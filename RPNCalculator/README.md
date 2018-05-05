@@ -1,11 +1,19 @@
 # Description
 
-Solving typical math equation like
+Solve typical math equation like
  
 ```
 3 + 2 - (2 / 3) * 3
 ```
-using reverse Polish notation to calculate 
+
+### How
+
+build postfix expression
+
+```cpp
+std::string Interface::buildPostfixExpression(const std::string & equation);
+```
+and use reverse Polish notation to calculate 
 
 ```cpp
 double Calculator::rpn(const std::string& expression);
