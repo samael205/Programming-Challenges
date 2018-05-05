@@ -16,7 +16,7 @@ std::string Interface::buildPostfixExpression(const std::string & equation);
 and use reverse Polish notation to calculate 
 
 ```cpp
-double Calculator::rpn(const std::string& expression);
+double Interface::rpn(const std::string& expression);
 ```
 
 # Installation
