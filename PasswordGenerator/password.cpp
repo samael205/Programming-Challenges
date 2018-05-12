@@ -30,16 +30,16 @@ void PasswordGenerator::Settings(){
 }
 
 const void PasswordGenerator::Show(){
-	cout << "\033[2J\033[1;1H";
-	cout<<"Password Generator v1.2\n";
-	cout<<"u.\t"<<checked(passwordSettings[0])<<" Upper Case"
-		<<"\tStrength: "<<passwordStrength()<<"\n";
-	cout<<"l.\t"<<checked(passwordSettings[1])<<" Lower Case\n";
-	cout<<"n.\t"<<checked(passwordSettings[2])<<" Numbers\n";
-	cout<<"s.\t"<<checked(passwordSettings[3])<<" Symbols\n";
-	cout<<"t.\t"<<"Length: \033[1;31m"<<length<<"\033[0m\n";
-	cout<<"g.\tGenerate\n";
-	cout<<"e.\tExit\n";
+	cout << "\033[2J\033[1;1H"
+	     <<"Password Generator v1.2\n"
+	     <<"u.\t"<<checked(passwordSettings[0])<<" Upper Case"
+	     <<"\tStrength: "<<passwordStrength()<<"\n"
+	     <<"l.\t"<<checked(passwordSettings[1])<<" Lower Case\n"
+	     <<"n.\t"<<checked(passwordSettings[2])<<" Numbers\n"
+	     <<"s.\t"<<checked(passwordSettings[3])<<" Symbols\n"
+	     <<"t.\t"<<"Length: \033[1;31m"<<length<<"\033[0m\n"
+	     <<"g.\tGenerate\n"
+	     <<"e.\tExit\n";
 	if(password.length() >= 10)
 		cout<<"Your generated password: \e[1m"<<password<<"\e[0m\n";
 	cout<<"-: "<<std::flush;
