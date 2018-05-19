@@ -81,8 +81,7 @@ Item{
 
     function getIndexBySource(source){
         for(var i = 0; i<playlist.itemCount; i++)
-            if(source === playlist.itemSource(i))
-                return i;
+            if(source === playlist.itemSource(i)) return i;
         return 0;
     }
 
@@ -125,16 +124,12 @@ Item{
             else if(status == MediaPlayer.NoMedia)
                 musicPlaying = false
         }
-        onPositionChanged:  progressChanged.start()
-        onPlaying: {
-            if(!musicPlaying && playlist.itemCount >= 1)
-                musicPlaying = true
-        }
+        onPositionChanged: progressChanged.start()
+        onPlaying: if(!musicPlaying && playlist.itemCount >= 1) musicPlaying = true
     }
 
     function songNameAndAuthor(){
-        if(!mediaPlayer.hasAudio)
-            return ""
+        if(!mediaPlayer.hasAudio) return ""
 
         var getSong = mediaPlayer.source.toString()
         var getName = getSong.split("/")
@@ -175,8 +170,7 @@ Item{
                     duplicate = true
                     break
                 }
-            if(!duplicate)
-                playlist.addItem(songs[i])
+            if(!duplicate) playlist.addItem(songs[i])
         }
     }
 
@@ -188,8 +182,7 @@ Item{
         onAccepted: {
             addSongsWithoutDuplicate(fileDialog.fileUrls)
             fileDialog.visible = false
-            if(!mediaPlayer.hasAudio)
-                setAudio(currentMusicIndex);
+            if(!mediaPlayer.hasAudio) setAudio(currentMusicIndex);
         }
     }
 
@@ -257,10 +250,7 @@ Item{
 
         MouseArea{
             anchors.fill: parent
-            onClicked:{
-                if(mediaPlayer.hasAudio)
-                    audioStatus()
-            }
+            onClicked: if(mediaPlayer.hasAudio) audioStatus()
         }
     }
 
