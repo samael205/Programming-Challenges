@@ -88,7 +88,7 @@ class IRCWidget(QtWidgets.QWidget):
             self.channels.setCurrentRow(self.channels.count() - 1)
 
     def remove_channel(self):
-        if len(self.connections) == 0:
+        if not self.connections:
             return
 
         connection = self.current_connection()
