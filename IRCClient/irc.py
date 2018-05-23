@@ -16,7 +16,12 @@ class IRC:
     def connect(self):
         self.irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.irc_sock.connect((self.server, 6667))
-        self.irc_sock.send(bytes("USER " + self.botnick + " " + self.botnick + " " + self.botnick + " " + self.botnick + "\n", "UTF-8"))
+        self.irc_sock.send(bytes("USER "
+                                + self.botnick + " "
+                                + self.botnick + " "
+                                + self.botnick + " "
+                                + self.botnick + "\n",
+                                "UTF-8"))
         self.irc_sock.send(bytes("NICK " + self.botnick + "\n", "UTF-8"))
 
     def join_channel(self):
