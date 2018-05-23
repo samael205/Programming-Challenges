@@ -21,10 +21,8 @@ namespace wc{
 		std::string bufor = "\0";
 		std::string data = "\0";
 
-		while(file >> bufor){	
-			data += bufor + " ";
-		}
-		
+		while(file >> bufor) data += bufor + " ";
+
 		return data;
 	}
 
@@ -74,16 +72,12 @@ namespace wc{
 	std::string totalSummary(){
 		std::stringstream summaryTotal;
 
-		summaryTotal << allWords;
-		if(readChars)
-			summaryTotal << std::setw(4)<<allChars;
-		if(readNewLines)
-			summaryTotal << std::setw(4)<<allNewLines;
-		if(readBytes)
-			summaryTotal << std::setw(4) << allBytes;
+		summaryTotal<<allWords;
+		if(readChars) summaryTotal<<std::setw(4)<<allChars;
+		if(readNewLines) summaryTotal<<std::setw(4)<<allNewLines;
+		if(readBytes) summaryTotal<<std::setw(4)<<allBytes;
 		summaryTotal<<"\ttotal\n";
 
 		return summaryTotal.str();
 	}
-
 }

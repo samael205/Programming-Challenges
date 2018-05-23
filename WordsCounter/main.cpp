@@ -12,8 +12,7 @@ void Options(int argc, char ** argv);
 int main(int argc, char *argv[]){
 	std::ios_base::sync_with_stdio(false);
 
-	if(argc < 2)
-		std::exit(EXIT_FAILURE);
+	if(argc < 2) std::exit(EXIT_FAILURE);
 
 	CheckIfUserAskForHelp(argc, argv);
 	Options(argc, argv);
@@ -21,8 +20,7 @@ int main(int argc, char *argv[]){
 	wc::result filesResult;
 
 	REP(i, argc, 1){
-		if(std::strlen(argv[i]) == 0)
-			continue;
+		if(std::strlen(argv[i]) == 0) continue;
 
 		std::ifstream file;
 		file.open(argv[i], std::ios_base::binary);
@@ -33,9 +31,9 @@ int main(int argc, char *argv[]){
 		}
 
 		std::stringstream fileSummary;
-		fileSummary	<< wc::countWords(file);
+		fileSummary<<wc::countWords(file);
 		file.close();
-		fileSummary << '\t' << std::string(argv[i]);
+		fileSummary<<'\t'<<std::string(argv[i]);
 
 		filesResult.push_back(fileSummary.str());
 	}
@@ -43,8 +41,7 @@ int main(int argc, char *argv[]){
 	FOREACH(it, filesResult)
 		std::cout<<*it<<"\n";
 
-	if(filesResult.size() > 1)
-		std::cout<<wc::totalSummary();				
+	if(filesResult.size() > 1) std::cout<<wc::totalSummary();				
 }
 
 void CheckIfUserAskForHelp(int argc, char ** arguments){
@@ -52,8 +49,8 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
 			std::cout << "\e[1m-m, --chars\n\t\e[0mprint the character counts"
-				<< "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
-				<<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
+					  << "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
+					  <<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
 			std::exit(EXIT_SUCCESS);
 		}
 	}
