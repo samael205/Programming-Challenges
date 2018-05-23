@@ -8,7 +8,7 @@ PasswordGenerator::PasswordGenerator() : passwordSettings(new bool[n]){
 	length = 10;
 }
 
-PasswordGenerator::~PasswordGenerator(){}
+PasswordGenerator::~PasswordGenerator() { }
 
 const int PasswordGenerator::random(int n){
 	return std::rand()%n;
@@ -20,8 +20,7 @@ void PasswordGenerator::Settings(){
 	while(std::tolower(choice) != 'k'){
 		Show();
 		while(!(cin>>choice)){
-			while(cin>>choice)
-				break;
+			while(cin>>choice) break;
 			cin.clear();
 			continue;
 		}
@@ -31,7 +30,7 @@ void PasswordGenerator::Settings(){
 
 const void PasswordGenerator::Show(){
 	cout << "\033[2J\033[1;1H"
-	     <<"Password Generator v1.2\n"
+	     <<"Password Generator v1.3\n"
 	     <<"u.\t"<<checked(passwordSettings[0])<<" Upper Case"
 	     <<"\tStrength: "<<passwordStrength()<<"\n"
 	     <<"l.\t"<<checked(passwordSettings[1])<<" Lower Case\n"
@@ -40,8 +39,7 @@ const void PasswordGenerator::Show(){
 	     <<"t.\t"<<"Length: \033[1;31m"<<length<<"\033[0m\n"
 	     <<"g.\tGenerate\n"
 	     <<"e.\tExit\n";
-	if(password.length() >= 10)
-		cout<<"Your generated password: \e[1m"<<password<<"\e[0m\n";
+	if(password.length() >= 10) cout<<"Your generated password: \e[1m"<<password<<"\e[0m\n";
 	cout<<"-: "<<std::flush;
 }
 
@@ -72,8 +70,7 @@ void PasswordGenerator::setSettings(const char set){
 			while(cin.get() != '\n' || length < 10 || length > 255){
 				std::cout<<"Password length should be (10-255)\n"
 					<<"Enter new Password: "<<std::flush;
-				while(!(cin>>length))
-					break;
+				while(!(cin>>length)) break;
 				cin.clear();
 				continue;
 			}
@@ -82,7 +79,6 @@ void PasswordGenerator::setSettings(const char set){
 			std::exit(EXIT_SUCCESS);
 		break;
 		default:
-
 		break;
 	}
 }
@@ -90,16 +86,10 @@ void PasswordGenerator::setSettings(const char set){
 static std::string availableChars(std::unique_ptr<bool[]> const & settings){
 	string rule = "\0";
 
-	if(settings[0])
-		for(int i=65; i<91; i++)
-			rule += (char)i;
-	if(settings[1])
-		for(int i=97; i<123; i++)
-			rule += (char)i;	
-	if(settings[2])
-			rule += "1234567890";	
-	if(settings[3])
-			rule += "'!?$?%^&*()_-+={[}]:;@~#|<,>.?";	
+	if(settings[0]) for(int i=65; i<91; i++) rule += (char)i;
+	if(settings[1]) for(int i=97; i<123; i++) rule += (char)i;	
+	if(settings[2]) rule += "1234567890";	
+	if(settings[3]) rule += "'!?$?%^&*()_-+={[}]:;@~#|<,>.?";	
 
 	std::random_shuffle(rule.begin(), rule.end());	
 
@@ -112,7 +102,7 @@ void PasswordGenerator::GeneratePassword(){
 
 	int ruleLength = passwordRule.length();
 	const int requiredPasswordLength = 8;
-	if(ruleLength <= requiredPasswordLength)
+	if(ruleLength <= requiredPasswordLength) 
 		return;
 
 	for(int i=0; i<length; i++)	
@@ -121,50 +111,25 @@ void PasswordGenerator::GeneratePassword(){
 
 string PasswordGenerator::passwordStrength(){
 	string strength = "\0";
-	bool hasUppercase, hasLowercase, hasNumbers, hasSymbols;
-	hasUppercase = upperInPass();
-	hasLowercase = lowerInPass();
-	hasNumbers = numInPass();	
-	hasSymbols = symbolInPass();
 
-	int numberOfRulesAchieved = hasLowercase + hasUppercase + hasNumbers + hasSymbols;
+	int numberOfRulesAchieved = calculateNumberOfRules();
 
-	if(numberOfRulesAchieved == 1)
-		strength = " \033[1;31mLOW\033[0m";
-	else if(numberOfRulesAchieved == 2)
-		strength = " \033[1;33mMEDIUM\033[0m";
-	else if(numberOfRulesAchieved == 3)
-		strength = " \033[1;32mGOOD\033[0m";
-	else if(numberOfRulesAchieved == 4)
-		strength = " \033[1;35mVERY GOOD\033[0m";
+	if(numberOfRulesAchieved == 1) strength = " \033[1;31mLOW\033[0m";
+	else if(numberOfRulesAchieved == 2) strength = " \033[1;33mMEDIUM\033[0m";
+	else if(numberOfRulesAchieved == 3) strength = " \033[1;32mGOOD\033[0m";
+	else if(numberOfRulesAchieved == 4) strength = " \033[1;35mVERY GOOD\033[0m";
 
 	return strength;
 }
 
-bool PasswordGenerator::upperInPass(){
-	REP(i, password.length())
-		if(std::isupper(password[i]))
-			return true;
-	return false;	
-}
-
-bool PasswordGenerator::lowerInPass(){
-	REP(i, password.length())
-		if(std::islower(password[i]))
-			return true;
-	return false;
-}
-
-bool PasswordGenerator::numInPass(){
-	REP(i, password.length())
-		if(std::isdigit(password[i]))
-			return true;
-	return false;
-}
-
-bool PasswordGenerator::symbolInPass(){
-	REP(i, password.length())
-		if(std::ispunct(password[i]))
-			return true;
-	return false;
+int PasswordGenerator::calculateNumberOfRules(){ 
+	bool lower, upper, punct, digit;
+	lower = upper = punct = digit = false;
+	REP(i, password.length()){ 
+		if(std::islower(password[i])) lower = true;
+		if(std::isupper(password[i])) upper = true;
+		if(std::ispunct(password[i])) punct = true;
+		if(std::isdigit(password[i])) digit = true;
+	}
+	return lower + upper + punct + digit;
 }

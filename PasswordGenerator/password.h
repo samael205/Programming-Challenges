@@ -15,11 +15,6 @@ using std::cout;
 using std::cin;
 
 class PasswordGenerator{
-private:
-	enum { n = 4};
-	std::unique_ptr<bool[]> passwordSettings;
-	string password;
-	int length;
 public:
 	PasswordGenerator();
 	~PasswordGenerator();
@@ -27,19 +22,19 @@ public:
 	void GeneratePassword();
 	void Settings();
 	const void Show();
-
 protected:
 	void setSettings(const char);
-
+	
 	string checked(bool);
 	string passwordStrength();
 
 	const int random(int);
-
-	bool upperInPass();
-	bool lowerInPass();
-	bool numInPass();
-	bool symbolInPass();
+	int calculateNumberOfRules();
+private:
+	enum { n = 4 };
+	std::unique_ptr<bool[]> passwordSettings;
+	string password;
+	int length;
 };
 
 #endif
