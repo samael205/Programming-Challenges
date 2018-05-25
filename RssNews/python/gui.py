@@ -87,6 +87,12 @@ class RssWidget(QtWidgets.QWidget):
 
         self.setLayout(main_layout)
 
+    def is_categories(self):
+        if self.categories.count() > 0:
+            return True
+        else:
+            return False
+
     def refresh_table(self):
         self.description.setHtml("")
         for i in range(self.data_table.rowCount(), 0, -1):
@@ -130,32 +136,45 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setWindowTitle("Rss Reader")
         self.rss_widget = RssWidget()
         self.setCentralWidget(self.rss_widget)
+   
+        self.edit = QtWidgets.QAction("Edit", self)
+        self.remove_category = QtWidgets.QAction("Delete", self)
+        self.export = QtWidgets.QAction("Export", self)
+        self.setup_menu()
 
+    def setup_menu(self):
         rss_menu = self.menuBar()
+        
         menu = rss_menu.addMenu("RSS")
         add_rss = QtWidgets.QAction("New", self)
         add_rss.triggered.connect(self.add_new_rss)
-        add_rss.setShortcut(QtCore.Qt.Key_New)
+        add_rss.setShortcut("CTRL+N")
         menu.addAction(add_rss)
-        export = QtWidgets.QAction("Export", self)
-        export.setShortcut(QtCore.Qt.Key_Save)
-        export.triggered.connect(self.export_rss)
-        menu.addAction(export)
-        edit = QtWidgets.QAction("Edit", self)
-        edit.setShortcut(QtCore.Qt.Key_Tab)
-        edit.triggered.connect(self.edit_current_rss)
-        menu.addAction(edit)
+            
+        self.export.triggered.connect(self.export_rss)
+        self.export.setShortcut("CTRL+S")
+        menu.addAction(self.export)
+     
+        self.edit.triggered.connect(self.edit_current_rss)
+        self.edit.setShortcut("CTRL+E")
+        menu.addAction(self.edit)
+        
         menu.addSeparator()
+        
         exit = QtWidgets.QAction("Exit", self)
         exit.setShortcut(QtCore.Qt.Key_Exit)
         exit.triggered.connect(self.quit)
         menu.addAction(exit)
 
         category_menu = rss_menu.addMenu("Category")
-        remove_category = QtWidgets.QAction("Delete", self)
-        remove_category.setShortcut(QtCore.Qt.Key_Delete)
-        remove_category.triggered.connect(self.delete_category)
-        category_menu.addAction(remove_category)
+        self.remove_category.setShortcut(QtCore.Qt.Key_Delete)
+        self.remove_category.triggered.connect(self.delete_category)
+        category_menu.addAction(self.remove_category)
+      
+    def update_actions(self):
+        self.edit.setEnabled(self.rss_widget.is_categories())
+        self.remove_category.setEnabled(self.rss_widget.is_categories())
+        self.export.setEnabled(self.rss_widget.is_categories())
 
     def export_rss(self):
         file_path = QtWidgets.QFileDialog.getSaveFileName(self, "Export RSS")
@@ -184,15 +203,16 @@ class MainWindow(QtWidgets.QMainWindow):
 
         if decision == QtWidgets.QMessageBox.Ok:
             rss.pop(selected[0].text(), None)
-
+        
             for item in selected:
                 self.rss_widget.categories.takeItem(self.rss_widget.categories.row(item))
+
+            self.update_actions()
 
             if self.rss_widget.categories.count != 0:    
                 self.rss_widget.categories.setCurrentRow(0)  
                 self.rss_widget.show_rss_titles_from_categories(self.rss_widget.categories.item(0)) 
-
-
+            
     def quit(self):
         QtWidgets.QApplication.quit()
 
@@ -231,6 +251,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 rss[category] = url
                 self.rss_widget.get_rss_categories()
                 set_rss()
+                self.update_actions()
 
 if __name__ == '__main__':
     import sys
