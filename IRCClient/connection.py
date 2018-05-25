@@ -16,6 +16,7 @@ class IRCWidget(QtWidgets.QWidget):
     def __init__(self):
         QtWidgets.QWidget.__init__(self)
         data_layout = QtWidgets.QHBoxLayout()
+
         self.refresh_text.connect(self.refresh_data)
 
         self.connections = []
@@ -88,9 +89,6 @@ class IRCWidget(QtWidgets.QWidget):
             self.channels.setCurrentRow(self.channels.count() - 1)
 
     def remove_channel(self):
-        if not self.connections:
-            return
-
         connection = self.current_connection()
         try:
             connection.disconnect()
@@ -107,6 +105,12 @@ class IRCWidget(QtWidgets.QWidget):
 
         if not self.channels:
             self.users_list.clear()
+
+    def is_connections(self):
+        if self.connections:
+            return True
+        else:
+            return False
 
     def send_message(self):
         message = self.send_message_line.text()
@@ -155,16 +159,10 @@ class IRCWidget(QtWidgets.QWidget):
                 return connection
 
     def connect_to_current_channel(self):
-        if not self.connections:
-            return
-
         connection = self.current_connection()
         connection.connect()
 
     def disconnect_from_current_channel(self):
-        if not self.connections:
-            return
-
         connection = self.current_connection()
         try:
             connection.disconnect()
@@ -176,7 +174,7 @@ class IRCWidget(QtWidgets.QWidget):
 
     def hold_connections(self):
         while 1:
-            if len(self.connections) == 0:
+            if not self.is_connections():
                 continue
 
             socks = dict((connection.irc_sock, connection) for connection in self.connections)
@@ -213,37 +211,38 @@ class MainWindow(QtWidgets.QMainWindow):
         self.irc_widget = IRCWidget()
         self.setCentralWidget(self.irc_widget)
 
+        self.connect_to_channel = QtWidgets.QAction("Connect", self)
+        self.disconnect_from_channel = QtWidgets.QAction("Disconnect", self)
+        self.remove_channel = QtWidgets.QAction("Remove", self)
+        self.edit_channel = QtWidgets.QAction("Edit", self)
         self.setup_menu()
 
     def setup_menu(self):
         irc_menu = self.menuBar()
+        
         channel_menu = irc_menu.addMenu("Channel")
         add_channel = QtWidgets.QAction("New", self)
         add_channel.triggered.connect(self.add_new_channel)
         add_channel.setShortcut("CTRL+N")
         channel_menu.addAction(add_channel)
 
-        edit_channel = QtWidgets.QAction("Edit", self)
-        edit_channel.triggered.connect(self.edit_channel)
-        edit_channel.setShortcut("CTRL+E")
-        channel_menu.addAction(edit_channel)
+        self.edit_channel.triggered.connect(self.edit_current_channel)
+        self.edit_channel.setShortcut("CTRL+E")
+        channel_menu.addAction(self.edit_channel)
 
         channel_menu.addSeparator()
 
-        connect_to_channel = QtWidgets.QAction("Connect", self)
-        connect_to_channel.triggered.connect(self.irc_widget.connect_to_current_channel)
-        connect_to_channel.setShortcut("CTRL+C")
-        channel_menu.addAction(connect_to_channel)
+        self.connect_to_channel.triggered.connect(self.connect)
+        self.connect_to_channel.setShortcut("CTRL+C")
+        channel_menu.addAction(self.connect_to_channel)
 
-        disconnect_from_channel = QtWidgets.QAction("Disconnect", self)
-        disconnect_from_channel.triggered.connect(self.irc_widget.disconnect_from_current_channel)
-        disconnect_from_channel.setShortcut("CTRL+D")
-        channel_menu.addAction(disconnect_from_channel)
+        self.disconnect_from_channel.triggered.connect(self.disconnect)
+        self.disconnect_from_channel.setShortcut("CTRL+D")
+        channel_menu.addAction(self.disconnect_from_channel)
 
-        remove_channel = QtWidgets.QAction("Remove", self)
-        remove_channel.triggered.connect(self.irc_widget.remove_channel)
-        remove_channel.setShortcut("CTRL+R")
-        channel_menu.addAction(remove_channel)
+        self.remove_channel.triggered.connect(self.remove)
+        self.remove_channel.setShortcut("CTRL+R")
+        channel_menu.addAction(self.remove_channel)
 
         channel_menu.addSeparator()
 
@@ -251,6 +250,26 @@ class MainWindow(QtWidgets.QMainWindow):
         exit_program.triggered.connect(QtWidgets.QApplication.quit)
         exit_program.setShortcut("CTRL+Q")
         channel_menu.addAction(exit_program)
+
+        self.update_actions()
+
+    def update_actions(self):
+        self.connect_to_channel.setEnabled(self.irc_widget.is_connections())
+        self.disconnect_from_channel.setEnabled(self.irc_widget.is_connections())
+        self.remove_channel.setEnabled(self.irc_widget.is_connections())
+        self.edit_channel.setEnabled(self.irc_widget.is_connections())
+
+    def connect(self):
+        self.irc_widget.connect_to_current_channel()
+        self.update_actions()
+
+    def disconnect(self):
+        self.irc_widget.disconnect_from_current_channel()
+        self.update_actions()
+
+    def remove(self):
+        self.irc_widget.remove_channel()
+        self.update_actions()
 
     def add_new_channel(self):
         new_channel_dialog = IRCDialog()
@@ -265,11 +284,9 @@ class MainWindow(QtWidgets.QMainWindow):
 
             new_irc = IRC(server, channel, nickname)
             self.irc_widget.new_channel(new_irc)
+            self.update_actions()
 
-    def edit_channel(self):
-        if not self.irc_widget.connections:
-            return
-
+    def edit_current_channel(self):
         current_connection = self.irc_widget.current_connection()
         edit_channel_dialog = IRCDialog("Edit channel",
                                             current_connection.server,
