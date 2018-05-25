@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "wordsCounter.h"
+#include "wordscounter.h"
 
 #define REP(i, n, v) for(int i=v; i<n; i++)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
