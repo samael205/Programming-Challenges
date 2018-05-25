@@ -11,6 +11,9 @@ def get_data(feed_url):
 
     feed = parseRSS(feed_url)
     for item in feed["items"]:
-        data[item["title"]] = html.unescape(item["description"])
+        try:
+            data[item["title"]] = html.unescape(item["description"])
+        except Exception:
+            data[item["title"]] = ""
 
     return data
