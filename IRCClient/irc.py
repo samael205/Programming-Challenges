@@ -17,11 +17,11 @@ class IRC:
         self.irc_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.irc_sock.connect((self.server, 6667))
         self.irc_sock.send(bytes("USER "
-                                + self.botnick + " "
-                                + self.botnick + " "
-                                + self.botnick + " "
-                                + self.botnick + "\n",
-                                "UTF-8"))
+                                 + self.botnick + " "
+                                 + self.botnick + " "
+                                 + self.botnick + " "
+                                 + self.botnick + "\n",
+                                 "UTF-8"))
         self.irc_sock.send(bytes("NICK " + self.botnick + "\n", "UTF-8"))
 
     def join_channel(self):
@@ -44,6 +44,16 @@ class IRC:
             users = irc_message[irc_message.find(":" + self.botnick)+1:]
             users = users[:users.find(":")]
             self.users = users.split()
+
+        if irc_message.find("PART") != -1:
+            user = irc_message.split("!")[0]
+            user = user[1:]
+            self.users.remove(user)
+
+        if irc_message.find("JOIN") != -1:
+            user = irc_message.split("!")[0]
+            user = user[1:]
+            self.users.append(user)
 
         if irc_message.find("PRIVMSG") != -1:
             name = irc_message.split("!", 1)[0][1:]
