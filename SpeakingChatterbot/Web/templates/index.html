@@ -1,0 +1,60 @@
+<html>
+<head>
+
+</head>
+<body onload="setFocusToText();">
+
+<style>
+	body{
+		background-color: #879BC7;
+	}
+	#main-dialog{
+		position: relative;
+		width: 700px;
+		height: 300px;
+		margin-left: auto;
+		margin-right: auto;
+		text-align;: center;
+		padding: 0;
+		align-content: center;
+		vertical-align: center;
+	}
+	p{
+		text-shadow: 3px 2px 1px #879BC7;
+		color: black;
+		font-weight: 300;
+		width: 350px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	#hidden-enter{
+		position: absolute;
+		left: -999px;
+		width: 1px;
+		height: 1px;
+	}
+	#panel{
+		position: absolute;
+		bottom: 0%;
+		right: 45%;
+	}
+</style>
+
+<div id="main-dialog">
+	{% for dialog in dialogs %}
+		<p>{{ dialog }}</p>
+	{% endfor %}
+	<form id="panel" method="post">
+		<input id="user" type="text" placeholder="Say to bot..." name="message">
+		<input id="hidden-enter" type="submit">
+	</form>
+</div>
+
+<script type="text/javascript">
+	function setFocusToText(){
+		document.getElementById("user").focus();
+	}
+</script>
+
+</body>
+</html>
