@@ -1,7 +1,8 @@
 # Description
 
 ###### Speaking chatter bot with voice recognition
-He can talk
+He can talk but also you can communicate with him via Web!
+
 He learn by saving all unknown answers from user to csv file 
 
 ```python
