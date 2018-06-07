@@ -1,1 +1,1 @@
-![screenshot](../guiIntroduction/botweb.png)
+![screenshot](../../guiIntroduction/botweb.png)
