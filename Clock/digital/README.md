@@ -1,1 +1,1 @@
-![screenshot](../guiIntroduction/digital2.png)
+![screenshot](../../guiIntroduction/digital2.png)
