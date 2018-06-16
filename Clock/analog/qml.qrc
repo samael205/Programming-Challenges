@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>main.cpp</file>
+        <file>content/second.png</file>
+        <file>content/minutes.png</file>
+        <file>content/hours.png</file>
+        <file>content/icon.png</file>
+        <file>content/day.jpg</file>
+        <file>content/night.jpg</file>
+    </qresource>
+</RCC>
