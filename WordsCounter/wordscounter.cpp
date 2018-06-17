@@ -18,20 +18,19 @@ namespace wc{
 	int numberOfBytes;
 
 	std::string getFileContent(std::ifstream & file){
-		std::string bufor = "\0";
-		std::string data = "\0";
-
-		while(file >> bufor) data += bufor + " ";
+		std::string data;
+		data.assign(std::istreambuf_iterator<char>(file),
+					std::istreambuf_iterator<char>());
 
 		return data;
 	}
-
+	
 	std::string countWords(std::ifstream & file){
 		auto content = getFileContent(file);
 
 		std::stringstream sstream(content);
 		numberOfWords = std::distance(std::istream_iterator<std::string>(sstream), 
-			std::istream_iterator<std::string>());
+					    std::istream_iterator<std::string>());
 		allWords += numberOfWords;
 
 		std::stringstream summary;
@@ -42,6 +41,7 @@ namespace wc{
 				return std::isalpha(c);	
 			});
 			allChars += numberOfChars;
+
 			summary << std::setw(4)<<numberOfChars;
 		}
 
@@ -65,10 +65,8 @@ namespace wc{
 
 			summary<<std::setw(4)<<numberOfBytes;
 		}
-
 		return summary.str();
 	}
-
 	std::string totalSummary(){
 		std::stringstream summaryTotal;
 

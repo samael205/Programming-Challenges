@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cstring>
 
-#include "wordscounter.h"
+#include "wordscounter.cpp"
 
 #define REP(i, n, v) for(int i=v; i<n; i++)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
@@ -49,8 +49,8 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
 			std::cout << "\e[1m-m, --chars\n\t\e[0mprint the character counts"
-				  << "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
-				  <<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
+				 	  << "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
+				 	  <<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
 			std::exit(EXIT_SUCCESS);
 		}
 	}
