@@ -15,16 +15,13 @@ Window {
     property int seconds
 
     function timeChanged(){
-        var date = new Date;
+        var date = new Date
         hours = date.getHours()
         minutes = date.getMinutes()
         seconds = date.getSeconds()
     }
     function isDay(){
-        if(hours > 7 && hours < 21)
-            return true
-        else
-            return false
+        return hours > 7 && hours < 21
     }
     Timer{
         interval: 100; running: true; repeat: true;
@@ -53,8 +50,8 @@ Window {
             }
         }
         Image{
-            x: 200
-            y: 73
+            x: 210
+            y: 83
             source: "./content/minutes.png"
             transform: Rotation{
                 id: minuteRotation
@@ -66,7 +63,7 @@ Window {
             }
         }
         Image{
-            x: 200
+            x: 210
             y: 100
             source: "./content/hours.png"
             transform: Rotation{
