@@ -5,7 +5,7 @@ Counts all words, chars, lines or bytes in specific files
 # Installation 
 
 ```sh
-$ g++ -std=c++11 main.cpp wordscounter.h -o wc
+$ g++ -std=c++11 -Wl,--allow-multiple-definition main.cpp wordscounter.cpp -o wc
 ```
 
 # Usage
