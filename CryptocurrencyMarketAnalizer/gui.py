@@ -159,9 +159,15 @@ class MainWindow(QtWidgets.QMainWindow):
         month.setChecked(True)
         month.setShortcut("CTRL+M")
         month.triggered.connect(self.month_filter)
+        three_months = filter.addAction("3 months")
+        three_months.setCheckable(True)
+        three_months.setShortcut("CTRL+N")
+        three_months.triggered.connect(self.three_months_filter)
+        filter.addAction(three_months)
 
         menu_action.addAction(week)
         menu_action.addAction(month)
+        menu_action.addAction(three_months)
         menu_action.setExclusive(True)
 
     def reload_data(self):
@@ -173,6 +179,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def month_filter(self):
         self.main_widget.time_distance = 31
+        self.reload_data()
+
+    def three_months_filter(self):
+        self.main_widget.time_distance = 93
         self.reload_data()
 
 
