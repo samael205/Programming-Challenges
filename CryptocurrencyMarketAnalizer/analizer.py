@@ -56,7 +56,7 @@ btc_usd_datasets.replace(0, np.nan, inplace=True)
 btc_usd_datasets['avg_btc_price_usd'] = btc_usd_datasets.mean(axis=1)
 
 main_data_url = 'https://poloniex.com/public?command=returnChartData&currencyPair={}&start={}&end={}&period={}'
-start_date = datetime.datetime.today() - datetime.timedelta(31)
+start_date = datetime.datetime.today() - datetime.timedelta(93)
 end_date = datetime.datetime.now()
 pedoid = 86400
 
