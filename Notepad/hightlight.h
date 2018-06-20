@@ -7,7 +7,7 @@ class Hightlight : public QSyntaxHighlighter
 {
     Q_OBJECT
 public:
-    Hightlight(QTextDocument * parent = 0, const QString="[a-zA-Z]+");
+    Hightlight(QTextDocument * parent = 0, const QString="\0");
 protected:
     void highlightBlock(const QString&) override;
 private:

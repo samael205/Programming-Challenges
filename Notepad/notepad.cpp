@@ -21,11 +21,8 @@ Notepad::Notepad(QWidget *parent) :
     connect(ui->pushButton_2, SIGNAL(clicked(bool)), this, SLOT(replaceAll()));
     connect(ui->textEdit, SIGNAL(cursorPositionChanged()), this, SLOT(checkColumnAndLine()));
 
-    QString replaceIconPath = QDir::currentPath() + "/icons/exit.png";
-    QString searchIconPath = QDir::currentPath() + "/icons/replace.png";
-
-    QIcon replaceIcon(replaceIconPath);
-    QIcon searchIcon(searchIconPath);
+    QIcon replaceIcon(":icons/icons/exit.png");
+    QIcon searchIcon(":icons/icons/replace.png");
 
     ui->pushButton->setIcon(replaceIcon);
     ui->pushButton_2->setIcon(searchIcon);
@@ -38,7 +35,7 @@ Notepad::Notepad(QWidget *parent) :
     int x = screenSize.width();
     int y = screenSize.height();
     animation->setEndValue(QRect(x/3 - 100, y/3 - 100, 710, 430));
-    animation->setDuration(70);
+    animation->setDuration(270);
     animation->start();
 }
 
