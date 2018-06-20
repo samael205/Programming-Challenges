@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/discover.png</file>
+        <file>icons/scan.png</file>
+    </qresource>
+    <qresource prefix="/scan">
+        <file>ports.txt</file>
+    </qresource>
+</RCC>

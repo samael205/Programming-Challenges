@@ -4,7 +4,8 @@
 
 int main(int argc, char ** argv){
     QApplication app(argc, argv);
-    QIcon icon("./icons/discover.png");
+    Q_INIT_RESOURCE(content);
+    QIcon icon(":/icons/icons/discover.png");
     app.setWindowIcon(icon);
 
     MainWindow scanner;
