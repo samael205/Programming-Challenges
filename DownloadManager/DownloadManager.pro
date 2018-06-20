@@ -19,3 +19,6 @@ SOURCES += \
     downloaderitemdelegate.cpp \
     newdownloaddialog.cpp \
     downloadprogresssingleconnect.cpp
+
+RESOURCES += \
+    icons.qrc
