@@ -5,6 +5,7 @@
 
 MainWindow::MainWindow(){
     portScanner = new Scanner;
+    setWindowTitle(tr("Port Scanner"));
 
     setCentralWidget(portScanner);
 

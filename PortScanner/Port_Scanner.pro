@@ -1,5 +1,4 @@
 TEMPLATE = app
-TARGET = Port_Scanner
 
 CONFIG += c++11
 
@@ -21,4 +20,7 @@ HEADERS += \
     scaninfomodel.h \
     mainwindow.h \
     scanstatusdelegate.h
+
+RESOURCES += \
+    content.qrc
 

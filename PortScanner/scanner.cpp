@@ -15,7 +15,7 @@
 
 Scanner::Scanner(QWidget * p)
     : QWidget(p){
-    QIcon icon("./icons/scan.png");
+    QIcon icon(":/icons/icons/scan.png");
     QGridLayout * background;
     background = new QGridLayout;
 
@@ -25,7 +25,7 @@ Scanner::Scanner(QWidget * p)
     description->setText("");
     enter->setIcon(icon);
     enter->setText("Scan");
-    enter->setStyleSheet("background-color: #68ADC4;");
+    enter->setStyleSheet("background-color: #017AF3;");
     enter->setToolTip("Scan ports");
 
     QRegExpValidator *v = new QRegExpValidator;
@@ -40,9 +40,11 @@ Scanner::Scanner(QWidget * p)
     data[0].setValidator(v);
     data[0].setToolTip("Set Host to scan");
     data[0].setPlaceholderText("Host");
+
     data[1].setToolTip("Set Ports to scan");
     data[1].setPlaceholderText("Ports");
     data[1].setValidator(vx);
+
     background->addWidget(data, 0, 0);
     background->addWidget(description, 0, 1, 0, Qt::AlignVertical_Mask);
     background->addWidget(enter, 0, 2, 2, Qt::AlignRight);
@@ -127,7 +129,7 @@ bool Scanner::isHostUp(const QString &host){
 }
 
 QString Scanner::portInfo(int port){
-    QFile file(QCoreApplication::applicationDirPath() + "/ports.txt");
+    QFile file(":/scan/ports.txt");
     file.open(QIODevice::ReadOnly);
     file.seek((qint64)port);
     QStringList splitContent;
@@ -171,7 +173,7 @@ void Scanner::Scan(){
         if(isOpen(host.toStdString(), port))
             show <<"OPEN";
         else
-            show  <<"CLOSE";
+            show <<"CLOSE";
 
          scanResults->insertRows(0, 1, QModelIndex());
          QModelIndex index = scanResults->index(0, 0, QModelIndex());
