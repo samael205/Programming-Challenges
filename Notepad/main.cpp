@@ -1,12 +1,12 @@
 #include "notepad.h"
 #include <QApplication>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]){
     setenv("PYTHONPATH", ".", 1);
     QApplication app(argc, argv);
+    Q_INIT_RESOURCE(content);
 
-    QString iconPath("icons/notepad.png");
+    QString iconPath(":icons/icons/notepad.png");
     QIcon appIcon(iconPath);
     app.setWindowIcon(appIcon);
 

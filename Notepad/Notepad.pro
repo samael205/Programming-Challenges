@@ -25,3 +25,6 @@ FORMS    += notepad.ui
 DISTFILES += \
     text_to_audio.py
 
+RESOURCES += \
+    content.qrc
+
