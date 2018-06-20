@@ -19,8 +19,7 @@ inline bool singleDownloadInfo::operator ==(const singleDownloadInfo & download)
     return this->name == download.name;
 }
 
-class DownloaderTable : public QAbstractTableModel
-{
+class DownloaderTable : public QAbstractTableModel{
     Q_OBJECT
 public:
     DownloaderTable(QObject * parent = 0);

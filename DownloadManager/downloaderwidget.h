@@ -10,8 +10,7 @@
 #include "downloaderitemdelegate.h"
 #include "downloadprogresssingleconnect.h"
 
-class downloaderWidget : public QTabWidget
-{
+class downloaderWidget : public QTabWidget{
     Q_OBJECT
 public:
     downloaderWidget(QWidget * parent = 0);
@@ -30,7 +29,7 @@ public:
     void load();
 public slots:
     void downloadFinished(QNetworkReply*);
-    void showDownloadedFileLocation();
+    void showDownloadedFileLocation(QModelIndex);
     void remove();
 private:
     void setupTable();

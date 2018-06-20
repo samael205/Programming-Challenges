@@ -15,13 +15,13 @@ public slots:
     void startDownload();
     void quit();
 private:
-    downloaderWidget * downloader;
+    downloaderWidget * downloader = nullptr;
 
     void setup();
-    QMenu * downloadMenu;
-    QAction * addDownload;
-    QAction * remove;
-    QAction * exitFromProgram;
+    QMenu * downloadMenu = nullptr;
+    QAction * addDownload = nullptr;
+    QAction * remove = nullptr;
+    QAction * exitFromProgram = nullptr;
 };
 
 #endif // MAINWINDOW_H

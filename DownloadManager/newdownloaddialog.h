@@ -6,17 +6,15 @@
 #include <QLabel>
 #include <QPushButton>
 
-class newDownloadDialog : public QDialog
-{
+class newDownloadDialog : public QDialog{
     Q_OBJECT
 public:
     newDownloadDialog();
-    QLineEdit * linkToData;
+    QLineEdit * linkToData = nullptr;
 private:
     void setup();
-    QLabel * linkLabel;
-    QPushButton * okButton;
-    QPushButton * cancelButton;
+    QPushButton * okButton = nullptr;
+    QPushButton * cancelButton = nullptr;
 };
 
 #endif // NEWDOWNLOADDIALOG_H

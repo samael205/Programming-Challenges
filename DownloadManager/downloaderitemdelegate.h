@@ -3,8 +3,7 @@
 
 #include <QStyledItemDelegate>
 
-class DownloaderItemDelegate : public QStyledItemDelegate
-{
+class DownloaderItemDelegate : public QStyledItemDelegate{
     Q_OBJECT
 public:
     DownloaderItemDelegate(QObject * parent = 0);

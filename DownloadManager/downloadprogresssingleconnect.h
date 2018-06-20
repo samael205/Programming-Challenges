@@ -9,25 +9,24 @@
 #include <QTime>
 #include <QUrl>
 
-class DownloadProgressSingleConnect : public QObject
-{
+class DownloadProgressSingleConnect : public QObject{
     Q_OBJECT
 public:
-    DownloadProgressSingleConnect(QUrl,DownloaderTable*);
+    DownloadProgressSingleConnect(QUrl, DownloaderTable*);
 
     const QUrl & getUrl() const;
 signals:
     void downloadFinished(QNetworkReply*);
 public slots:
-      void downloadProgress(qint64,qint64);
-private:
-    QString size;
-    DownloaderTable * dataModel;
-    QTime downloadTime;
-    QUrl url;
+    void downloadProgress(qint64,qint64);
 protected:
     QString timeHuman(const int);
     QString sizeHuman(const qint64);
+private:
+    QString size;
+    DownloaderTable * dataModel = nullptr;
+    QTime downloadTime;
+    QUrl url;
 };
 
 #endif // DOWNLOADPROGRESSSINGLECONNECT_H
