@@ -6,3 +6,6 @@ HEADERS += \
 SOURCES += \
     animationviewer.cpp \
     main.cpp
+
+RESOURCES += \
+    content.qrc

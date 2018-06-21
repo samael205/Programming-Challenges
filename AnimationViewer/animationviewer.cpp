@@ -131,26 +131,24 @@ void AnimationViewer::updateButtons(){
 }
 
 void AnimationViewer::createButtons(){
-    QString appPath = QDir::currentPath() + "/icons";
-
     openFile = new QToolButton;
-    openFile->setIcon(QIcon(appPath + "/open.png"));
+    openFile->setIcon(QIcon(":/icons/icons/open.png"));
     openFile->setWindowTitle(tr("&Open"));
     connect(openFile, SIGNAL(clicked(bool)), this, SLOT(open()));
 
     playButton = new QToolButton;
-    playButton->setIcon(QIcon(appPath + "/play.png"));
+    playButton->setIcon(QIcon(":/icons/icons/play.png"));
     playButton->setWindowTitle(tr("&Play"));
     connect(playButton, SIGNAL(clicked(bool)), animated, SLOT(start()));
 
     pauseButton = new QToolButton;
-    pauseButton->setIcon(QIcon(appPath + "/pause.png"));
+    pauseButton->setIcon(QIcon(":/icons/icons/pause.png"));
     pauseButton->setCheckable(true);
     pauseButton->setWindowTitle(tr("&Pause"));
     connect(pauseButton, SIGNAL(clicked(bool)), animated, SLOT(setPaused(bool)));
 
     stopButton = new QToolButton;
-    stopButton->setIcon(QIcon(appPath + "/stop.png"));
+    stopButton->setIcon(QIcon(":/icons/icons/stop.png"));
     stopButton->setWindowTitle(tr("&Stop"));
     connect(stopButton, SIGNAL(clicked(bool)), animated, SLOT(stop()));
 
