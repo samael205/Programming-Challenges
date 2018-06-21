@@ -29,7 +29,7 @@ void TaskWidget::Setup(){
 
     connect(viewModel->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), this, SLOT(selectChanged()));
 
-    QString iconPath(QDir::currentPath() + "/icons/progress.png");
+    QString iconPath(":/icons/icons/progress.png");
     QIcon tabIcon(iconPath);
 
     addTab(viewModel, tabIcon, "Productivity");

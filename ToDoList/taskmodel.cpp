@@ -72,14 +72,14 @@ bool TaskModel::setData(const QModelIndex &index, const QVariant &value, int rol
         emit(dataChanged(index, index));
         return true;
     }
-    if(index.isValid() && role == Qt::CheckStateRole){
+    else if(index.isValid() && role == Qt::CheckStateRole){
         auto task = tasks.value(index.row());
         task.progress->setChecked(value.toBool());
         tasks.replace(index.row(), task);
         emit(dataChanged(index, index));
         return true;
     }
-    if(index.isValid() && role == Qt::EditRole){
+    else if(index.isValid() && role == Qt::EditRole){
         auto task = tasks.value(index.row());
         task.description = value.toString();
         tasks.replace(index.row(), task);

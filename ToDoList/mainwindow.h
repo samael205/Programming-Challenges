@@ -20,10 +20,7 @@ private slots:
 private:
     QTextEdit * notes = nullptr;
     TaskWidget * ToDoList = nullptr;
-
     void SetupMenu();
-
-
     QMenu * taskMenu = nullptr;
     QMenu * fileMenu = nullptr;
     QAction * editTask = nullptr;
@@ -32,7 +29,6 @@ private:
     QAction * saveToFile = nullptr;
     QAction * readFromFile = nullptr;
     QAction * addTask = nullptr;
-
     QAction * exit = nullptr;
 protected:
     void Restore();

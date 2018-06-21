@@ -3,7 +3,7 @@
 #include <QFileDialog>
 
 MainWindow::MainWindow()
-    : savedTasksPath(QDir::currentPath() + "/myToDo"){
+    : savedTasksPath("myToDo"){
     ToDoList = new TaskWidget(this);
 
     QVBoxLayout * mainLayout = new QVBoxLayout;
@@ -19,7 +19,6 @@ MainWindow::MainWindow()
     mainLayout->addWidget(notes);
 
     setCentralWidget(new QWidget);
-
     centralWidget()->setLayout(mainLayout);
 
     SetupMenu();
@@ -72,6 +71,7 @@ void MainWindow::SetupMenu(){
     connect(addTask, SIGNAL(triggered(bool)), ToDoList, SLOT(showAddTaskDialog()));
 
     editTask = new QAction("Edit", this);
+    editTask->setShortcut(tr("CTRL+E"));
     taskMenu->addAction(editTask);
     connect(editTask, SIGNAL(triggered(bool)), ToDoList, SLOT(editTask()));
 
