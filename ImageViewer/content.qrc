@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/eye.png</file>
+    </qresource>
+</RCC>

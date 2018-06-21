@@ -14,3 +14,6 @@ SOURCES += \
 
 HEADERS += \
     imageviewer.h
+
+RESOURCES += \
+    content.qrc

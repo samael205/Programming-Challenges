@@ -3,7 +3,8 @@
 
 int main(int argc, char **argv){
     QApplication app(argc, argv);
-    QIcon icon(QDir::currentPath() + "/icons/images.png");
+    Q_INIT_RESOURCE(content);
+    QIcon icon(":/icons/icons/eye.png");
     app.setWindowIcon(icon);
 
     ImageViewer gallery;
