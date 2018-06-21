@@ -27,5 +27,6 @@
         <file>content/images/previous.png</file>
         <file>content/images/next.png</file>
         <file>content/PlaylistDelegate.qml</file>
+        <file>content/icons/audio.png</file>
     </qresource>
 </RCC>
