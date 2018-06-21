@@ -33,6 +33,18 @@ Item{
         onTriggered: removeCurrentSong()
     }
 
+    Action{
+        id: jumpToDown
+        shortcut: "Down"
+        onTriggered: nextSong()
+    }
+
+    Action{
+        id: jumpToUp
+        shortcut: "Up"
+        onTriggered: previousSong()
+    }
+
     FolderListModel{
         id: folderModel
         nameFilters: ["*.jpg", "*.jpeg"]
@@ -81,8 +93,7 @@ Item{
 
     function getIndexBySource(source){
         for(var i = 0; i<playlist.itemCount; i++)
-            if(source === playlist.itemSource(i))
-                return i;
+            if(source === playlist.itemSource(i)) return i;
         return 0;
     }
 
@@ -126,15 +137,11 @@ Item{
                 musicPlaying = false
         }
         onPositionChanged:  progressChanged.start()
-        onPlaying: {
-            if(!musicPlaying && playlist.itemCount >= 1)
-                musicPlaying = true
-        }
+        onPlaying: if(!musicPlaying && playlist.itemCount >= 1) musicPlaying = true
     }
 
     function songNameAndAuthor(){
-        if(!mediaPlayer.hasAudio)
-            return ""
+        if(!mediaPlayer.hasAudio) return ""
 
         var getSong = mediaPlayer.source.toString()
         var getName = getSong.split("/")
@@ -186,8 +193,7 @@ Item{
         onAccepted: {
             addSongsWithoutDuplicate(fileDialog.fileUrls)
             fileDialog.visible = false
-            if(!mediaPlayer.hasAudio)
-                setAudio(currentMusicIndex);
+            if(!mediaPlayer.hasAudio) setAudio(currentMusicIndex);
         }
     }
 
@@ -255,10 +261,7 @@ Item{
 
         MouseArea{
             anchors.fill: parent
-            onClicked:{
-                if(mediaPlayer.hasAudio)
-                    audioStatus()
-            }
+            onClicked: if(mediaPlayer.hasAudio) audioStatus()
         }
     }
 
