@@ -23,3 +23,6 @@ HEADERS  += chatdialog.h \
     usernamedialog.h
 
 FORMS    += chatdialog.ui
+
+RESOURCES += \
+    content.qrc
