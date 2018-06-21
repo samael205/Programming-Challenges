@@ -3,7 +3,8 @@
 
 int main(int argc, char ** argv){
     QApplication app(argc, argv);
-    QIcon icon(QDir::currentPath() + "/icons/todo.png");
+    Q_INIT_RESOURCE(content);
+    QIcon icon(":/icons/icons/todo.png");
     app.setWindowIcon(icon);
 
     MainWindow productivity;

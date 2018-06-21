@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/icons">
+        <file>icons/todo.png</file>
+        <file>icons/progress.png</file>
+    </qresource>
+</RCC>

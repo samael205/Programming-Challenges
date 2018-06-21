@@ -17,3 +17,6 @@ SOURCES += \
     taskwidget.cpp \
     addtaskdialog.cpp \
     mainwindow.cpp
+
+RESOURCES += \
+    content.qrc
