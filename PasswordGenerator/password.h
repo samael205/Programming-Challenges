@@ -28,7 +28,6 @@ protected:
 	string checked(bool);
 	string passwordStrength();
 
-	const int random(int);
 	int calculateNumberOfRules();
 private:
 	enum { n = 4 };

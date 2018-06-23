@@ -1,6 +1,7 @@
 #include "password.h"
 #include <cctype>
 #include <algorithm>
+#include <random>
 
 PasswordGenerator::PasswordGenerator() : passwordSettings(new bool[n]){
 	passwordSettings[0] = true;
@@ -9,10 +10,6 @@ PasswordGenerator::PasswordGenerator() : passwordSettings(new bool[n]){
 }
 
 PasswordGenerator::~PasswordGenerator() { }
-
-const int PasswordGenerator::random(int n){
-	return std::rand()%n;
-}
 
 void PasswordGenerator::Settings(){
 	char choice ='\0';
@@ -51,35 +48,34 @@ void PasswordGenerator::setSettings(const char set){
 	switch(std::tolower(set)){
 		case 'u':
 			passwordSettings[0] = !passwordSettings[0];
-		break;
+			break;
 		case 'l':
 			passwordSettings[1] = !passwordSettings[1];
-		break;
+			break;
 		case 'n':
 			passwordSettings[2] = !passwordSettings[2];
-		break;
+			break;
 		case 's':
 			passwordSettings[3] = !passwordSettings[3];
-		break;
+			break;
 		case 'g':
 			GeneratePassword();
-		break;
+			break;
 		case 't':
 			std::cout<<"Set new password length: "<<std::flush;
 			cin>>length;
 			while(cin.get() != '\n' || length < 10 || length > 255){
 				std::cout<<"Password length should be (10-255)\n"
-					<<"Enter new Password: "<<std::flush;
+					 <<"Enter new Password: "<<std::flush;
 				while(!(cin>>length)) break;
 				cin.clear();
 				continue;
 			}
-		break;
+			break;
 		case 'e':
 			std::exit(EXIT_SUCCESS);
-		break;
 		default:
-		break;
+			break;
 	}
 }
 
@@ -91,22 +87,20 @@ static std::string availableChars(std::unique_ptr<bool[]> const & settings){
 	if(settings[2]) rule += "1234567890";	
 	if(settings[3]) rule += "'!?$?%^&*()_-+={[}]:;@~#|<,>.?";	
 
-	std::random_shuffle(rule.begin(), rule.end());	
-
 	return rule;	
+}
+
+static std::mt19937 gen{std::random_device{}()};
+template <class T>
+T random(T min, T max){
+	return std::uniform_int_distribution<T>{min, max}(gen);
 }
 
 void PasswordGenerator::GeneratePassword(){
 	password.clear();
-	const std::string passwordRule = availableChars(passwordSettings);
-
-	int ruleLength = passwordRule.length();
-	const int requiredPasswordLength = 8;
-	if(ruleLength <= requiredPasswordLength) 
-		return;
-
-	for(int i=0; i<length; i++)	
-		password += passwordRule[random(ruleLength)];	
+	auto passwordRule = availableChars(passwordSettings);
+	REP(i, length) 
+		password += passwordRule[random(0, (int)passwordRule.length())];
 }
 
 string PasswordGenerator::passwordStrength(){
