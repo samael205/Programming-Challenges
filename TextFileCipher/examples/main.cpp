@@ -9,15 +9,15 @@ using std::cin;
 using std::cout;
 
 int main(int argc, char ** argv){
-	std::string pathToTextFiles;
-	if(argc < 2){
-		cout<<"Path to dir: "<<std::flush;
-		std::getline(cin, pathToTextFiles);
-	}else
-		pathToTextFiles.assign(argv[1]);
+	if(argc < 2) std::exit(EXIT_FAILURE);
+
+	std::string pathToTextFiles, cipherMethod;
+	
+	pathToTextFiles.assign(argv[1]);
+	cipherMethod.assign(argv[2]);
 
 	auto files = getTextFiles(pathToTextFiles);
 
-	Cipher cipher(files, "vigenere");
+	Cipher cipher(files, cipherMethod);
 	cipher.startEncrypt();
 }
