@@ -34,7 +34,6 @@ int main(int argc, char *argv[]){
 		fileSummary<<wc::countWords(file);
 		file.close();
 		fileSummary<<'\t'<<std::string(argv[i]);
-
 		filesResult.push_back(fileSummary.str());
 	}
 
@@ -48,8 +47,8 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--help") == 0 ||
 			std::strcmp(arguments[i], "-h") == 0){
-			std::cout << "\e[1m-m, --chars\n\t\e[0mprint the character counts"
-				 	  << "\n\e[1m-l, --lines\n\t\e[0mprint the new lines  counts"
+			std::cout <<"\e[1m-m, --chars\n\t\e[0mprint the character counts"
+				 	  <<"\n\e[1m-l, --lines\n\t\e[0mprint the new lines counts"
 				 	  <<"\n\e[1m-c, --bytes\n\t\e[0mprint the bytes counts\n";
 			std::exit(EXIT_SUCCESS);
 		}
