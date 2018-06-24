@@ -1,6 +1,6 @@
 # Description
 
-Read MBR content
+Display Master Boot Record content, choosen information
 
 # Installation
 
