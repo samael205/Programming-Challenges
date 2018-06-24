@@ -4,7 +4,7 @@
 Interface::Interface() : output(0), results(0), stack() {
 	result = 0;
 	std::ifstream checkFile("results.txt");
-	if(!checkFile.good()){
+	if(!checkFile.is_open()){
 		std::ofstream createResultsFile;
 		createResultsFile.open("results.txt");
 		createResultsFile.close();
@@ -117,22 +117,18 @@ double Interface::rpn(const std::string& expression){
 
 const void Interface::show(bool muliResults) const{
 	std::cout << "\033[2J\033[1;1H"
-			  <<"\033[1;31m-: \033[0m"
-		 	  <<"RPN Calculator v1.1";
+		  <<"\033[1;31m-: \033[0m"
+		  <<"RPN Calculator v1.1";
 
 	if(!muliResults)
 		std::cout<<"\n"<<std::setw(15)<<"= "<<result;
 	else{
 		std::cout<<std::setw(7)<<results.size()<<"/"<<n<<"\n";
-		REP(i, 50)
-			std::cout<<"-";
-
+		REP(i, 50) std::cout<<"-";
 		std::cout<<'\n';
 		std::copy(results.begin(), results.end(), std::ostream_iterator<double>(std::cout, " "));
 		std::cout<<'\n';	
-
-		REP(i, 50)
-			std::cout<<"-";		
+		REP(i, 50) std::cout<<"-";		
 	}
 }
 
@@ -142,8 +138,7 @@ void Interface::calculate(std::string & expression,  bool muliResults){
 	});
 
 	expression.erase(it, expression.end());
-	if(isAlpha(expression))
-		return;
+	if(isAlpha(expression)) return;
 
 	result = rpn(buildPostfixExpression(expression));
 	if(muliResults && results.size() < n)
@@ -151,9 +146,7 @@ void Interface::calculate(std::string & expression,  bool muliResults){
 }
 
 bool Interface::isAlpha(std::string stringToCheck){
-	FOREACH(i, stringToCheck)
-		if(std::isalpha(*i))
-			return true;
+	FOREACH(i, stringToCheck) if(std::isalpha(*i)) return true;
 	return false;	
 }
 
@@ -191,11 +184,11 @@ Calculator::~Calculator() {
 
 void const Calculator::showMenu() const{
 	std::cout<<"\nE.\tWrite Expression\n"
-			 <<"M.\tMemory Mode\n"
-			 <<"S.\tSave\n"
-			 <<"C.\tClear\n"
-			 <<"X.\tExit\n"
-			 <<"-: "<<std::flush;
+		 <<"M.\tMemory Mode\n"
+		 <<"S.\tSave\n"
+		 <<"C.\tClear\n"
+		 <<"X.\tExit\n"
+		 <<"-: "<<std::flush;
 }
 
 void Calculator::calculate(char & choice){
