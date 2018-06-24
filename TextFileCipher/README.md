@@ -32,7 +32,7 @@ std::string Cipher::encrypt(std::string & contentToEncrypt){
 Setting Cipher
 
 ```cpp
-Cipher cipher(files, "vigenere");
+Cipher cipher(files, cipherMethod);
 cipher.startEncrypt();
 ```
 
@@ -48,7 +48,7 @@ $ g++ -std=c++11 -lboost_system -lboost_filesystem -Wl,--allow-multiple-definiti
 ### Usage
 
 ```sh
-./cipher <Path do dir with text files> "vigenere"
+./cipher <Path to dir with text files> "vigenere"
 ```
 
 Be sure that your system has installed boost libraries
