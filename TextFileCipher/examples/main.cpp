@@ -1,15 +1,23 @@
+#include <iostream>
+#include <string>
+#include <vector>
+
 #include "cipher.h"
-#include "filesearcher.h"
+#include "search.cpp"
 
-int main(void){
-	FileSearcher findFiles;
+using std::cin;
+using std::cout;
 
+int main(int argc, char ** argv){
 	std::string pathToTextFiles;
-	cout<<"Path to dir: "<<std::flush;
-	std::getline(cin, pathToTextFiles);
+	if(argc < 2){
+		cout<<"Path to dir: "<<std::flush;
+		std::getline(cin, pathToTextFiles);
+	}else
+		pathToTextFiles.assign(argv[1]);
 
-	findFiles.search(pathToTextFiles);
+	auto files = getTextFiles(pathToTextFiles);
 
-	Cipher encryptFiles(findFiles.filesPath(), "vigenere");
-	encryptFiles.startEncrypt();
+	Cipher cipher(files, "vigenere");
+	cipher.startEncrypt();
 }
