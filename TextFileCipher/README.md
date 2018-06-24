@@ -3,19 +3,13 @@
 Search all text files in specific dir path
 
 ```cpp
-void FileSearcher::search(const fs::path &dirRoot){
-	if(!fs::exists(dirRoot) || !fs::is_directory(dirRoot))
-		return;
-	fs::recursive_directory_iterator it(dirRoot);
-	fs::recursive_directory_iterator end;
-	while(it != end){
-		if(fs::is_regular_file(*it) && it->path().extension() == ".txt")
-			filePaths.push_back(it->path().string());
-		it++;
-	}
+std::vector<std::string> getTextFiles(const std::string & path){
+	std::vector<std::string> files;
+	search(files, path);
+	return files;
 }
 ```
-and encrypt them 
+encrypt them 
 
 ```cpp
 std::string Cipher::encrypt(std::string & contentToEncrypt){
@@ -34,11 +28,12 @@ std::string Cipher::encrypt(std::string & contentToEncrypt){
 	return encrypted;
 }
 ```
-in Cipher constructor you set a cipher method 
+
+Setting Cipher
 
 ```cpp
-cipher encryptFiles(findFiles.filesPath(), "vigenere");
-encryptFiles.StartEncrypt();
+Cipher cipher(files, "vigenere");
+cipher.startEncrypt();
 ```
 
 # Installation
@@ -48,7 +43,7 @@ encryptFiles.StartEncrypt();
 - Compile
 
 ```sh
-$ g++ -std=c++11 -lboost_system -lboost_filesystem cipher.cpp cipher.h filesearcher.cpp filesearcher.h main.cpp -o encryptTextFiles
+$ g++ -std=c++11 -lboost_system -lboost_filesystem -Wl,--allow-multiple-definition cipher.cpp cipher.h search.cpp main.cpp -o cipher
 ```
 
 Be sure that your system has installed boost libraries
