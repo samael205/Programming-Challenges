@@ -1,7 +1,8 @@
 ```sh
-$ time ./queue > test.out  
+$ time ./simulate > test.out 
 
 user 0,03s
-system 0,00s
-total  0,130 
+system 0,01s
+total 0,093 
+
 ```

@@ -1,37 +1,21 @@
- customers: 8	sum: 5m 29s 	average: 41s	slowest:  Zena      1m 5s    quickest: Zena      25s     
- customers: 8	sum: 5m 20s 	average: 40s	slowest:  Synthia   1m 11s   quickest: Kenyetta  19s     
- customers: 8	sum: 4m 35s 	average: 34s	slowest:  Royal     1m 11s   quickest: Kris      10s     
- customers: 8	sum: 5m 45s 	average: 43s	slowest:  Synthia   1m 12s   quickest: Everette  16s     
- customers: 8	sum: 7m 14s 	average: 54s	slowest:  Una       1m 13s   quickest: Dayle     31s     
+ customers: 8	sum: 00:16:34 average: 00:02:04 slowest: Royal     00:03:45 quickest: Royal     00:00:15
+ customers: 8	sum: 00:26:30 average: 00:03:18 slowest: Arlena    00:04:38 quickest: Una       00:02:01
+ customers: 8	sum: 00:21:11 average: 00:02:38 slowest: Luigi     00:04:26 quickest: Arlena    00:00:07
+ customers: 8	sum: 00:20:43 average: 00:02:35 slowest: Luigi     00:03:31 quickest: Luigi     00:01:58
+ customers: 8	sum: 00:19:25 average: 00:02:25 slowest: Viola     00:04:38 quickest: Luigi     00:00:37
 
 
- customers: 13	sum: 8m 51s 	average: 40s	slowest:  Una       1m 7s    quickest: Arlena    12s     
- customers: 2	sum: 1m 14s 	average: 37s	slowest:  Glady     1m 1s    quickest: Royal     13s     
- customers: 19	sum: 13m 12s 	average: 41s	slowest:  Lu        1m 14s   quickest: Glady     17s     
- customers: 16	sum: 11m 28s 	average: 43s	slowest:  Helga     1m 13s   quickest: Harrison  11s     
- customers: 9	sum: 5m 41s 	average: 37s	slowest:  Synthia   1m 11s   quickest: Almeda    12s     
- customers: 2	sum: 2m 2s 	average: 61s	slowest:  Almeda    1m 2s    quickest: Edie      1m      
- customers: 20	sum: 12m 45s 	average: 38s	slowest:  Viola     1m 9s    quickest: Augustina 14s     
- customers: 3	sum: 3m 10s 	average: 63s	slowest:  Helga     1m 13s   quickest: Arlena    44s     
- customers: 5	sum: 2m 44s 	average: 32s	slowest:  Zena      45s      quickest: Arlena    19s     
- customers: 20	sum: 14m 53s 	average: 44s	slowest:  Augustina 1m 13s   quickest: Lu        13s     
+ customers: 4	sum: 00:10:37 average: 00:02:39 slowest: Ferdinand 00:03:51 quickest: Glady     00:00:34
+ customers: 51	sum: 02:11:23 average: 00:02:34 slowest: Ferdinand 00:04:58 quickest: Rossana   00:00:03
+ customers: 75	sum: 03:11:19 average: 00:02:33 slowest: Ferdinand 00:04:58 quickest: Ferdinand 00:00:03
+ customers: 40	sum: 01:43:54 average: 00:02:35 slowest: Kenyetta  00:05:00 quickest: Rossana   00:00:02
+ customers: 18	sum: 00:49:47 average: 00:02:45 slowest: Dayle     00:04:45 quickest: Luigi     00:00:05
+ customers: 5	sum: 00:12:11 average: 00:02:26 slowest: Una       00:04:09 quickest: Everette  00:00:41
+ customers: 31	sum: 01:16:29 average: 00:02:28 slowest: Janeen    00:04:58 quickest: Jayna     00:00:06
+ customers: 27	sum: 01:09:25 average: 00:02:34 slowest: Royal     00:04:59 quickest: Edie      00:00:06
+ customers: 95	sum: 04:02:27 average: 00:02:33 slowest: Luigi     00:04:54 quickest: Luigi     00:00:01
+ customers: 46	sum: 01:51:15 average: 00:02:25 slowest: Kenyetta  00:04:37 quickest: Edie      00:00:15
 
 
- customers: 4	sum: 1m 57s 	average: 29s	slowest:  Almeda    41s      quickest: Zena      10s     
- customers: 1	sum: 11s 	average: 11s	slowest:  Jayna     11s      quickest: Jayna     11s     
- customers: 18	sum: 14m 18s 	average: 47s	slowest:  Royal     1m 9s    quickest: Luigi     17s     
- customers: 3	sum: 1m 56s 	average: 38s	slowest:  Edie      54s      quickest: Dayle     12s     
- customers: 12	sum: 9m 38s 	average: 48s	slowest:  Yvone     1m 14s   quickest: Rossana   24s     
- customers: 16	sum: 10m 34s 	average: 39s	slowest:  Una       1m 3s    quickest: Royal     13s     
- customers: 11	sum: 9m 2s 	average: 49s	slowest:  Dayle     1m 14s   quickest: Rossana   26s     
- customers: 16	sum: 12m 58s 	average: 48s	slowest:  Synthia   1m 14s   quickest: Augustina 10s     
- customers: 3	sum: 1m 31s 	average: 30s	slowest:  Zena      59s      quickest: Arlena    10s     
- customers: 30	sum: 21m 41s 	average: 43s	slowest:  Edie      1m 12s   quickest: Lu        10s     
- customers: 8	sum: 5m 20s 	average: 40s	slowest:  Zena      1m       quickest: Synthia   18s     
- customers: 1	sum: 36s 	average: 36s	slowest:  Edie      36s      quickest: Edie      36s     
- customers: 5	sum: 3m 27s 	average: 41s	slowest:  Ferdinand 1m 3s    quickest: Arlena    12s     
- customers: 3	sum: 1m 47s 	average: 35s	slowest:  Lu        56s      quickest: Viola     10s     
- customers: 1	sum: 45s 	average: 45s	slowest:  Royal     45s      quickest: Royal     45s     
- customers: 7	sum: 5m 52s 	average: 50s	slowest:  Dayle     1m 10s   quickest: Yvone     15s     
- customers: 27	sum: 14m 56s 	average: 33s	slowest:  Synthia   1m 10s   quickest: Rossana   10s     
- customers: 15	sum: 10m 37s 	average: 42s	slowest:  Luigi     1m 12s   quickest: Juan      10s     
+ customers: 33	sum: 01:17:14 average: 00:02:20 slowest: Royal     00:05:00 quickest: Edie      00:00:13
+ customers: 70	sum: 03:02:47 average: 00:02:36 slowest: Ferdinand 00:05:00 quickest: Royal     00:00:04
