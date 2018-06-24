@@ -42,7 +42,7 @@ public:
 class Queue{
 private:
 	static vs results;
-	enum { n = 30 };
+	enum { n = 100 };
 	struct Node{
 		Customer person;
 		struct Node * next;

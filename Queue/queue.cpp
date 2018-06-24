@@ -17,13 +17,11 @@ Customer & Customer::operator=(const Customer & absorb){
 }
 
 bool Customer::operator<(const Customer & customer){
-	return customer.first() < this->wait_time
-			
+	return customer.first() < this->wait_time;	
 }
 
 bool Customer::operator>(const Customer & customer){
-	return customer.first() > this->wait_time;
-			
+	return customer.first() > this->wait_time;	
 }
 
 std::ostream & operator<<(std::ostream & os, const Customer & customer){
@@ -79,10 +77,10 @@ void Queue::dequeue(Customer & leaver){
 void Queue::save(){
 	std::stringstream sstream;
 	sstream<<std::left<<std::setw(3)<<" customers: "<<number_of_customers<<'\t'
-		<<std::setw(3)<<"sum: "<<time_format(allwaittime)<<'\t'
-		<<std::setw(3)<<"average: "<<average<<"s\t"
-		<<std::setw(10)<<"slowest: "<< std::setw(9)<<longest_time 
-		<<std::setw(10)<<" quickest: "<<std::setw(9)<< shortest_time;
+	       <<std::setw(3)<<"sum: "<<time_format(allwaittime)<<" "
+               <<std::setw(3)<<"average: "<<time_format(average)<<" "
+	       <<std::setw(9)<<"slowest: "<<std::setw(9)<<longest_time<<" " 
+	       <<std::setw(9)<<"quickest: "<<std::setw(9)<<shortest_time;
 	results.push_back(sstream.str());
 }
 
@@ -99,13 +97,16 @@ void summary(const Queue & queue){
 }
 
 string time_format(ll time){
-	int min = time/60;
-	int seconds = time%60;
-	if(seconds == 0 && min != 0)
-		return std::to_string(min) + "m ";
-	else if(seconds != 0 && min == 0)
-		return std::to_string(seconds) + "s ";
-	else 
-		return std::to_string(min) + "m " + std::to_string(seconds) + "s ";
+	int seconds = time%3600;
+	int minutes = seconds/60;
+	int hours = time/3600;
+	seconds %= 60;
+	
+	std::string hourFormat, minuteFormat, secondFormat;
+	hourFormat = hours >= 10 ? std::to_string(hours) : "0" + std::to_string(hours);
+	minuteFormat = minutes >= 10 ? std::to_string(minutes) : "0" + std::to_string(minutes);
+	secondFormat = seconds >= 10 ? std::to_string(seconds) : "0" + std::to_string(seconds);
+	
+	return hourFormat + ":" + minuteFormat + ":" + secondFormat;
 }
 
