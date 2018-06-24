@@ -2,13 +2,17 @@
 #include <fstream>
 #include <iterator>
 #include <algorithm>
-
-const int random(int n) { return rand()%n+10; }
+#include <random>
 
 std::mutex guard;
 
-string setname();
+static std::mt19937 gen{std::random_device{}()};
+template <class T>
+T random(T min, T max){
+	return std::uniform_int_distribution<T>{min, max}(gen);
+}
 
+string setname();
 void simulate(Queue&);
 
 typedef std::vector<Queue> vq;
@@ -20,8 +24,7 @@ vq queues_to_simulate();
 void queue_threads(vq & queue);
 int countFileLines(std::ifstream & file);
 
-int main(void){
-	std::srand(std::time(0));
+int main(void){	
 	vq test = queues_to_simulate(5, 8);
 	queue_threads(test);
 	summary(test.back());
@@ -73,22 +76,20 @@ void simulate(Queue & queue){
 	guard.unlock();
 }
 
-
 int countFileLines(std::ifstream & file){
 	int lines = std::count(std::istreambuf_iterator<char>(file),
-			std::istreambuf_iterator<char>(), '\n');
+			       std::istreambuf_iterator<char>(), '\n');
 	return lines;
 }
-
 
 string setname(){
 	std::ifstream file;
 	file.open("names.txt", std::ios::out);
 	if(!file.is_open())
-		exit(EXIT_FAILURE);
+		return "None";	
 	int n = countFileLines(file);
 	file.seekg(std::ios::beg);
-	REP(i, rand()%n-1)
+	REP(i, random(0, n))
 		file.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	std::string name;
 	file >> name;
@@ -102,7 +103,7 @@ vq queues_to_simulate(int n, int n_customers){
 	REP(i, n){
 		queues.push_back(Queue());
 		REP(j, n_customers)
-			queues[i].enqueue(Customer(setname(), random(65)));
+			queues[i].enqueue(Customer(setname(), random(1, 300)));
 	}
 	return queues;
 }
@@ -113,23 +114,23 @@ vq queues_to_simulate(int n){
 	int n_customers;
 	REP(i, n){
 		queues.push_back(Queue());
-		n_customers = rand()%30+1;
+		n_customers = random(1, 100); 
 		REP(j, n_customers)
-			queues[i].enqueue(Customer(setname(), random(65)));
+			queues[i].enqueue(Customer(setname(), random(1, 300)));
 	}
 	return queues;
 }
 
 vq queues_to_simulate(){
 	vq queues;
-	int n = rand()%40+1;
+	int n = random(1, 20);
 	int n_customers;
 	queues.reserve(n);
 	REP(i, n){
 		queues.push_back(Queue());
-		n_customers = rand()%30+1;
+		n_customers = random(1, 100); 
 		REP(j, n_customers)
-			queues[i].enqueue(Customer(setname(), random(65)));
+			queues[i].enqueue(Customer(setname(), random(1, 300)));
 	}
 	return queues;
 }
