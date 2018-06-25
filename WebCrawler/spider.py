@@ -1,62 +1,77 @@
-from html.parser import HTMLParser
-from urllib import parse
-from urllib.request import urlopen
 from bs4 import BeautifulSoup
-import re
+import csv
+import urllib3
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
-class SearchingSpider(HTMLParser):
-    def __init__(self):
-        HTMLParser.__init__(self)
+class Spider:
+    def __init__(self, url):
+        self.start_url = url
+        pass
+
+    def open_url(self, url):
+        http = urllib3.PoolManager()
+        response = http.request('GET', url)
+        return response
+
+
+class AsianRestaurantSpider(Spider):
+    def __init__(self, url="https://www.tripadvisor.com/Restaurants-g1066456-Shibuya_Tokyo_Tokyo_Prefecture_Kanto.html"):
+        super().__init__(url)
         self.links = []
-        self.base_url = None
-        self.counter = 0
 
-    def search_word(self, url, key_word, pages):
-        self.links = [url]
-        current_page_number = 0
+    def get_links(self):
+        response = self.open_url(self.start_url)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        links = soup.find_all('a', {'class': 'property_title'})
+        main_url = self.start_url.split("R")[0]
+        for link in links:
+            href = link['href']
+            self.links.append(main_url + href)
 
-        while current_page_number < pages and self.links != []:
-            current_url = self.links.pop(0)
-            current_page_number += 1
+    def get_restaurant_data(self, url):
+        response = self.open_url(url)
+        soup = BeautifulSoup(response.data, "html.parser")
+        title = soup.find('h1', id='HEADING').text
+        opinions = soup.find_all('span', {'class': 'noQuotes'})
+        opinions = [opinion.text for opinion in opinions]
+        return {title: opinions}
 
-            print(current_page_number, current_url)
-            web_data, new_links = self.get_links(current_url)
+    def save_to_csv(self, name, data):
+        with open(name, 'w') as file:
+            writer = csv.writer(file)
+            names, opinions = [], []
+            for restaurants in data:
+                for restaurant in restaurants:
+                    names.append(restaurant)
+                    opinions.append(restaurants[restaurant])
+            writer.writerow(names)
+            writer.writerows(zip(*opinions))
 
-            if web_data.find(key_word) != -1:
-                parsed_html = BeautifulSoup(web_data, "html.parser")
-                tags_with_key_word = parsed_html.find_all(text=re.compile(key_word))
-                for tag in tags_with_key_word:
-                    if "http" not in tag:
-                        self.counter += 1
-                        content = tag
-                        content = content.replace(key_word, "\033[10;31m" + key_word + "\033[m")
-                        print("\033[00;35m>\033[m", content.strip())
+    def crawl(self, max=5):
+        self.get_links()
+        restaurant_data = []
+        for link, i in zip(self.links, range(0, max)):
+            data = self.get_restaurant_data(link)
+            restaurant_data.append(data)
+        return restaurant_data
 
-            self.links.extend(new_links)
 
-        print("\nTags:", self.counter)
+class AdafruitSpider(Spider):
+    def __init__(self, url="https://www.adafruit.com/new"):
+        super().__init__(url)
 
-    def handle_starttag(self, tag, attrs):
-        url_regex = re.compile(r'^(?:http|ftp)s?://', re.IGNORECASE)
+    def crawl(self):
+        response = self.open_url(self.start_url)
+        soup = BeautifulSoup(response.data, 'html.parser')
+        products = soup.find_all('div', {'class': 'product-listing-right'})
+        data = []
+        for i in range(0, len(products)):
+            price = products[i].find('span', itemprop='price')
+            product = products[i].h1
+            data.append((product.text, price.text))
+        return data
 
-        if tag.lower() == "a":
-            for key, value in attrs:
-                    if key == "href":
-                        new_url = parse.urljoin(self.base_url, value)
-                        if re.match(url_regex, new_url) is not None:
-                            self.links.append(new_url)
-
-    def get_links(self, url):
-        self.base_url = url
-        response = urlopen(self.base_url, timeout=10)
-        html_info = response.info()
-        content_type = html_info.get_content_type()
-
-        if content_type == "text/html":
-            get_web = response.read()
-            html_content = get_web.decode("utf-8")
-            self.feed(html_content)
-            return html_content, self.links
-        else:
-            return "", []
+    def show(self, data):
+        for product, price in data:
+            print(product, ': $' + price)
