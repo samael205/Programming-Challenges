@@ -73,5 +73,42 @@ class AdafruitSpider(Spider):
         return data
 
     def show(self, data):
-        for product, price in data:
-            print(product, ': $' + price)
+        for product, price, description in data:
+            print("\033[95m{}\033[0m : $\033[93m{}\033[0m{}".format(product, price, description))
+
+
+class AmazonElectronicsSpider(Spider):
+    def __init__(self, url="https://www.amazon.com/Best-Sellers-Electronics/zgbs/"
+                           "electronics/ref=zg_bs_pg_3?_encoding=UTF8&pg={}"):
+        super().__init__(url)
+
+    def crawl(self):
+        data = []
+        for page in range(1, 6):
+            url = self.start_url.format(page)
+            response = self.open_url(url)
+            soup = BeautifulSoup(response.data, 'html.parser')
+            products = soup.select(".zg_itemWrapper")
+            for product in products:
+                title = product.div.img['alt']
+                price = product.find("span", {'class': 'p13n-sc-price'})
+                price = price.text if price else 'NaN'
+                rating = product.find("span", {'class': 'a-icon-alt'})
+                rating = rating.text if rating else 'NaN'
+                data.append((title, price, rating))
+        return data
+
+    def save_to_csv(self, name, data):
+        with open(name, 'w') as file:
+            writer = csv.writer(file)
+            headers = ['Product', 'Price', 'Rating']
+            writer.writerow(headers)
+            for product, price, rating in data:
+                writer.writerow([product, price, rating])
+
+    def show(self, data):
+        for product, price, rating in data:
+            print("\033[94m{}\033[0m : \033[93m{}\033[0m\n{}\n".format(product, price, rating))
+
+
+
