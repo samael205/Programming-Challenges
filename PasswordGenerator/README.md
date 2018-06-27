@@ -9,5 +9,5 @@ Password generator with user options
 - Compile
 
 ```sh
-$ g++ -std=c++11 main.cpp password.h password.cpp -o passwordGenerator
+$ g++ -std=c++11 *.cpp *.h -o generator
 ```

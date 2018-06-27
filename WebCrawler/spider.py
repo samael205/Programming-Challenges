@@ -67,9 +67,10 @@ class AdafruitSpider(Spider):
         products = soup.find_all('div', {'class': 'product-listing-right'})
         data = []
         for i in range(0, len(products)):
-            price = products[i].find('span', itemprop='price')
             product = products[i].h1
-            data.append((product.text, price.text))
+            price = products[i].find('span', itemprop='price')    
+            description = products[i].find('div', {'class': 'product-description'})	
+            data.append((product.text, price.text, description.text))
         return data
 
     def show(self, data):
@@ -109,6 +110,4 @@ class AmazonElectronicsSpider(Spider):
     def show(self, data):
         for product, price, rating in data:
             print("\033[94m{}\033[0m : \033[93m{}\033[0m\n{}\n".format(product, price, rating))
-
-
 

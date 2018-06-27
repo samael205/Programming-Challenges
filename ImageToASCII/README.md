@@ -12,7 +12,7 @@ struct search{
 
 };
 ```
-and convert them to ASCII art using python script
+Convert them to ASCII art using python script
 
 # Installation
 
@@ -24,7 +24,7 @@ $ export CPLUS_INCLUDE_PATH=/usr/include/python2.7
 - compile 
 
 ```sh
-$ g++ -std=c++11 -lpython2.7 -lboost_system -lboost_filesystem Images.cpp -o run
+$ g++ -std=c++11 -lpython2.7 -lboost_system -lboost_filesystem Images.cpp -o converter
 ```
 
 Be sure that your system has installed boost libraries

@@ -43,7 +43,7 @@ cipher.startEncrypt();
 - Compile
 
 ```sh
-$ g++ -std=c++11 -lboost_system -lboost_filesystem -Wl,--allow-multiple-definition cipher.cpp cipher.h search.cpp main.cpp -o cipher
+$ g++ -std=c++11 -lboost_system -lboost_filesystem -Wl,--allow-multiple-definition *.cpp *.h -o cipher
 ```
 ### Usage
 

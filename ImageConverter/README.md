@@ -31,7 +31,7 @@ $ export CPLUS_INCLUDE_PATH=/usr/include/python2.7
 - Compile
 
 ```sh
-$ g++ -std=c++11 -lpython2.7 -lboost_system -lboost_filesystem Image.cpp Image.h main.cpp -o run
+$ g++ -std=c++11 -lpython2.7 -lboost_system -lboost_filesystem *.cpp *.h -o converter
 ```
 Be sure that your system has installed boost libraries
 
