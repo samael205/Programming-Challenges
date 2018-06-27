@@ -1,13 +1,14 @@
 #include <iostream>
 #include <cstring>
+#include <iomanip>
 
-#include "wordscounter.cpp"
+#include "wordscounter.h"
 
 #define REP(i, n, v) for(int i=v; i<n; i++)
 #define FOREACH(it, v) for(auto it = v.begin(); it != v.end(); it++)
 
 void CheckIfUserAskForHelp(int argc, char ** argv);
-void Options(int argc, char ** argv);
+void Options(int argc, char ** argv, WordsCounter&);
 
 int main(int argc, char *argv[]){
 	std::ios_base::sync_with_stdio(false);
@@ -15,10 +16,10 @@ int main(int argc, char *argv[]){
 	if(argc < 2) std::exit(EXIT_FAILURE);
 
 	CheckIfUserAskForHelp(argc, argv);
-	Options(argc, argv);
 
-	wc::result filesResult;
-
+	WordsCounter wc;
+	Options(argc, argv, wc);
+	
 	REP(i, argc, 1){
 		if(std::strlen(argv[i]) == 0) continue;
 
@@ -31,16 +32,16 @@ int main(int argc, char *argv[]){
 		}
 
 		std::stringstream fileSummary;
-		fileSummary<<wc::countWords(file);
+		fileSummary<<wc.countWords(file);
 		file.close();
 		fileSummary<<'\t'<<std::string(argv[i]);
-		filesResult.push_back(fileSummary.str());
+		wc.result.push_back(fileSummary.str());
 	}
 
-	FOREACH(it, filesResult)
+	FOREACH(it, wc.result)
 		std::cout<<*it<<"\n";
 
-	if(filesResult.size() > 1) std::cout<<wc::totalSummary();				
+	if(wc.result.size() > 1) std::cout<<wc.totalSummary();				
 }
 
 void CheckIfUserAskForHelp(int argc, char ** arguments){
@@ -55,21 +56,21 @@ void CheckIfUserAskForHelp(int argc, char ** arguments){
 	}
 }
 
-void Options(int argc, char ** arguments){
+void Options(int argc, char ** arguments, WordsCounter & wc){
 	REP(i, argc, 1){
 		if(std::strcmp(arguments[i], "--chars") == 0 ||
 			std::strcmp(arguments[i], "-m") == 0){
-			wc::readChars = true;
+			wc.readChars = true;
 			arguments[i][0] = '\0';
 		} 
 		if(std::strcmp(arguments[i], "--lines") == 0 ||
 			std::strcmp(arguments[i], "-l") == 0){
-			wc::readNewLines = true;
+			wc.readNewLines = true;
 			arguments[i][0] = '\0';
 		}
 		if(std::strcmp(arguments[i], "-c") == 0 ||
 			std::strcmp(arguments[i], "--bytes") == 0){
-			wc::readBytes = true;
+			wc.readBytes = true;
 			arguments[i][0] = '\0';
 		}
 	}
