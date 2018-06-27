@@ -1,8 +1,4 @@
-#include <boost/filesystem.hpp>
-#include <vector>
-#include <string>
-
-namespace fs = ::boost::filesystem;
+#include "search.h"
 
 void search(std::vector<std::string> & files, const fs::path &dirRoot){
 	if(!fs::exists(dirRoot) || !fs::is_directory(dirRoot))

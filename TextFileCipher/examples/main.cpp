@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "cipher.h"
-#include "search.cpp"
+#include "search.h"
 
 using std::cin;
 using std::cout;
@@ -13,8 +13,8 @@ int main(int argc, char ** argv){
 
 	std::string pathToTextFiles, cipherMethod;
 	
-	pathToTextFiles.assign(argv[1]);
-	cipherMethod.assign(argv[2]);
+	pathToTextFiles.assign(argv[2]);
+	cipherMethod.assign(argv[1]);
 
 	auto files = getTextFiles(pathToTextFiles);
 
