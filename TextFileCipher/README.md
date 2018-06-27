@@ -43,12 +43,13 @@ cipher.startEncrypt();
 - Compile
 
 ```sh
-$ g++ -std=c++11 -lboost_system -lboost_filesystem -Wl,--allow-multiple-definition *.cpp *.h -o cipher
+$ g++ -std=c++11 -lboost_system -lboost_filesystem *.cpp *.h -o cipher
 ```
+
 ### Usage
 
 ```sh
-./cipher <Path to dir with text files> "vigenere"
+./cipher "vigenere" <Path to dir with text files> 
 ```
 
 Be sure that your system has installed boost libraries

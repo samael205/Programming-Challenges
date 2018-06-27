@@ -29,7 +29,7 @@ namespace wc{
 
 		std::stringstream sstream(content);
 		numberOfWords = std::distance(std::istream_iterator<std::string>(sstream), 
-                        	std::istream_iterator<std::string>());
+                        		      std::istream_iterator<std::string>());
 		allWords += numberOfWords;
 		std::stringstream summary;
 		summary <<numberOfWords;
