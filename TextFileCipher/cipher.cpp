@@ -65,7 +65,7 @@ void Cipher::startEncrypt(){
 std::string Cipher::getFileContent(std::ifstream & file){
 	std::string content;
 	content.assign(std::istreambuf_iterator<char>(file),
-				   std::istreambuf_iterator<char>());
+		       std::istreambuf_iterator<char>());
 	return content;
 }
 

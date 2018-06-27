@@ -18,14 +18,14 @@ int main(void){
 		getlogin_r(username, 1024);
 
 		std::wcout<<"Hello, "<<username<<"!\n\n"
-			<<"Bytes: "<<sizeof(hd)<<"\n"
-			<<"Multisect: "<<hd.multsect<<"\n"
-			<<"Config: "<<hd.config<<"\n"
-			<<"Cyls: "<<hd.cyls<<"\n"
-			<<"Bufer size: "<<hd.buf_size<<"\n"
-			<<"Heads: "<<hd.heads<<"\n"
-			<<"Sector Bytes: "<<hd.sector_bytes<<"\n"
-			<<"Sectors: "<<hd.sectors<<"\n";
+			  <<"Bytes: "<<sizeof(hd)<<"\n"
+			  <<"Multisect: "<<hd.multsect<<"\n"
+			  <<"Config: "<<hd.config<<"\n"
+			  <<"Cyls: "<<hd.cyls<<"\n"
+			  <<"Bufer size: "<<hd.buf_size<<"\n"
+			  <<"Heads: "<<hd.heads<<"\n"
+			  <<"Sector Bytes: "<<hd.sector_bytes<<"\n"
+			  <<"Sectors: "<<hd.sectors<<"\n";
 	}else{
 		perror("ERROR: HDIO_GET_IDENTITY");
 		std::exit(EXIT_FAILURE);
