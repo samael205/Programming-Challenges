@@ -58,7 +58,7 @@ if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
     icon = QtGui.QIcon()
-    icon.addPixmap(QtGui.QPixmap(QtCore.QDir.currentPath() + "/icons/random.png"))
+    icon.addPixmap(QtGui.QPixmap("./icons/random.png"))
     app.setWindowIcon(icon)
 
     name_generator = NameGenerator()
