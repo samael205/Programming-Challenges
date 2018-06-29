@@ -111,3 +111,36 @@ class AmazonElectronicsSpider(Spider):
         for product, price, rating in data:
             print("\033[94m{}\033[0m : \033[93m{}\033[0m\n{}\n".format(product, price, rating))
 
+
+class SearchingSpider(Spider):
+    def __init__(self):
+        super().__init__(self)
+        self.links = []
+
+    def get_links(self, url):
+        response = self.open_url(url)
+        links = []
+        soup = BeautifulSoup(response.data, 'html.parser')
+        for link in soup.find_all('a', attrs={'href': re.compile("^http://")}):
+            links.append(link['href'])
+        return soup, links
+
+    def search(self, start_url, content, max_pages=10, show=False):
+        self.links = [start_url]
+        page = 0
+        founded = False
+
+        while page < max_pages and self.links != []:
+            page += 1
+            current_url = self.links.pop(0)
+            web_data, new_links = self.get_links(current_url)
+            if content in web_data.text:
+                founded = True
+                print("\033[92mFound in\033[0m", current_url)
+                if show:
+                    data = web_data.find(text=re.compile(content)).split()
+                    print('\033[91m>\033[0m', ' '.join(data))
+            self.links.extend(new_links)
+
+        if not founded:
+            print("Not found")
