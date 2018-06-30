@@ -28,7 +28,7 @@ class IRCDialog(QtWidgets.QDialog):
         data_layout.addWidget(self.nickname)
 
         ok_button = QtWidgets.QPushButton("ok")
-        cancel_button = QtWidgets.QPushButton("canncel")
+        cancel_button = QtWidgets.QPushButton("cancel")
 
         button_box = QtWidgets.QHBoxLayout()
         button_box.addWidget(ok_button)

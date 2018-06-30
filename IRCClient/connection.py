@@ -107,11 +107,8 @@ class IRCWidget(QtWidgets.QWidget):
             self.users_list.clear()
 
     def is_connections(self):
-        if self.connections:
-            return True
-        else:
-            return False
-
+        return True if self.connections else False
+            
     def send_message(self):
         message = self.send_message_line.text()
         self.send_message_line.clear()
@@ -181,12 +178,11 @@ class IRCWidget(QtWidgets.QWidget):
             ready_socks, _, _ = select.select(socks.keys(), [], [], 5)
 
             for sock in ready_socks:
-
                 try:
                     data = socks[sock].receive_messages()
                 except Exception:
                     pass
-
+                
                 if not data:
                     continue
 

@@ -33,9 +33,21 @@ class IRC:
     def send_message(self, message):
         self.irc_sock.send(bytes("PRIVMSG " + self.channel + " :" + message + "\n", "UTF-8"))
 
+    def update_users(self, message):
+        if message.find("PART") != -1:
+            user = irc_message.split("!")[0]
+            user = user[1:]
+            self.users.remove(user)
+
+        if message.find("JOIN") != -1:
+            user = irc_message.split("!")[0]
+            user = user[1:]
+            self.users.append(user)
+
     def receive_messages(self):
         irc_message = self.irc_sock.recv(2048).decode("UTF-8")
         irc_message = irc_message.strip("\n\r")
+        self.update_users(irc_message)	
 
         if irc_message.find("PING :") != -1:
             self.ping()
@@ -45,16 +57,6 @@ class IRC:
             users = users[:users.find(":")]
             self.users = users.split()
 
-        if irc_message.find("PART") != -1:
-            user = irc_message.split("!")[0]
-            user = user[1:]
-            self.users.remove(user)
-
-        if irc_message.find("JOIN") != -1:
-            user = irc_message.split("!")[0]
-            user = user[1:]
-            self.users.append(user)
-
         if irc_message.find("PRIVMSG") != -1:
             name = irc_message.split("!", 1)[0][1:]
             message = irc_message.split("PRIVMSG", 1)[1].split(":", 1)[1]
@@ -63,4 +65,5 @@ class IRC:
         return irc_message
 
     def disconnect(self):
+        del self.users[:]
         self.irc_sock.send(bytes("QUIT \n", "UTF-8"))
