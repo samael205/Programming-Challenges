@@ -1,6 +1,6 @@
 # Description
 
-Search all Image files with specific extension in current folder
+Search all Image files with a specific extension in the current folder
 
 ```cpp
 struct search{

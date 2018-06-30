@@ -14,7 +14,7 @@ Convert infix expression to postfix
 std::string infixToPostix(const std::string & expression);
 ```
 
-Solve them using stack
+Solve them using a stack
 
 ```cp
 double solve(const std::string & expression);

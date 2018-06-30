@@ -1,6 +1,6 @@
 # Description
 
-Display Master Boot Record content, choosen information
+Display Master Boot Record content, chosen information
 
 # Installation
 

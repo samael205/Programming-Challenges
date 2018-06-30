@@ -3,7 +3,7 @@ import time, random
 import sys
 import json
 import threading
-from score_board import start_web_server
+from scoreboard import start_web_server
 
 pygame.init()
 pygame.mixer.init()

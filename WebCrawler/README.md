@@ -1,6 +1,6 @@
 # Description
 
-A crawling spiders which get a needed data from specific website
+A crawling spiders to searching web content and get specific data
 
 ## Usage
 

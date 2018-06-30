@@ -3,7 +3,7 @@
 ###### Speaking chatter bot with voice recognition
 He can talk but also you can communicate with him via Web!
 
-He learn by saving all unknown answers from user to csv file 
+He learns by saving all unknown answers from user to CSV file 
 
 ```python
 def ask_question(self):
@@ -13,7 +13,7 @@ def ask_question(self):
             writer = csv.writer(append_csv)
 writer.writerow([self.question.lower(), user.lower()])
 ```
-reload memory with new questions and answers 
+Reload memory with new questions and answers 
 ```python
 def refresh_data(self):
         self.memory.clear()
