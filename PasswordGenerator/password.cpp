@@ -81,12 +81,11 @@ void PasswordGenerator::setSettings(const char set){
 
 static std::string availableChars(std::unique_ptr<bool[]> const & settings){
 	string rule = "\0";
-
 	if(settings[0]) for(int i=65; i<91; i++) rule += (char)i;
 	if(settings[1]) for(int i=97; i<123; i++) rule += (char)i;	
 	if(settings[2]) rule += "1234567890";	
 	if(settings[3]) rule += "'!?$?%^&*()_-+={[}]:;@~#|<,>.?";	
-
+	std::random_shuffle(rule.begin(), rule.end());
 	return rule;	
 }
 
