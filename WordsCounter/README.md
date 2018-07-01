@@ -8,7 +8,7 @@ Counts all words, chars, lines or bytes in specific files
 $ g++ -std=c++11 *.cpp -o wc
 ```
 
-# Usage
+### Usage
 
 ```sh
 $ ./wc file1.txt file2.txt file3.txt

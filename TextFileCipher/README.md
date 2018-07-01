@@ -9,8 +9,8 @@ std::vector<std::string> getTextFiles(const std::string & path){
 	return files;
 }
 ```
-encrypt them 
 
+Encrypt 
 ```cpp
 std::string Cipher::encrypt(std::string & contentToEncrypt){
 	std::string encrypted;
