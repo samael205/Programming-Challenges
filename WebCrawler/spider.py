@@ -42,20 +42,25 @@ class AsianRestaurantSpider(Spider):
         with open(name, 'w') as file:
             writer = csv.writer(file)
             names, opinions = [], []
-            for restaurants in data:
-                for restaurant in restaurants:
-                    names.append(restaurant)
-                    opinions.append(restaurants[restaurant])
+            for restaurant in data: 
+                names.append(restaurant)
+                opinions.append(data[restaurant])
             writer.writerow(names)
             writer.writerows(zip(*opinions))
 
     def crawl(self, max=5):
         self.get_links()
-        restaurant_data = []
+        restaurant_data = {}
         for link, i in zip(self.links, range(0, max)):
             data = self.get_restaurant_data(link)
-            restaurant_data.append(data)
+            restaurant_data.update(data)
         return restaurant_data
+
+    def show(self, data):
+        for restaurant in data:
+            print("\033[94m{}\033[0m".format(restaurant))
+            for opinion in data[restaurant]:
+                print(opinion)     
 
 
 class AdafruitSpider(Spider):
