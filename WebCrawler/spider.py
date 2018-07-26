@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import re
 import csv
 import urllib3
+
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 
@@ -58,9 +59,10 @@ class AsianRestaurantSpider(Spider):
 
     def show(self, data):
         for restaurant in data:
-            print("\033[94m{}\033[0m".format(restaurant))
+            print("\033[96m{}\033[0m".format(restaurant))
             for opinion in data[restaurant]:
-                print(opinion)     
+                print(opinion)    
+            print()     
 
 
 class AdafruitSpider(Spider):
@@ -91,17 +93,17 @@ class AmazonElectronicsSpider(Spider):
 
     def crawl(self):
         data = []
-        for page in range(1, 6):
+        for page in range(1, 3):
             url = self.start_url.format(page)
             response = self.open_url(url)
             soup = BeautifulSoup(response.data, 'html.parser')
-            products = soup.select(".zg_itemWrapper")
+            products = soup.select(".zg-item")
             for product in products:
                 title = product.div.img['alt']
                 price = product.find("span", {'class': 'p13n-sc-price'})
-                price = price.text if price else 'NaN'
+                price = price.text if price else '?'
                 rating = product.find("span", {'class': 'a-icon-alt'})
-                rating = rating.text if rating else 'NaN'
+                rating = rating.text if rating else '?'
                 data.append((title, price, rating))
         return data
 
@@ -134,19 +136,19 @@ class SearchingSpider(Spider):
     def search(self, start_url, content, max_pages=10, show=False):
         self.links = [start_url]
         page = 0
-        founded = False
+        found = False
 
         while page < max_pages and self.links != []:
             page += 1
             current_url = self.links.pop(0)
             web_data, new_links = self.get_links(current_url)
             if content in web_data.text:
-                founded = True
+                found = True
                 print("\033[92mFound in\033[0m", current_url)
                 if show:
                     data = web_data.find(text=re.compile(content)).split()
                     print('\033[91m>\033[0m', ' '.join(data))
             self.links.extend(new_links)
 
-        if not founded:
-            print("Not found")
+        if not found:
+            print("\033[91mNot found\033[0m")
