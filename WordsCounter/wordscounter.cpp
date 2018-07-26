@@ -28,7 +28,8 @@ std::string WordsCounter::countWords(std::ifstream & file){
         file.clear();
         file.seekg(0, std::ios_base::beg);
         numberOfNewLines = std::count(std::istreambuf_iterator<char>(file), 
-                           std::istreambuf_iterator<char>(), '\n');
+                                      std::istreambuf_iterator<char>(),
+                                      '\n');
         allNewLines += numberOfNewLines;
         summary<<std::setw(4)<<numberOfNewLines;
     }
